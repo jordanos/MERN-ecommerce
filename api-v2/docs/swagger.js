@@ -2,14 +2,14 @@ exports.options = {
   swaggerOptions: {
     authAction: {
       JWT: {
-        name: "JWT",
+        name: 'JWT',
         schema: {
-          type: "apiKey",
-          in: "header",
-          name: "Authorization",
-          description: "",
+          type: 'apiKey',
+          in: 'header',
+          name: 'Authorization',
+          description: '',
         },
-        value: "Bearer <JWT>",
+        value: 'Bearer <JWT>',
       },
     },
   },
@@ -17,28 +17,28 @@ exports.options = {
 
 exports.swaggerOptions = {
   swaggerDefinition: {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-      version: "1.0.0",
-      title: "Todo API",
-      description: "Todo API documentaion.",
+      version: '1.0.0',
+      title: 'Todo API',
+      description: 'Todo API documentaion.',
       contact: {
-        name: "Jordan",
-        email: "jordanoswork2021@gmail.com",
+        name: 'Jordan',
+        email: 'jordanoswork2021@gmail.com',
       },
-      servers: ["http://localhost:5000"],
+      servers: ['http://localhost:5000'],
     },
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: "apiKey",
-          name: "authorization",
-          scheme: "bearer",
-          in: "header",
+          type: 'apiKey',
+          name: 'authorization',
+          scheme: 'bearer',
+          in: 'header',
         },
       },
     },
     security: [{ bearerAuth: [] }],
   },
-  apis: ["./routes/*.js"],
+  apis: ['./routes/*.js'],
 };

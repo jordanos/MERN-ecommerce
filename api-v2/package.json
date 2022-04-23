@@ -10,7 +10,11 @@
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "dev": "nodemon ./bin/www",
-    "test": "jest ./tests --watchAll --detectOpenHandles"
+    "test": "jest ./tests --watchAll --detectOpenHandles",
+    "format:check": "prettier --check .",
+   "format:write": "prettier --write .",
+   "lint:check": "eslint .",
+   "lint:fix": "eslint --fix ."
   },
   "author": "jordanos",
   "license": "ISC",
@@ -19,17 +23,24 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "jest": "^27.5.1",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.2.5",
     "morgan": "^1.10.0",
     "pm2": "^5.2.0",
+    "supertest": "^6.2.2",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
-    "jest": "^27.5.1",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    
     "nodemon": "^2.0.15",
-    "supertest": "^6.2.2"
+    "prettier": "^2.6.2"
+    
   }
 }

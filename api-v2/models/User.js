@@ -1,16 +1,16 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const { number } = require("joi");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const { number } = require('joi');
 
 const UserSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please provide your name"],
+      required: [true, 'Please provide your name'],
     },
     phone: {
       type: Number,
-      required: [true, "Please provide your phone number"],
+      required: [true, 'Please provide your phone number'],
       unique: true,
     },
     email: {
@@ -19,20 +19,20 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
+      required: [true, 'Please provide a password'],
       select: true,
     },
     address: {
       type: String,
-      default: "Addis Ababa",
+      default: 'Addis Ababa',
     },
     image: {
       type: String,
-      default: "image_default.png",
+      default: 'image_default.png',
     },
     status: {
       type: String,
-      default: "active",
+      default: 'active',
     },
     createdAt: {
       type: Date,
@@ -42,16 +42,16 @@ const UserSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Mongoose Middleware To Encrypt Password
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
     next();
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema);

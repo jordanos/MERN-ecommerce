@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const {
   getUsers,
   createUser,
@@ -6,9 +6,9 @@ const {
   updateUser,
   deleteUser,
   //   deleteUser,
-} = require("../controllers/userController");
-const { loginReq } = require("../middlewares/authMiddleware");
-const { authorizeUser } = require("../middlewares/authorizationMiddleware");
+} = require('../controllers/userController');
+const { loginReq } = require('../middlewares/authMiddleware');
+const { authorizeUser } = require('../middlewares/authorizationMiddleware');
 
 const router = express.Router();
 
@@ -53,7 +53,7 @@ const router = express.Router();
  */
 
 router
-  .route("/")
+  .route('/')
   /**
    *@swagger
    *path:
@@ -94,7 +94,7 @@ router
   .post(createUser);
 
 router
-  .route("/:id")
+  .route('/:id')
   /**
    *@swagger
    *path:

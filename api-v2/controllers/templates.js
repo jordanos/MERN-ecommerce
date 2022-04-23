@@ -1,5 +1,5 @@
-const CustomError = require("../utils/CustomError");
-const { validateId } = require("../utils/validators");
+const CustomError = require('../utils/CustomError');
+const { validateId } = require('../utils/validators');
 
 class BaseTemplate {
   constructor(req, res, next, model, modelName) {
@@ -15,13 +15,13 @@ class BaseTemplate {
   // do database stuff and save the result in this.doc, and must get implemented in sub classes
   async doMongo() {
     throw new Error(
-      "No function has been implemented to perform the doMongo()"
+      'No function has been implemented to perform the doMongo()',
     );
   }
 
   // perform the request.. this must get implemented in sub classes
   performReq() {
-    throw new Error("No function has been implemented to performReq()");
+    throw new Error('No function has been implemented to performReq()');
   }
 
   // It gets called by controllers torun the request
@@ -77,7 +77,7 @@ exports.GetOne = class GetOne extends BaseTemplate {
   }
 
   async doMongo() {
-    const id = this.req.params.id;
+    const { id } = this.req.params;
     validateId(id);
 
     this.doc = await this.model.findById(id);
@@ -85,8 +85,7 @@ exports.GetOne = class GetOne extends BaseTemplate {
 
   performReq() {
     // throw exception if doc is null/not found
-    if (!this.doc)
-      throw new CustomError(`${this.modelName} id ${id} not found`, 404);
+    if (!this.doc) throw new CustomError(`${this.modelName} id ${id} not found`, 404);
     this.res.status(200).json({
       data: this.doc,
     });
@@ -102,7 +101,7 @@ exports.UpdateOne = class UpdateOne extends BaseTemplate {
     // validate user data
     this.validate(this.req);
 
-    const id = this.req.params.id;
+    const { id } = this.req.params;
     validateId(id);
 
     this.filter = { _id: id };
@@ -114,8 +113,7 @@ exports.UpdateOne = class UpdateOne extends BaseTemplate {
 
   performReq() {
     // throw exception if doc is null/not found
-    if (!this.doc)
-      throw new CustomError(`${this.modelName} id ${id} not found`, 404);
+    if (!this.doc) throw new CustomError(`${this.modelName} id ${id} not found`, 404);
 
     this.res.status(200).json({
       data: this.doc,
@@ -129,7 +127,7 @@ exports.DeleteOne = class DeleteOne extends BaseTemplate {
   }
 
   async doMongo() {
-    const id = this.req.params.id;
+    const { id } = this.req.params;
     validateId(id);
 
     this.filter = { _id: id };
