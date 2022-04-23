@@ -1,7 +1,8 @@
 class Config {
   static const String appName = "rica_mobile";
-  static const String apiUrl = "192.168.1.2:9000";
-  static const String messageUrl = "192.168.1.2:8900";
+  static const String host = "192.168.0.108";
+  static const String apiUrl = host + ":9000";
+  static const String messageUrl = host + ":8900";
   static const String postApi = "/feed";
   static const String heroApi = "/product/heroproducts";
   static const String postByUserIdApi = "/feed/user/";
