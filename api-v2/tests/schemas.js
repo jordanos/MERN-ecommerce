@@ -1,12 +1,14 @@
-exports.taskSchema = {
-  title: expect.any(String),
-  description: expect.any(String),
-  date: expect.any(String),
-  status: expect.any(String),
-  assignedTo: expect.any(String),
-  createdAt: expect.any(String),
-  owner: expect.any(String),
-};
+const { expect } = global;
+
+// exports.taskSchema = {
+//   title: expect.any(String),
+//   description: expect.any(String),
+//   date: expect.any(String),
+//   status: expect.any(String),
+//   assignedTo: expect.any(String),
+//   createdAt: expect.any(String),
+//   owner: expect.any(String),
+// };
 
 exports.userSchema = {
   name: expect.any(String),

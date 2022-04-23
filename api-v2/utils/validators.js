@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const CustomError = require("./CustomError");
+const Joi = require('joi');
+const CustomError = require('./CustomError');
 
 const userSchema = Joi.object({
   name: Joi.string().required(),

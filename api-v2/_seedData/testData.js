@@ -1,25 +1,27 @@
 exports.seedUser1 = {
-  name: "kebede",
+  name: 'kebede',
   phone: 251919803123,
-  email: "alemu@xyz.com",
-  password: "123456",
-  address: "Addis Ababa",
-  image: "image_default.png",
-  status: "active",
-  createdAt: "2022-03-14T08:28:54.019Z",
-  _id: "622efd0f9676958c4d2732cc",
+  email: 'alemu@xyz.com',
+  password: '123456',
+  address: 'Addis Ababa',
+  image: 'image_default.png',
+  status: 'active',
+  createdAt: '2022-03-14T08:28:54.019Z',
+  id: '622efd0f9676958c4d2732cc',
+  _id: '622efd0f9676958c4d2732cc',
 };
 
 exports.seedUser2 = {
-  name: "abebu",
+  name: 'abebu',
   phone: 251919803125,
-  email: "abebu@xyz.com",
-  password: "123456",
-  address: "Addis Ababa",
-  image: "image_default.png",
-  status: "active",
-  createdAt: "2022-03-14T08:34:39.297Z",
-  _id: "622efe5d7a8344cd7bb07a6a",
+  email: 'abebu@xyz.com',
+  password: '123456',
+  address: 'Addis Ababa',
+  image: 'image_default.png',
+  status: 'active',
+  createdAt: '2022-03-14T08:34:39.297Z',
+  id: '622efe5d7a8344cd7bb07a6a',
+  _id: '622efe5d7a8344cd7bb07a6a',
 };
 
 // exports.seedTask1 = {

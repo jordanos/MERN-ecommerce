@@ -1,4 +1,4 @@
-const CustomError = require("../utils/CustomError");
+const CustomError = require('../utils/CustomError');
 
 const errorHandler = (err, req, res, next) => {
   if (err instanceof CustomError) {
