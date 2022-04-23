@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { number } = require("joi");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -8,7 +9,7 @@ const UserSchema = new mongoose.Schema(
       required: [true, "Please provide your name"],
     },
     phone: {
-      type: String,
+      type: Number,
       required: [true, "Please provide your phone number"],
       unique: true,
     },

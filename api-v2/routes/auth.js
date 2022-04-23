@@ -55,6 +55,12 @@ const router = express.Router();
  */
 router.route("/login").post(login);
 
+// todo
+// send otp
+router.route("/verify").post();
+
+// todo
+// logout user and expire the jwt token
 router.route("/logout").post();
 
 module.exports = router;
