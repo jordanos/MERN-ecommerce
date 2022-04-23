@@ -10,7 +10,11 @@ exports.taskSchema = {
 
 exports.userSchema = {
   name: expect.any(String),
+  phone: expect.any(Number),
   email: expect.any(String),
+  address: expect.any(String),
+  image: expect.any(String),
+  status: expect.any(String),
   createdAt: expect.any(String),
 };
 
