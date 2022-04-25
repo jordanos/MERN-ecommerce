@@ -37,7 +37,7 @@ const router = express.Router();
  *          type: string
  *          description: email of user.
  *        phone:
- *          type: number
+ *          type: string
  *          description: phone number of user.
  *        password:
  *          type: string
@@ -56,8 +56,9 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        name: Abebe
- *        phone: 251919803245
+ *        name: "Abebe"
+ *        phone: "251919803245"
+ *        password: "123456"
  */
 
 /**
