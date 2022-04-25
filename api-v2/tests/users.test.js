@@ -3,21 +3,30 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const app = require('../app');
 const User = require('../models/User');
+const Follow = require('../models/Follow');
 
-const { seedUser1, seedUser2 } = require('../_seedData/testData');
+const {
+  seedUser1,
+  seedUser2,
+  seedFollow1,
+  seedFollow2,
+} = require('../_seedData/testData');
 
 const token = jwt.sign({ id: seedUser1.id }, process.env.SECRET_KEY, {
   expiresIn: '9999d',
 });
 
-const { userSchema } = require('./schemas');
+const { userSchema, followSchema } = require('./schemas');
 
 // /users integration test
 describe('Users API endpoint', () => {
   beforeAll(async () => {
     await User.create(seedUser1);
+    await Follow.create(seedFollow1);
   });
   afterAll(async () => {
+    await Follow.deleteOne({ _id: seedFollow1.id });
+    await Follow.deleteOne({ _id: seedFollow2.id });
     await User.deleteOne({ _id: seedUser1.id });
     await User.deleteOne({ _id: seedUser2.id });
   });
@@ -46,7 +55,7 @@ describe('Users API endpoint', () => {
   it('POST /users -> create user with no password', () =>
     request(app)
       .post('/api/v1/users')
-      .send({ name: 'addf', email: 'absd@yahoo.com' })
+      .send({ name: 'addf', phone: '251912344565' })
       .expect('Content-Type', /json/)
       .expect(400)
       .then((response) => {
@@ -57,10 +66,10 @@ describe('Users API endpoint', () => {
         );
       }));
 
-  it('POST /users -> create user with bad email', () =>
+  it('POST /users -> create user with bad phone number', () =>
     request(app)
       .post('/api/v1/users')
-      .send({ ...seedUser1, email: 'adaedaeded' })
+      .send({ ...seedUser1, phone: '2823' })
       .expect('Content-Type', /json/)
       .expect(400)
       .then((response) => {
@@ -71,7 +80,7 @@ describe('Users API endpoint', () => {
         );
       }));
 
-  it('POST /users -> create duplicate user email', () =>
+  it('POST /users -> create duplicate user phone', () =>
     request(app)
       .post('/api/v1/users')
       .send({ ...seedUser2 })
@@ -116,6 +125,121 @@ describe('Users API endpoint', () => {
           expect.objectContaining({
             acknowledged: expect.any(Boolean),
           })
+        );
+      }));
+
+  // follows
+  it('GET /follows -> list of follows', () =>
+    request(app)
+      .get('/api/v1/follows')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.arrayContaining([expect.objectContaining(followSchema)])
+        );
+      }));
+
+  it('POST /follows -> creates a follow', () =>
+    request(app)
+      .post('/api/v1/follows')
+      .send(seedFollow2)
+      .expect('Content-Type', /json/)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.objectContaining(followSchema)
+        );
+      }));
+
+  it('POST /follows -> create user with no follower id', () =>
+    request(app)
+      .post('/api/v1/follows')
+      .send({ followingId: '622efd0f9676958c4d2732cf' })
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            error: expect.any(String),
+          })
+        );
+      }));
+
+  it('POST /follows -> create duplicate follow', () =>
+    request(app)
+      .post('/api/v1/follows')
+      .send({
+        followingId: seedFollow1.followingId,
+        followerId: seedFollow1.followerId,
+      })
+      .expect('Content-Type', /json/)
+      .expect(500)
+      .then((response) => {
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            error: expect.any(String),
+          })
+        );
+      }));
+
+  it('GET /follows/:id -> gets a follow', () =>
+    request(app)
+      .get(`/api/v1/follows/${seedFollow1.id}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.objectContaining(followSchema)
+        );
+      }));
+
+  it('DELETE /follows/:id -> deletes a follow', () =>
+    request(app)
+      .delete(`/api/v1/follows/${seedFollow1.id}`)
+      .set('Authorization', token)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.objectContaining({
+            acknowledged: expect.any(Boolean),
+          })
+        );
+      }));
+
+  it('GET /follows/followings/:id -> list of following users', () =>
+    request(app)
+      .get(`/api/v1/follows/followings/${seedFollow1.followingId}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.arrayContaining([expect.objectContaining(userSchema)])
+        );
+      }));
+
+  it('GET /follows/followers/:id -> list of follower users', () =>
+    request(app)
+      .get(`/api/v1/follows/followers/${seedFollow1.followingId}`)
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.arrayContaining([expect.objectContaining(userSchema)])
+        );
+      }));
+
+  it('GET /follows/isfollowing/:followerId/:followingId -> checks if the users are following eachother', () =>
+    request(app)
+      .get(
+        `/api/v1/follows/isfollowing/${seedFollow1.followerId}/${seedFollow1.followingId}`
+      )
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.data).toEqual(
+          expect.objectContaining({ isFollowing: expect.any(Boolean) })
         );
       }));
 });

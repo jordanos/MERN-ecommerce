@@ -40,6 +40,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Load Routes
 const usersRoute = require('./routes/users');
+const followsRoute = require('./routes/follows');
 const authRoute = require('./routes/auth');
 // const { loginReq } = require('./middlewares/authMiddleware');
 // const { adminReq } = require('./middlewares/authorizationMiddleware');
@@ -48,6 +49,7 @@ const apiVersion = '/api/v1';
 
 // Use Routes
 app.use(`${apiVersion}/users`, usersRoute);
+app.use(`${apiVersion}/follows`, followsRoute);
 app.use(`${apiVersion}/auth`, authRoute);
 
 // Error handler middleware
