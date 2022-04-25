@@ -1,3 +1,6 @@
+# media files
+public/media
+
 # Logs
 logs
 *.log
