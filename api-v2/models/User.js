@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { number } = require('joi');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -9,7 +8,7 @@ const UserSchema = new mongoose.Schema(
       required: [true, 'Please provide your name'],
     },
     phone: {
-      type: Number,
+      type: String,
       required: [true, 'Please provide your phone number'],
       unique: true,
     },
@@ -42,7 +41,7 @@ const UserSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  },
+  }
 );
 
 // Mongoose Middleware To Encrypt Password

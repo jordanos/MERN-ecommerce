@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 const CustomError = require('../utils/CustomError');
 const { validateId } = require('../utils/validators');
 
@@ -13,22 +14,23 @@ class BaseTemplate {
   }
 
   // do database stuff and save the result in this.doc, and must get implemented in sub classes
-  async doMongo() {
+  static async doMongo() {
     throw new Error(
-      'No function has been implemented to perform the doMongo()',
+      'No function has been implemented to perform the doMongo()'
     );
   }
 
   // perform the request.. this must get implemented in sub classes
-  performReq() {
+  static performReq() {
     throw new Error('No function has been implemented to performReq()');
   }
 
   // It gets called by controllers torun the request
+
   async execute() {
     try {
       await this.doMongo();
-      this.performReq();
+      return this.performReq();
     } catch (e) {
       return this.next(e);
     }
@@ -36,10 +38,6 @@ class BaseTemplate {
 }
 
 exports.GetAll = class GetAll extends BaseTemplate {
-  constructor(req, res, next, model, modelName) {
-    super(req, res, next, model, modelName);
-  }
-
   async doMongo() {
     if (this.filter) this.doc = await this.model.find(this.filter);
     else this.doc = await this.model.find();
@@ -53,10 +51,6 @@ exports.GetAll = class GetAll extends BaseTemplate {
 };
 
 exports.CreateOne = class CreateOne extends BaseTemplate {
-  constructor(req, res, next, model, modelName) {
-    super(req, res, next, model, modelName);
-  }
-
   async doMongo() {
     // validate user data
     this.validate(this.req);
@@ -72,10 +66,6 @@ exports.CreateOne = class CreateOne extends BaseTemplate {
 };
 
 exports.GetOne = class GetOne extends BaseTemplate {
-  constructor(req, res, next, model, modelName) {
-    super(req, res, next, model, modelName);
-  }
-
   async doMongo() {
     const { id } = this.req.params;
     validateId(id);
@@ -85,7 +75,12 @@ exports.GetOne = class GetOne extends BaseTemplate {
 
   performReq() {
     // throw exception if doc is null/not found
-    if (!this.doc) throw new CustomError(`${this.modelName} id ${id} not found`, 404);
+    if (!this.doc) {
+      throw new CustomError(
+        `${this.modelName} id ${this.req.params.id} not found`,
+        404
+      );
+    }
     this.res.status(200).json({
       data: this.doc,
     });
@@ -93,16 +88,11 @@ exports.GetOne = class GetOne extends BaseTemplate {
 };
 
 exports.UpdateOne = class UpdateOne extends BaseTemplate {
-  constructor(req, res, next, model, modelName) {
-    super(req, res, next, model, modelName);
-  }
-
   async doMongo() {
-    // validate user data
-    this.validate(this.req);
-
     const { id } = this.req.params;
     validateId(id);
+    // validate user data
+    this.validate(this.req);
 
     this.filter = { _id: id };
     const update = this.req.body;
@@ -113,7 +103,11 @@ exports.UpdateOne = class UpdateOne extends BaseTemplate {
 
   performReq() {
     // throw exception if doc is null/not found
-    if (!this.doc) throw new CustomError(`${this.modelName} id ${id} not found`, 404);
+    if (!this.doc)
+      throw new CustomError(
+        `${this.modelName} id ${this.req.params.id} not found`,
+        404
+      );
 
     this.res.status(200).json({
       data: this.doc,
@@ -122,10 +116,6 @@ exports.UpdateOne = class UpdateOne extends BaseTemplate {
 };
 
 exports.DeleteOne = class DeleteOne extends BaseTemplate {
-  constructor(req, res, next, model, modelName) {
-    super(req, res, next, model, modelName);
-  }
-
   async doMongo() {
     const { id } = this.req.params;
     validateId(id);

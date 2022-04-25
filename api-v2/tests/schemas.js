@@ -12,11 +12,17 @@ const { expect } = global;
 
 exports.userSchema = {
   name: expect.any(String),
-  phone: expect.any(Number),
+  phone: expect.any(String),
   email: expect.any(String),
   address: expect.any(String),
   image: expect.any(String),
   status: expect.any(String),
+  createdAt: expect.any(String),
+};
+
+exports.followSchema = {
+  followerId: expect.any(String),
+  followingId: expect.any(String),
   createdAt: expect.any(String),
 };
 

@@ -1,6 +1,5 @@
 const User = require('../models/User');
-const CustomError = require('../utils/CustomError');
-const { authorizeUser } = require('../middlewares/authorizationMiddleware');
+
 const {
   GetAll,
   CreateOne,

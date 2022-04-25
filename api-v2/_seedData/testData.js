@@ -1,6 +1,6 @@
 exports.seedUser1 = {
   name: 'kebede',
-  phone: 251919803123,
+  phone: '251919803123',
   email: 'alemu@xyz.com',
   password: '123456',
   address: 'Addis Ababa',
@@ -13,7 +13,7 @@ exports.seedUser1 = {
 
 exports.seedUser2 = {
   name: 'abebu',
-  phone: 251919803125,
+  phone: '251919803125',
   email: 'abebu@xyz.com',
   password: '123456',
   address: 'Addis Ababa',
@@ -22,6 +22,20 @@ exports.seedUser2 = {
   createdAt: '2022-03-14T08:34:39.297Z',
   id: '622efe5d7a8344cd7bb07a6a',
   _id: '622efe5d7a8344cd7bb07a6a',
+};
+
+exports.seedFollow1 = {
+  followingId: '622efd0f9676958c4d2732cc',
+  followerId: '622efe5d7a8344cd7bb07a6a',
+  _id: '622efd0f9676958c4d2732cc',
+  id: '622efd0f9676958c4d2732cc',
+};
+
+exports.seedFollow2 = {
+  followingId: '622efd0f9676958c4d2732cf',
+  followerId: '622efe5d7a8344cd7bb07a6a',
+  _id: '622efe5d7a8344cd7bb07a6a',
+  id: '622efe5d7a8344cd7bb07a6a',
 };
 
 // exports.seedTask1 = {

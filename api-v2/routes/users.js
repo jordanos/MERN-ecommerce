@@ -7,10 +7,13 @@ const {
   deleteUser,
   //   deleteUser,
 } = require('../controllers/userController');
+
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeUser } = require('../middlewares/authorizationMiddleware');
 
 const router = express.Router();
+
+// users route
 
 /**
  *
@@ -21,7 +24,7 @@ const router = express.Router();
  *      type: object
  *      required:
  *        - name
- *        - email
+ *        - phone
  *        - password
  *      properties:
  *        id:
@@ -33,16 +36,28 @@ const router = express.Router();
  *        email:
  *          type: string
  *          description: email of user.
+ *        phone:
+ *          type: number
+ *          description: phone number of user.
  *        password:
  *          type: string
  *          description: password of user.
+ *        address:
+ *          type: string
+ *          description: address of user.
+ *        image:
+ *          type: string
+ *          description: image of user.
+ *        status:
+ *          type: string
+ *          description: status of user.
  *        createdAt:
  *          type: string
  *          format: date
  *          description: The date of the record creation.
  *      example:
  *        name: Abebe
- *        email: abebe@xyz.com
+ *        phone: 251919803245
  */
 
 /**
