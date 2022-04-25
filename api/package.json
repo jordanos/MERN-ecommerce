@@ -1,26 +1,46 @@
 {
-  "name": "api",
+  "name": "rica-ecommerce-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
+  "description": "A rest api for a rica ecommerce app.",
+  "main": "bin/www",
+  "jest": {
+    "verbose": true,
+    "testTimeout": 20000
   },
-  "author": "\"Abnezer Anbessie\"",
+  "scripts": {
+    "start": "pm2-runtime start ecosystem.config.js --env production",
+    "dev": "nodemon ./bin/www",
+    "test": "jest ./tests --watchAll --detectOpenHandles",
+    "format:check": "prettier --check .",
+   "format:write": "prettier --write .",
+   "lint:check": "eslint .",
+   "lint:fix": "eslint --fix ."
+  },
+  "author": "jordanos",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.1",
     "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.2",
-    "express-fileupload": "^1.2.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jest": "^27.5.1",
+    "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
-    "multer": "^1.4.4",
-    "mysql": "^2.18.1",
+    "mongoose": "^6.2.5",
+    "morgan": "^1.10.0",
+    "pm2": "^5.2.0",
+    "supertest": "^6.2.2",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    
     "nodemon": "^2.0.15",
-    "path": "^0.12.7",
-    "socket.io": "^4.4.1",
-    "yarn": "^1.22.17"
+    "prettier": "^2.6.2"
+    
   }
 }
