@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Please provide a password'],
-      select: true,
+      select: false,
     },
     address: {
       type: String,
@@ -32,6 +32,11 @@ const UserSchema = new mongoose.Schema(
     status: {
       type: String,
       default: 'active',
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+      select: false,
     },
     createdAt: {
       type: Date,
