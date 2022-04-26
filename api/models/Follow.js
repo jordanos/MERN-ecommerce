@@ -4,10 +4,12 @@ const FollowSchema = new mongoose.Schema(
   {
     followerId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: [true, 'follower id is required'],
     },
     followingId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: [true, 'following id is required'],
     },
     createdAt: {

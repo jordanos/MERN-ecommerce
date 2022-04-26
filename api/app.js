@@ -26,6 +26,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));
 app.use(cors());
 
+// const { loginReq } = require('./middlewares/authMiddleware');
+// const { adminReq } = require('./middlewares/authorizationMiddleware');
+
 // index page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
@@ -41,15 +44,13 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Load Routes
 const usersRoute = require('./routes/users');
 const followsRoute = require('./routes/follows');
-
-// const { loginReq } = require('./middlewares/authMiddleware');
-// const { adminReq } = require('./middlewares/authorizationMiddleware');
-
-const apiVersion = '/api/v1';
+const authRoute = require('./routes/auth');
 
 // Use Routes
+const apiVersion = '/api/v1';
 app.use(`${apiVersion}/users`, usersRoute);
 app.use(`${apiVersion}/follows`, followsRoute);
+app.use(`${apiVersion}/auth`, authRoute);
 
 // Error handler middleware
 app.use(errorHandler);
