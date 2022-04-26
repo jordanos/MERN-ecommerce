@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { formatImageUrl } = require('../utils/helpers');
+const { userImagesPath } = require('../config');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -14,12 +16,11 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      unique: true,
     },
     password: {
       type: String,
       required: [true, 'Please provide a password'],
-      select: true,
+      select: false,
     },
     address: {
       type: String,
@@ -27,11 +28,16 @@ const UserSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: 'image_default.png',
+      default: 'default_image.png',
+      get: (image) => formatImageUrl(userImagesPath, image),
     },
     status: {
       type: String,
       default: 'active',
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     createdAt: {
       type: Date,
@@ -39,12 +45,12 @@ const UserSchema = new mongoose.Schema(
     },
   },
   {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true },
   }
 );
 
-// Mongoose Middleware To Encrypt Password
+// mongoose Middleware To Encrypt Password
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();

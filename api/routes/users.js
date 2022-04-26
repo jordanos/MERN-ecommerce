@@ -1,10 +1,15 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const { userImagesPath } = require('../config');
+
 const {
   getUsers,
   createUser,
   getUser,
   updateUser,
   deleteUser,
+  uploadImage,
   //   deleteUser,
 } = require('../controllers/userController');
 
@@ -37,7 +42,7 @@ const router = express.Router();
  *          type: string
  *          description: email of user.
  *        phone:
- *          type: number
+ *          type: string
  *          description: phone number of user.
  *        password:
  *          type: string
@@ -56,8 +61,9 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        name: Abebe
- *        phone: 251919803245
+ *        name: "Abebe"
+ *        phone: "251919803245"
+ *        password: "123456"
  */
 
 /**
@@ -185,5 +191,48 @@ router
    *               $ref: '#/components/schemas/User'
    */
   .delete(loginReq, authorizeUser, deleteUser);
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, `./public/${userImagesPath}`);
+  },
+  filename(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const imageUpload = multer({ storage });
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/users/image/{id}:
+ *   put:
+ *     consumes:
+ *     - multipart/form-data
+ *     summary: uploads a user image.
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *       - in: formData
+ *         name: image
+ *         type: file
+ *         required: true
+ *         description: image file
+ *     responses:
+ *       "200":
+ *         description: returnes data object with acknowledged=true.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+// add validation of images for latter
+router.put('/image/:id', imageUpload.single('image'), uploadImage);
 
 module.exports = router;
