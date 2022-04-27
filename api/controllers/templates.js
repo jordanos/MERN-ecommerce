@@ -53,7 +53,7 @@ exports.GetAll = class GetAll extends BaseTemplate {
 exports.CreateOne = class CreateOne extends BaseTemplate {
   async doMongo() {
     // validate user data
-    this.validate(this.req);
+    await this.validate(this.req);
 
     this.doc = await this.model.create(this.req.body);
   }
@@ -91,8 +91,8 @@ exports.UpdateOne = class UpdateOne extends BaseTemplate {
   async doMongo() {
     const { id } = this.req.params;
     validateId(id);
-    // validate user data
-    this.validate(this.req);
+    // validate input data
+    await this.validate(this.req);
 
     this.filter = { _id: id };
     const update = this.req.body;

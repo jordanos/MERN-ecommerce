@@ -45,12 +45,20 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 const usersRoute = require('./routes/users');
 const followsRoute = require('./routes/follows');
 const authRoute = require('./routes/auth');
+const feedsRoute = require('./routes/feeds');
+const likesRoute = require('./routes/likes');
+const messagesRoute = require('./routes/messages');
+const notificationsRoute = require('./routes/notifications');
 
 // Use Routes
 const apiVersion = '/api/v1';
 app.use(`${apiVersion}/users`, usersRoute);
 app.use(`${apiVersion}/follows`, followsRoute);
 app.use(`${apiVersion}/auth`, authRoute);
+app.use(`${apiVersion}/feeds`, feedsRoute);
+app.use(`${apiVersion}/likes`, likesRoute);
+app.use(`${apiVersion}/messages`, messagesRoute);
+app.use(`${apiVersion}/notificatiopns`, notificationsRoute);
 
 // Error handler middleware
 app.use(errorHandler);

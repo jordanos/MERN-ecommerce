@@ -1,75 +1,56 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { userImagesPath } = require('../config');
+const { feedImagesPath } = require('../config');
 
 const {
-  getUsers,
-  createUser,
-  getUser,
-  updateUser,
-  deleteUser,
-  uploadImage,
-} = require('../controllers/userController');
-
-const { loginReq } = require('../middlewares/authMiddleware');
-const { authorizeUser } = require('../middlewares/authorizationMiddleware');
+  getFeeds,
+  createFeed,
+  getFeed,
+  updateFeed,
+  deleteFeed,
+  uploadFeedImage,
+} = require('../controllers/feedController');
 
 const router = express.Router();
-
-// users route
 
 /**
  *
  *@swagger
  *components:
  *  schemas:
- *    User:
+ *    Feed:
  *      type: object
  *      required:
- *        - name
- *        - phone
- *        - password
+ *        - text
+ *        - owner
  *      properties:
  *        id:
  *          type: String
- *          description: The auto-generated id of the user.
- *        name:
+ *          description: The auto-generated id of the feed.
+ *        text:
  *          type: string
- *          description: name of the user.
- *        email:
- *          type: string
- *          description: email of user.
- *        phone:
- *          type: string
- *          description: phone number of user.
- *        password:
- *          type: string
- *          description: password of user.
- *        address:
- *          type: string
- *          description: address of user.
+ *          description: text of feed.
  *        image:
  *          type: string
- *          description: image of user.
- *        status:
+ *          description: image of feed.
+ *        owner:
  *          type: string
- *          description: status of user.
+ *          description: user id of the feed owner
  *        createdAt:
  *          type: string
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        name: "Abebe"
- *        phone: "251919803245"
- *        password: "123456"
+ *        owner: aababababababababababab4
+ *        text: "i'm feeling good"
  */
 
 /**
  *@swagger
  *tags:
- *  name: Users
- *  description: API to manage users.
+ *  name: Feeds
+ *  description: API to manage feeds.
  */
 
 router
@@ -77,123 +58,123 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/users/:
+   * /api/v1/feeds/:
    *   get:
-   *     summary: Lists all the users
-   *     tags: [Users]
+   *     summary: Lists all the feeds
+   *     tags: [Feeds]
    *     responses:
    *       "200":
-   *         description: list of users.
+   *         description: list of Feeds.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/Feed'
    */
-  .get(getUsers)
+  .get(getFeeds)
   /**
    *@swagger
    *path:
-   * /api/v1/users/:
+   * /api/v1/feeds/:
    *   post:
-   *     summary: Creates a user.
-   *     tags: [Users]
+   *     summary: Creates a feed.
+   *     tags: [Feeds]
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/User'
+   *             $ref: '#/components/schemas/Feed'
    *     responses:
    *       "201":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/Feed'
    */
-  .post(createUser);
+  .post(createFeed);
 
 router
   .route('/:id')
   /**
    *@swagger
    *path:
-   * /api/v1/users/{id}:
+   * /api/v1/feeds/{id}:
    *   get:
-   *     summary: gets a user.
-   *     tags: [Users]
+   *     summary: gets a feed.
+   *     tags: [Feeds]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The user id
+   *         description: The feed id
    *     responses:
    *       "200":
-   *         description: returnes a user.
+   *         description: returnes a feed.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/Feed'
    */
-  .get(getUser)
+  .get(getFeed)
   /**
    *@swagger
    *path:
-   * /api/v1/users/{id}:
+   * /api/v1/feeds/{id}:
    *   put:
-   *     summary: edits/updates a user.
-   *     tags: [Users]
+   *     summary: edits/updates a feed.
+   *     tags: [Feeds]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The user id
+   *         description: The feed id
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/User'
+   *             $ref: '#/components/schemas/Feed'
    *     responses:
    *       "200":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/Feed'
    */
-  .put(loginReq, authorizeUser, updateUser)
+  .put(updateFeed)
   /**
    *@swagger
    *path:
-   * /api/v1/users/{id}:
+   * /api/v1/feeds/{id}:
    *   delete:
-   *     summary: deletes a user.
-   *     tags: [Users]
+   *     summary: deletes a feed.
+   *     tags: [Feeds]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The user id
+   *         description: The feed id
    *     responses:
    *       "200":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/Feed'
    */
-  .delete(loginReq, authorizeUser, deleteUser);
+  .delete(deleteFeed);
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, `./public/${userImagesPath}`);
+    cb(null, `./public/${feedImagesPath}`);
   },
   filename(req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -205,19 +186,19 @@ const imageUpload = multer({ storage });
 /**
  *@swagger
  *path:
- * /api/v1/users/image/{id}:
+ * /api/v1/feeds/image/{id}:
  *   put:
  *     consumes:
  *     - multipart/form-data
- *     summary: uploads a user image.
- *     tags: [Users]
+ *     summary: uploads feed image.
+ *     tags: [Feeds]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The user id
+ *         description: The feed id
  *       - in: formData
  *         name: image
  *         type: file
@@ -229,9 +210,9 @@ const imageUpload = multer({ storage });
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/Feed'
  */
 // add validation of images for latter
-router.put('/image/:id', imageUpload.single('image'), uploadImage);
+router.put('/image/:id', imageUpload.single('image'), uploadFeedImage);
 
 module.exports = router;
