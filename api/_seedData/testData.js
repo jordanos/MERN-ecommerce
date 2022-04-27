@@ -40,6 +40,14 @@ exports.seedFollow2 = {
   id: '622efe5d7a8344cd7bb07a6a',
 };
 
+exports.seedFeed1 = {
+  text: '622efd0f9676958c4d2732cf',
+  image: '622efe5d7a8344cd7bb07a6a',
+  owner: '622efd0f9676958c4d2732cc',
+  _id: '622efe3d7a8344cd7bb07a6a',
+  id: '622efe3d7a8344cd7bb07a6a',
+};
+
 // exports.seedTask1 = {
 //   title: "new task",
 //   description: "new task description",

@@ -33,3 +33,10 @@ exports.adminSchema = {
   canRemoveAdmin: expect.any(Boolean),
   owner: expect.any(String),
 };
+
+exports.feedSchema = {
+  text: expect.any(String),
+  image: expect.any(String),
+  owner: expect.any(String),
+  createdAt: expect.any(String),
+};
