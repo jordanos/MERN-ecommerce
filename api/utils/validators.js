@@ -12,6 +12,15 @@ const userSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const productSchema = Joi.object({
+  name: Joi.string().required(),
+  price: Joi.number().required(),
+  quantity: Joi.number().integer().required(),
+  brand: Joi.string().required(),
+  description: Joi.string().required(),
+  productCondition: Joi.string().required(),
+});
+
 const followSchema = Joi.object({
   followerId: Joi.string().hex().length(24).required(),
   followingId: Joi.string().hex().length(24).required(),
@@ -59,6 +68,19 @@ exports.validateUserInput = async (req) => {
   const { error } = userSchema.validate(req.body, options);
   if (error) {
     throw new CustomError(error.message, 400);
+  }
+};
+
+exports.validateProductInput = async (req) => {
+  const { error } = productSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+
+  // check if reference exists
+  const userDoc = await User.findById(req.body.userId);
+  if (!userDoc) {
+    throw new CustomError('notification reciever object reference error', 400);
   }
 };
 
