@@ -54,10 +54,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/follows/:
+   * /api/v1/follows/?skip=0:
    *   get:
    *     summary: Lists all the follows
    *     tags: [Follows]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of users.
@@ -171,7 +177,7 @@ router
 /**
  *@swagger
  *path:
- * /api/v1/follows/followings/{id}:
+ * /api/v1/follows/followings/{id}?skip=0:
  *   get:
  *     summary: Lists all the followings of a user
  *     tags: [Follows]
@@ -182,6 +188,11 @@ router
  *           type: string
  *         required: true
  *         description: The user id
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: pagination value to skip to
  *     responses:
  *       "200":
  *         description: list of users.
@@ -195,7 +206,7 @@ router.get('/followings/:id', getFollowings);
 /**
  *@swagger
  *path:
- * /api/v1/follows/followers/{id}:
+ * /api/v1/follows/followers/{id}?skip=0:
  *   get:
  *     summary: Lists all the followers of a user
  *     tags: [Follows]
@@ -206,6 +217,11 @@ router.get('/followings/:id', getFollowings);
  *           type: string
  *         required: true
  *         description: The user id
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: pagination value to skip to
  *     responses:
  *       "200":
  *         description: list of users.

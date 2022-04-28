@@ -58,10 +58,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/feeds/:
+   * /api/v1/feeds/?skip=0:
    *   get:
    *     summary: Lists all the feeds
    *     tags: [Feeds]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of Feeds.
