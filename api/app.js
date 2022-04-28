@@ -5,16 +5,10 @@ const dotenv = require('dotenv');
 const path = require('path');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const db = require('./config/db');
 const errorHandler = require('./middlewares/errorHandler');
 
 // Load Config File
 dotenv.config({ path: './.env' });
-
-// Connect To Database
-db()
-  .then()
-  .catch((e) => console.log(e));
 
 // Express App
 const app = express();
@@ -58,7 +52,7 @@ app.use(`${apiVersion}/auth`, authRoute);
 app.use(`${apiVersion}/feeds`, feedsRoute);
 app.use(`${apiVersion}/likes`, likesRoute);
 app.use(`${apiVersion}/messages`, messagesRoute);
-app.use(`${apiVersion}/notificatiopns`, notificationsRoute);
+app.use(`${apiVersion}/notifications`, notificationsRoute);
 
 // Error handler middleware
 app.use(errorHandler);

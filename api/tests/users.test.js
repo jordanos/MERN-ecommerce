@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const app = require('../app');
 const User = require('../models/User');
 const Follow = require('../models/Follow');
+const { connect, disconnect } = require('../config/db');
 
 const {
   seedUser1,
@@ -21,6 +22,7 @@ const { userSchema, followSchema } = require('./schemas');
 // /users integration test
 describe('Users API endpoint', () => {
   beforeAll(async () => {
+    await connect();
     await User.create(seedUser1);
     await Follow.create(seedFollow1);
   });
@@ -29,6 +31,7 @@ describe('Users API endpoint', () => {
     await Follow.deleteOne({ _id: seedFollow2.id });
     await User.deleteOne({ _id: seedUser1.id });
     await User.deleteOne({ _id: seedUser2.id });
+    await disconnect();
   });
 
   it('GET /users -> list of users', () =>

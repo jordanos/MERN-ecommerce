@@ -48,6 +48,22 @@ exports.seedFeed1 = {
   id: '622efe3d7a8344cd7bb07a6a',
 };
 
+exports.seedMessage = {
+  text: 'hello',
+  fromId: this.seedUser1.id,
+  toId: this.seedUser2.id,
+  _id: '622efe3d7a8345cd7bb07a6a',
+  id: '622efe3d7a8345cd7bb07a6a',
+};
+
+exports.seedNotification = {
+  title: 'rica',
+  text: 'hello',
+  userId: this.seedUser1.id,
+  _id: '622efe3d2a8345cd7bb07a6a',
+  id: '622efe3d2a8345cd7bb07a6a',
+};
+
 // exports.seedTask1 = {
 //   title: "new task",
 //   description: "new task description",

@@ -40,3 +40,20 @@ exports.feedSchema = {
   owner: expect.any(String),
   createdAt: expect.any(String),
 };
+
+exports.messageSchema = {
+  text: expect.any(String),
+  toId: expect.any(String),
+  fromId: expect.any(String),
+  status: expect.any(String),
+  createdAt: expect.any(String),
+};
+
+exports.notificationSchema = {
+  title: expect.any(String),
+  text: expect.any(String),
+  userId: expect.any(String),
+  type: expect.any(String),
+  status: expect.any(String),
+  createdAt: expect.any(String),
+};
