@@ -45,20 +45,19 @@ exports.deleteLike = (req, res, next) => {
 exports.getLikings = (req, res, next) => {
   const getAll = new GetAll(req, res, next, LikeFeed, 'Like');
   //   custom function to map Likes to users
-  getAll.doMongo = async () => {
-    const { id } = getAll.req.params;
-    validateId(id);
-
-    const docs = await getAll.model.find({ userId: id }).exec();
-    // generate array of feed ids
-    const ids = docs.map((doc) => [doc.feedId]);
-    console.log(ids);
-
-    getAll.doc = await Feed.find({
+  getAll.filter = { userId: req.params.id };
+  getAll.transform = async () => {
+    const ids = getAll.doc.map((doc) => [doc.feedId]);
+    const docs = await Feed.find({
       _id: {
         $in: ids,
       },
-    });
+    })
+      .limit(getAll.req.query.limit)
+      .skip(getAll.req.query.skip)
+      .lean()
+      .exec();
+    return docs;
   };
 
   getAll.execute();
@@ -67,19 +66,19 @@ exports.getLikings = (req, res, next) => {
 exports.getLikers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, LikeFeed, 'Like');
   //   custom function to map Likes to users
-  getAll.doMongo = async () => {
-    const { id } = getAll.req.params;
-    validateId(id);
-
-    const docs = await getAll.model.find({ feedId: id }).exec();
-    // generate array of user ids
-    const ids = docs.map((doc) => [doc.userId]);
-
-    getAll.doc = await User.find({
+  getAll.filter = { feedId: req.params.id };
+  getAll.transform = async () => {
+    const ids = getAll.doc.map((doc) => [doc.userId]);
+    const docs = await User.find({
       _id: {
         $in: ids,
       },
-    });
+    })
+      .limit(getAll.req.query.limit)
+      .skip(getAll.req.query.skip)
+      .lean()
+      .exec();
+    return docs;
   };
 
   getAll.execute();

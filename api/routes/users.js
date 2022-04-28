@@ -77,10 +77,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/users/:
+   * /api/v1/users/?skip=0:
    *   get:
    *     summary: Lists all the users
    *     tags: [Users]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of users.

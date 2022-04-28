@@ -62,10 +62,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/messages:
+   * /api/v1/messages?skip=0:
    *   get:
    *     summary: Lists all the messages
    *     tags: [Messages]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of Messages.

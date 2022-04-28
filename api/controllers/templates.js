@@ -39,12 +39,33 @@ class BaseTemplate {
 
 exports.GetAll = class GetAll extends BaseTemplate {
   async doMongo() {
-    if (this.filter) this.doc = await this.model.find(this.filter);
-    else this.doc = await this.model.find();
+    this.req.query.skip = this.req.query.skip || 0;
+    this.req.query.skip = parseInt(this.req.query.skip, 10);
+    if (this.filter)
+      this.doc = await this.model
+        .find(this.filter)
+        .limit(this.req.query.limit)
+        .skip(this.req.query.skip)
+        .lean()
+        .exec();
+    else
+      this.doc = await this.model
+        .find()
+        .limit(this.req.query.limit)
+        .skip(this.req.query.skip)
+        .lean()
+        .exec();
+    if (this.transform) {
+      this.doc = await this.transform();
+    }
+    const itemCount = await this.model.count({});
+    this.pageCount = Math.ceil(itemCount / this.req.query.limit);
   }
 
   performReq() {
     this.res.status(200).json({
+      hasMore: this.req.query.skip / this.req.query.limit + 1 < this.pageCount,
+      skip: this.req.query.skip + this.req.query.limit,
       data: this.doc,
     });
   }
@@ -54,7 +75,6 @@ exports.CreateOne = class CreateOne extends BaseTemplate {
   async doMongo() {
     // validate user data
     await this.validate(this.req);
-
     this.doc = await this.model.create(this.req.body);
   }
 

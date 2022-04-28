@@ -54,7 +54,7 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/likes/feeds:
+   * /api/v1/likes/feeds?skip=0:
    *   get:
    *     summary: Lists all the feed likes
    *     tags: [Likes]
@@ -74,6 +74,12 @@ router
    *   post:
    *     summary: Creates a like.
    *     tags: [Likes]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     requestBody:
    *       required: true
    *       content:
@@ -176,7 +182,7 @@ router
 /**
  *@swagger
  *path:
- * /api/v1/likes/feeds/likings/{id}:
+ * /api/v1/likes/feeds/likings/{id}?skip=0:
  *   get:
  *     summary: Lists all feeds a user liked
  *     tags: [Likes]
@@ -187,6 +193,11 @@ router
  *           type: string
  *         required: true
  *         description: The user id
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: pagination value to skip to
  *     responses:
  *       "200":
  *         description: list of feeds.
@@ -200,7 +211,7 @@ router.get('/feeds/likings/:id', getLikings);
 /**
  *@swagger
  *path:
- * /api/v1/likes/feeds/likers/{id}:
+ * /api/v1/likes/feeds/likers/{id}?skip=0:
  *   get:
  *     summary: Lists all users who liked a feed
  *     tags: [Likes]
@@ -211,6 +222,11 @@ router.get('/feeds/likings/:id', getLikings);
  *           type: string
  *         required: true
  *         description: The feed id
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: pagination value to skip to
  *     responses:
  *       "200":
  *         description: list of users.

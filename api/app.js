@@ -5,7 +5,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const errorHandler = require('./middlewares/errorHandler');
+
+// pagination
+const paginate = require('express-paginate');
 
 // Load Config File
 dotenv.config({ path: './.env' });
@@ -35,6 +37,9 @@ const { swaggerOptions } = require('./docs/swagger');
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+// pagination middleware
+app.use(paginate.middleware(10, 50));
+
 // Load Routes
 const usersRoute = require('./routes/users');
 const followsRoute = require('./routes/follows');
@@ -54,6 +59,7 @@ app.use(`${apiVersion}/likes`, likesRoute);
 app.use(`${apiVersion}/messages`, messagesRoute);
 app.use(`${apiVersion}/notifications`, notificationsRoute);
 
+const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware
 app.use(errorHandler);
 

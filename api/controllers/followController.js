@@ -44,14 +44,19 @@ exports.deleteFollow = (req, res, next) => {
 exports.getFollowings = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Follow, 'follow');
   //   custom function to map follows to users
-  getAll.doMongo = async () => {
-    const { id } = getAll.req.params;
-    validateId(id);
-
-    const docs = await getAll.model.find({ followingId: id }).exec();
-    getAll.doc = await User.find({
-      ...docs.map((doc) => ({ id: doc.followerId })),
-    });
+  getAll.filter = { followingId: req.params.id };
+  getAll.transform = async () => {
+    const ids = getAll.doc.map((doc) => [doc.followerId]);
+    const docs = await User.find({
+      _id: {
+        $in: ids,
+      },
+    })
+      .limit(getAll.req.query.limit)
+      .skip(getAll.req.query.skip)
+      .lean()
+      .exec();
+    return docs;
   };
 
   getAll.execute();
@@ -60,15 +65,22 @@ exports.getFollowings = (req, res, next) => {
 exports.getFollowers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Follow, 'follow');
   //   custom function to map follows to users
-  getAll.doMongo = async () => {
-    const { id } = getAll.req.params;
-    validateId(id);
+  getAll.filter = { followerId: req.params.id };
 
-    const docs = await getAll.model.find({ followerId: id }).exec();
-    getAll.doc = await User.find(
-      ...docs.map((doc) => ({ id: doc.followingId }))
-    );
+  getAll.transform = async () => {
+    const ids = getAll.doc.map((doc) => [doc.followingId]);
+    const docs = await User.find({
+      _id: {
+        $in: ids,
+      },
+    })
+      .limit(getAll.req.query.limit)
+      .skip(getAll.req.query.skip)
+      .lean()
+      .exec();
+    return docs;
   };
+
   getAll.execute();
 };
 
