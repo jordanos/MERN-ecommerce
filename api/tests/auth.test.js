@@ -1,6 +1,7 @@
 const { expect, describe, beforeAll, afterAll, it } = global;
 const request = require('supertest');
 const app = require('../app');
+const { connect, disconnect } = require('../config/db');
 const Otp = require('../models/Otp');
 const User = require('../models/User');
 
@@ -9,11 +10,13 @@ const { seedUser1 } = require('../_seedData/testData');
 // /users integration test
 describe('Users API endpoint', () => {
   beforeAll(async () => {
+    await connect();
     await User.create(seedUser1);
   });
   afterAll(async () => {
-    await User.deleteOne({ id: seedUser1.id });
+    await User.deleteOne({ _id: seedUser1.id });
     await Otp.deleteOne({ owner: seedUser1.id });
+    await disconnect();
   });
 
   it('POST /auth/login -> authenticates a user', () =>

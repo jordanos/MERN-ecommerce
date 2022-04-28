@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "A rest api for a rica ecommerce app.",
   "main": "bin/www",
-  "jest": {
-    "verbose": true,
-    "testTimeout": 20000
-  },
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "dev": "nodemon ./bin/www",

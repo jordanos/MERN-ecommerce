@@ -35,10 +35,17 @@ const likeFeedSchema = Joi.object({
   feedId: Joi.string().hex().length(24).required(),
 });
 
-const messagechema = Joi.object({
+const messageSchema = Joi.object({
   text: Joi.string().required(),
   fromId: Joi.string().hex().length(24).required(),
   toId: Joi.string().hex().length(24).required(),
+});
+
+const notificationSchema = Joi.object({
+  title: Joi.string().required(),
+  text: Joi.string().required(),
+  type: Joi.string(),
+  userId: Joi.string().hex().length(24).required(),
 });
 
 // schema options
@@ -99,18 +106,30 @@ exports.validateLikeFeedInput = async (req) => {
   }
 };
 
-exports.validateLikeFeedInput = async (req) => {
-  const { error } = likeFeedSchema.validate(req.body, options);
+exports.validateMessageInput = async (req) => {
+  const { error } = messageSchema.validate(req.body, options);
   if (error) {
     throw new CustomError(error.message, 400);
   }
   // check if reference exists
-  const feedDoc = await Feed.findById(req.body.feedId);
-  const userDoc = await User.findById(req.body.userId);
-  if (!feedDoc || !userDoc) {
+  const fromDoc = await User.findById(req.body.fromId);
+  const toDoc = await User.findById(req.body.toId);
+  if (!fromDoc || !toDoc) {
     throw new CustomError(
-      "feed or user reference error. id doesn't exist!",
+      "sender or reciever object reference error. id doesn't exist!",
       400
     );
+  }
+};
+
+exports.validateNotificationInput = async (req) => {
+  const { error } = notificationSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+  // check if reference exists
+  const userDoc = await User.findById(req.body.userId);
+  if (!userDoc) {
+    throw new CustomError('notification reciever object reference error', 400);
   }
 };

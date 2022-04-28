@@ -1,11 +1,11 @@
 const express = require('express');
 
 const {
-  getMessages,
-  createMessage,
-  getMessage,
-  updateMessage,
-  deleteMessage,
+  getAll,
+  createOne,
+  getOne,
+  updateOne,
+  deleteOne,
 } = require('../controllers/messageController');
 
 const router = express.Router();
@@ -74,7 +74,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .get(getMessages)
+  .get(getAll)
   /**
    *@swagger
    *path:
@@ -96,10 +96,10 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .post(createMessage);
+  .post(createOne);
 
 router
-  .route('/messages/:id')
+  .route('/:id')
   /**
    *@swagger
    *path:
@@ -122,7 +122,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .get(getMessage)
+  .get(getOne)
   /**
    *@swagger
    *path:
@@ -151,11 +151,11 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .put(updateMessage)
+  .put(updateOne)
   /**
    *@swagger
    *path:
-   * /api/v1/messages/feeds/{id}:
+   * /api/v1/messages/{id}:
    *   delete:
    *     summary: deletes a Message.
    *     tags: [Messages]
@@ -174,6 +174,6 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .delete(deleteMessage);
+  .delete(deleteOne);
 
 module.exports = router;
