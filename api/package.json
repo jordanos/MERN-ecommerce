@@ -35,11 +35,11 @@
     "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
   }
 }

@@ -50,8 +50,9 @@ const router = express.Router();
  *        address:
  *          type: string
  *          description: address of user.
- *        image:
+ *        image/png:
  *          type: string
+ *          format: binary
  *          description: image of user.
  *        status:
  *          type: string
@@ -226,13 +227,14 @@ const imageUpload = multer({ storage });
  *         description: image file
  *     responses:
  *       "200":
- *         description: returnes data object with acknowledged=true.
+ *         description: returned data object with acknowledged=true.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  */
 // add validation of images for latter
+
 router.put('/image/:id', imageUpload.single('image'), uploadImage);
 
 module.exports = router;

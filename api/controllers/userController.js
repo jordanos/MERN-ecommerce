@@ -1,5 +1,6 @@
 const User = require('../models/User');
 
+
 const {
   GetAll,
   CreateOne,
@@ -9,6 +10,7 @@ const {
 } = require('./templates');
 const { validateUserInput } = require('../utils/validators');
 
+
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
   getAll.execute();
@@ -16,7 +18,7 @@ exports.getUsers = (req, res, next) => {
 
 exports.createUser = (req, res, next) => {
   const createOne = new CreateOne(req, res, next, User, 'user');
-  // setup a vallidaion function otherwise an error will be thrown
+  // setup a validation function otherwise an error will be thrown
   createOne.validate = validateUserInput;
 
   createOne.execute();

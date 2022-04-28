@@ -9,6 +9,15 @@ const userSchema = Joi.object({
     .required(),
   password: Joi.string().min(6).required(),
 });
+ const productSchema = Joi.object({
+ name: Joi.string().required(),
+ price: Joi.number().required(),
+ quantity: Joi.number().integer().required(),
+ brand:  Joi.string().required(),
+ description: Joi.string().required(),
+ productCondition: Joi.string().required(),
+ 
+});
 
 const followSchema = Joi.object({
   followerId: Joi.string().hex().length(24).required(),
@@ -35,6 +44,14 @@ exports.validateUserInput = (req) => {
   if (error) {
     throw new CustomError(error.message, 400);
   }
+};
+
+exports.validateProductInput = (req) => {
+const {error}= productSchema.validate(req.body,options);
+if(error)
+{
+  throw new CustomError(error.message,400)
+}
 };
 
 exports.validateFollowInput = (req) => {

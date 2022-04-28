@@ -25,7 +25,7 @@ class BaseTemplate {
     throw new Error('No function has been implemented to performReq()');
   }
 
-  // It gets called by controllers torun the request
+  // It gets called by controllers to run the request
 
   async execute() {
     try {
@@ -53,7 +53,7 @@ exports.GetAll = class GetAll extends BaseTemplate {
 exports.CreateOne = class CreateOne extends BaseTemplate {
   async doMongo() {
     // validate user data
-    this.validate(this.req);
+    // this.validate(this.req);
 
     this.doc = await this.model.create(this.req.body);
   }
