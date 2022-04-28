@@ -20,8 +20,8 @@ exports.swaggerOptions = {
     openapi: '3.0.0',
     info: {
       version: '1.0.0',
-      title: 'Todo API',
-      description: 'Todo API documentaion.',
+      title: 'Rica Ecommerce API',
+      description: 'Rica ecommerce API documentaion.',
       contact: {
         name: 'Jordan',
         email: 'jordanoswork2021@gmail.com',
