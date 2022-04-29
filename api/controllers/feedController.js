@@ -15,7 +15,8 @@ exports.getFeeds = (req, res, next) => {
 };
 
 exports.createFeed = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, Feed, 'feed');
+  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  const createOne = new CreateOne(modfiedReq, res, next, Feed, 'feed');
   // setup a vallidaion function otherwise an error will be thrown
   createOne.validate = validateFeedInput;
 

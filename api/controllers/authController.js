@@ -11,7 +11,7 @@ exports.login = async (req, res, next) => {
     // Get req data and init required datas
     const { phone, password } = req.body;
     const user = await User.findOne({ phone });
-
+    console.log(user);
     if (!(user && (await bcrypt.compare(password, user.password)))) {
       throw new CustomError('Invalid Credentials', 401);
     }
@@ -53,14 +53,14 @@ exports.sendOtp = async (req, res, next) => {
     const { id } = req.params;
     validateId(id);
 
-    const user = await User.findOne({ id });
-    const otpDoc = await Otp.findOne({ owner: id });
+    const user = await User.findOne({ _id: id });
+    const otpDoc = await Otp.findOne({ userId: id });
     // check if verified or otp exists.
     if (user.isVerified) {
       throw new CustomError('already verified!', 400);
     }
     if (otpDoc) {
-      await Otp.deleteOne({ owner: id });
+      await Otp.deleteOne({ userId: id });
     }
 
     // generate random 6 digit number
@@ -68,7 +68,7 @@ exports.sendOtp = async (req, res, next) => {
     const randomNumber = 123456;
 
     // save number in the database
-    const otpDocNew = await Otp.create({ owner: id, otp: randomNumber });
+    const otpDocNew = await Otp.create({ userId: id, otp: randomNumber });
     if (!otpDocNew) {
       throw new CustomError('Something went wrong!', 500);
     }
@@ -87,7 +87,7 @@ exports.verify = async (req, res, next) => {
     const { id } = req.params;
     validateId(id);
 
-    const user = await User.findOne({ id });
+    const user = await User.findOne({ _id: id });
 
     // check if already verified
     if (user.isVerified) {
@@ -96,9 +96,9 @@ exports.verify = async (req, res, next) => {
     // get OTP and check if true else throw error
     const { otp } = req.body;
 
-    const otpDoc = Otp.findOne({ id, otp });
+    const otpDoc = await Otp.findOne({ userId: id, otp });
     if (!otpDoc) {
-      throw new CustomError('Invalid credentials!', 403);
+      throw new CustomError('Invalid Otp credentials!', 403);
     }
 
     // change isVerified field to true

@@ -8,6 +8,11 @@ const {
   deleteOne,
 } = require('../controllers/messageController');
 
+// authentication and authorization
+const { loginReq } = require('../middlewares/authMiddleware');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const Message = require('../models/Message');
+
 const router = express.Router();
 
 /**
@@ -19,7 +24,6 @@ const router = express.Router();
  *      type: object
  *      required:
  *        - text
- *        - fromId
  *        - toId
  *      properties:
  *        id:
@@ -45,7 +49,6 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        fromId: fa124b57a700cccb21b45be1
  *        toId: fa124b57a700cccb21b45be1
  *        text: "hello"
  */
@@ -80,7 +83,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .get(getAll)
+  .get(loginReq, getAll)
   /**
    *@swagger
    *path:
@@ -102,7 +105,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .post(createOne);
+  .post(loginReq, createOne);
 
 router
   .route('/:id')
@@ -128,7 +131,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .get(getOne)
+  .get(loginReq, getOne)
   /**
    *@swagger
    *path:
@@ -157,7 +160,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .put(updateOne)
+  .put(loginReq, authorizeReq(Message), updateOne)
   /**
    *@swagger
    *path:
@@ -180,6 +183,6 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Message'
    */
-  .delete(deleteOne);
+  .delete(loginReq, authorizeReq(Message), deleteOne);
 
 module.exports = router;

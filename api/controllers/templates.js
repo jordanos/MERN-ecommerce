@@ -46,14 +46,12 @@ exports.GetAll = class GetAll extends BaseTemplate {
         .find(this.filter)
         .limit(this.req.query.limit)
         .skip(this.req.query.skip)
-        .lean()
         .exec();
     else
       this.doc = await this.model
         .find()
         .limit(this.req.query.limit)
         .skip(this.req.query.skip)
-        .lean()
         .exec();
     if (this.transform) {
       this.doc = await this.transform();

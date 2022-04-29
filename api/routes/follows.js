@@ -11,6 +11,11 @@ const {
   isFollowing,
 } = require('../controllers/followController');
 
+// authentication and authorization
+const { loginReq } = require('../middlewares/authMiddleware');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const Follow = require('../models/Follow');
+
 const router = express.Router();
 
 /**
@@ -21,7 +26,6 @@ const router = express.Router();
  *    Follow:
  *      type: object
  *      required:
- *        - followerId
  *        - followingId
  *      properties:
  *        id:
@@ -38,7 +42,6 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        followerId: fa124b57a700cccb21b45be1
  *        followingId: fa124b57a700cccb21b45be1
  */
 
@@ -72,7 +75,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Follow'
    */
-  .get(getFollows)
+  .get(loginReq, getFollows)
   /**
    *@swagger
    *path:
@@ -94,7 +97,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Follow'
    */
-  .post(createFollow);
+  .post(loginReq, createFollow);
 
 router
   .route('/:id')
@@ -149,7 +152,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Follow'
    */
-  .put(updateFollow)
+  .put(loginReq, authorizeReq(Follow), updateFollow)
   /**
    *@swagger
    *path:
@@ -172,7 +175,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Follow'
    */
-  .delete(deleteFollow);
+  .delete(loginReq, authorizeReq(Follow), deleteFollow);
 
 /**
  *@swagger

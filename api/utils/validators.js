@@ -3,8 +3,9 @@ const CustomError = require('./CustomError');
 const Feed = require('../models/Feed');
 const User = require('../models/User');
 
-const userSchema = Joi.object({
+const userSchema = Joi.object().keys({
   name: Joi.string().required(),
+  email: Joi.string().email(),
   phone: Joi.string()
     .length(12)
     .pattern(/^[0-9]+$/)
@@ -27,7 +28,7 @@ const followSchema = Joi.object({
 });
 
 const adminSchema = Joi.object({
-  owner: Joi.string().required(),
+  userId: Joi.string().required(),
 });
 
 const idSchema = Joi.object({
@@ -36,17 +37,14 @@ const idSchema = Joi.object({
 
 const feedSchema = Joi.object({
   text: Joi.string().required(),
-  owner: Joi.string().hex().length(24).required(),
 });
 
 const likeFeedSchema = Joi.object({
-  userId: Joi.string().hex().length(24).required(),
   feedId: Joi.string().hex().length(24).required(),
 });
 
 const messageSchema = Joi.object({
   text: Joi.string().required(),
-  fromId: Joi.string().hex().length(24).required(),
   toId: Joi.string().hex().length(24).required(),
 });
 
@@ -152,6 +150,6 @@ exports.validateNotificationInput = async (req) => {
   // check if reference exists
   const userDoc = await User.findById(req.body.userId);
   if (!userDoc) {
-    throw new CustomError('notification reciever object reference error', 400);
+    throw new CustomError('product user id object reference error', 400);
   }
 };

@@ -15,7 +15,8 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.createProduct = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, Product, 'product');
+  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  const createOne = new CreateOne(modfiedReq, res, next, Product, 'product');
   createOne.validate = validateProductInput;
   createOne.execute();
 };
@@ -34,13 +35,6 @@ exports.updateProduct = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
   const deleteOne = new DeleteOne(req, res, next, Product, 'product');
   deleteOne.execute();
-};
-
-exports.uploadImage = (req, res, next) => {
-  req.body = { image: req.file.filename };
-  const updateOne = new UpdateOne(req, res, next, Product, 'user');
-  updateOne.validate = () => {};
-  updateOne.execute();
 };
 
 exports.uploadImage = (req, res, next) => {

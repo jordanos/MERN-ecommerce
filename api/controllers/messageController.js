@@ -15,7 +15,8 @@ exports.getAll = (req, res, next) => {
 };
 
 exports.createOne = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, Message, 'Message');
+  const modfiedReq = { ...req, body: { ...req.body, fromId: req.user.id } };
+  const createOne = new CreateOne(modfiedReq, res, next, Message, 'Message');
   // setup a vallidaion function otherwise an error will be thrown
   createOne.validate = validateMessageInput;
 

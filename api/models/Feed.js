@@ -13,7 +13,7 @@ const FeedSchema = new mongoose.Schema(
       default: 'default_image.png',
       get: (image) => formatImageUrl(feedImagesPath, image),
     },
-    owner: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,

@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const { productImagesPath } = require('../config');
@@ -20,6 +19,11 @@ const {
   deleteProduct,
   uploadImage,
 } = require('../controllers/productController');
+
+// authentication and authorization
+const { loginReq } = require('../middlewares/authMiddleware');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const Product = require('../models/Product');
 
 // products route
 
@@ -85,8 +89,6 @@ const {
  *  description: API to manage lkmklnm.
  */
 
-router.use('/images', express.static('./src/images/'));
-
 router
   .route('/')
   /**
@@ -126,9 +128,33 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Product'
    */
-  .post(createProduct);
+  .post(loginReq, createProduct);
 router
   .route('/:id')
+  /**
+   *@swagger
+   *path:
+   * /api/v1/products/{id}:
+   *   get:
+   *     summary: gets a product.
+   *     tags: [Products]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: The product id
+   *     responses:
+   *       "200":
+   *         description: returns a product.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Product'
+   */
+
+  .get(getProduct)
   /**
    *@swagger
    *path:
@@ -157,7 +183,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Product'
    */
-  .put(updateProduct)
+  .put(loginReq, authorizeReq(Product), updateProduct)
   /**
    *@swagger
    *path:
@@ -180,31 +206,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Product'
    */
-  .delete(deleteProduct)
-  /**
-   *@swagger
-   *path:
-   * /api/v1/products/{id}:
-   *   get:
-   *     summary: gets a product.
-   *     tags: [Products]
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         schema:
-   *           type: string
-   *         required: true
-   *         description: The product id
-   *     responses:
-   *       "200":
-   *         description: returns a product.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Product'
-   */
-
-  .get(getProduct);
+  .delete(loginReq, authorizeReq(Product), deleteProduct);
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -247,6 +249,12 @@ const imageUpload = multer({ storage });
  *               $ref: '#/components/schemas/User'
  */
 // add validation of images for latter
-router.put('/image/:id', imageUpload.single('image'), uploadImage);
+router.put(
+  '/image/:id',
+  loginReq,
+  authorizeReq(Product),
+  imageUpload.single('image'),
+  uploadImage
+);
 
 module.exports = router;

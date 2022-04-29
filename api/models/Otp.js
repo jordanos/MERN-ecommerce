@@ -6,7 +6,7 @@ const OtpSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'otp must be provided'],
     },
-    owner: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
