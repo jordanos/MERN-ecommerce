@@ -81,7 +81,7 @@ const Product = require('../models/Product');
  *@swagger
  *tags:
  *  name: Products
- *  description: API to manage lkmklnm.
+ *  description: API to manage products.
  */
 
 router.use('/images', express.static('./src/images/'));
