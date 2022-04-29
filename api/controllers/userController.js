@@ -8,6 +8,7 @@ const {
   UpdateOne,
 } = require('./templates');
 const { validateUserInput } = require('../utils/validators');
+const { hashPassword } = require('../utils/helpers');
 
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
@@ -27,10 +28,14 @@ exports.getUser = (req, res, next) => {
   getOne.execute();
 };
 
-exports.updateUser = (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
   const updateOne = new UpdateOne(req, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown
   updateOne.validate = validateUserInput;
+  // hash password if exists
+  if (req.body.password) {
+    req.body.password = await hashPassword(req.body.password);
+  }
 
   updateOne.execute();
 };

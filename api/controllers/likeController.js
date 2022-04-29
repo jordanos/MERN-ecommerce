@@ -17,7 +17,8 @@ exports.getLikes = (req, res, next) => {
 };
 
 exports.createLike = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, LikeFeed, 'Like');
+  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  const createOne = new CreateOne(modfiedReq, res, next, LikeFeed, 'Like');
   // setup a vallidaion function otherwise an error will be thrown
   createOne.validate = validateLikeFeedInput;
 
@@ -55,7 +56,6 @@ exports.getLikings = (req, res, next) => {
     })
       .limit(getAll.req.query.limit)
       .skip(getAll.req.query.skip)
-      .lean()
       .exec();
     return docs;
   };
@@ -76,7 +76,6 @@ exports.getLikers = (req, res, next) => {
     })
       .limit(getAll.req.query.limit)
       .skip(getAll.req.query.skip)
-      .lean()
       .exec();
     return docs;
   };

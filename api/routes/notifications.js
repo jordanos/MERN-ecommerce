@@ -8,6 +8,10 @@ const {
   deleteOne,
 } = require('../controllers/notificationController');
 
+// authentication and authorization
+const { loginReq } = require('../middlewares/authMiddleware');
+// const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+
 const router = express.Router();
 
 /**
@@ -74,7 +78,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Notification'
    */
-  .get(getAll)
+  .get(loginReq, getAll)
   /**
    *@swagger
    *path:
@@ -128,7 +132,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Notification'
    */
-  .get(getOne)
+  .get(loginReq, getOne)
   /**
    *@swagger
    *path:

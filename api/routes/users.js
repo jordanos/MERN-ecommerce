@@ -12,8 +12,10 @@ const {
   uploadImage,
 } = require('../controllers/userController');
 
+// authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
-const { authorizeUser } = require('../middlewares/authorizationMiddleware');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -172,7 +174,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .put(loginReq, authorizeUser, updateUser)
+  .put(loginReq, authorizeReq(User), updateUser)
   /**
    *@swagger
    *path:
@@ -195,7 +197,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .delete(loginReq, authorizeUser, deleteUser);
+  .delete(loginReq, authorizeReq, deleteUser);
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -238,6 +240,12 @@ const imageUpload = multer({ storage });
  *               $ref: '#/components/schemas/User'
  */
 // add validation of images for latter
-router.put('/image/:id', imageUpload.single('image'), uploadImage);
+router.put(
+  '/image/:id',
+  loginReq,
+  authorizeReq(User),
+  imageUpload.single('image'),
+  uploadImage
+);
 
 module.exports = router;

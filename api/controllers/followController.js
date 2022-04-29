@@ -16,7 +16,8 @@ exports.getFollows = (req, res, next) => {
 };
 
 exports.createFollow = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, Follow, 'follow');
+  const modfiedReq = { ...req, body: { ...req.body, followerId: req.user.id } };
+  const createOne = new CreateOne(modfiedReq, res, next, Follow, 'follow');
   // setup a vallidaion function otherwise an error will be thrown
   createOne.validate = validateFollowInput;
 
@@ -54,7 +55,6 @@ exports.getFollowings = (req, res, next) => {
     })
       .limit(getAll.req.query.limit)
       .skip(getAll.req.query.skip)
-      .lean()
       .exec();
     return docs;
   };
@@ -76,7 +76,6 @@ exports.getFollowers = (req, res, next) => {
     })
       .limit(getAll.req.query.limit)
       .skip(getAll.req.query.skip)
-      .lean()
       .exec();
     return docs;
   };

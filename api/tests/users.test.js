@@ -13,7 +13,11 @@ const {
   seedFollow2,
 } = require('../_seedData/testData');
 
-const token = jwt.sign({ id: seedUser1.id }, process.env.SECRET_KEY, {
+const token1 = jwt.sign({ id: seedUser1._id }, process.env.SECRET_KEY, {
+  expiresIn: '9999d',
+});
+
+const token2 = jwt.sign({ id: seedUser2._id }, process.env.SECRET_KEY, {
   expiresIn: '9999d',
 });
 
@@ -100,6 +104,7 @@ describe('Users API endpoint', () => {
   it('GET /users/:id -> gets a user', () =>
     request(app)
       .get(`/api/v1/users/${seedUser1.id}`)
+      .set('Authorization', token1)
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {
@@ -109,7 +114,7 @@ describe('Users API endpoint', () => {
   it('PUT /users/:id -> edits a user', () =>
     request(app)
       .put(`/api/v1/users/${seedUser1.id}`)
-      .set('Authorization', token)
+      .set('Authorization', token1)
       .send({ ...seedUser1, name: 'abebu' })
       .expect('Content-Type', /json/)
       .expect(200)
@@ -120,7 +125,7 @@ describe('Users API endpoint', () => {
   it('DELETE /users/:id -> deletes a user', () =>
     request(app)
       .delete(`/api/v1/users/${seedUser1.id}`)
-      .set('Authorization', token)
+      .set('Authorization', token1)
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {
@@ -135,6 +140,7 @@ describe('Users API endpoint', () => {
   it('GET /follows -> list of follows', () =>
     request(app)
       .get('/api/v1/follows')
+      .set('Authorization', token1)
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {
@@ -146,6 +152,7 @@ describe('Users API endpoint', () => {
   it('POST /follows -> creates a follow', () =>
     request(app)
       .post('/api/v1/follows')
+      .set('Authorization', token2)
       .send(seedFollow2)
       .expect('Content-Type', /json/)
       .expect(201)
@@ -155,12 +162,12 @@ describe('Users API endpoint', () => {
         );
       }));
 
-  it('POST /follows -> create user with no follower id', () =>
+  it('POST /follows -> create a user with no auth', () =>
     request(app)
       .post('/api/v1/follows')
-      .send({ followingId: '622efd0f9676958c4d2732cf' })
+      .send({ followingId: seedFollow1.followingId })
       .expect('Content-Type', /json/)
-      .expect(400)
+      .expect(403)
       .then((response) => {
         expect(response.body).toEqual(
           expect.objectContaining({
@@ -172,9 +179,9 @@ describe('Users API endpoint', () => {
   it('POST /follows -> create duplicate follow', () =>
     request(app)
       .post('/api/v1/follows')
+      .set('Authorization', token1)
       .send({
         followingId: seedFollow1.followingId,
-        followerId: seedFollow1.followerId,
       })
       .expect('Content-Type', /json/)
       .expect(500)
@@ -200,7 +207,7 @@ describe('Users API endpoint', () => {
   it('DELETE /follows/:id -> deletes a follow', () =>
     request(app)
       .delete(`/api/v1/follows/${seedFollow1.id}`)
-      .set('Authorization', token)
+      .set('Authorization', token2)
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {

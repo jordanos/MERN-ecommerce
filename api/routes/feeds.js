@@ -12,6 +12,11 @@ const {
   uploadFeedImage,
 } = require('../controllers/feedController');
 
+// authentication and authorization
+const { loginReq } = require('../middlewares/authMiddleware');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const Feed = require('../models/Feed');
+
 const router = express.Router();
 
 /**
@@ -23,7 +28,6 @@ const router = express.Router();
  *      type: object
  *      required:
  *        - text
- *        - owner
  *      properties:
  *        id:
  *          type: String
@@ -42,7 +46,6 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        owner: aababababababababababab4
  *        text: "i'm feeling good"
  */
 
@@ -76,7 +79,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Feed'
    */
-  .get(getFeeds)
+  .get(loginReq, getFeeds)
   /**
    *@swagger
    *path:
@@ -98,7 +101,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Feed'
    */
-  .post(createFeed);
+  .post(loginReq, createFeed);
 
 router
   .route('/:id')
@@ -153,7 +156,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Feed'
    */
-  .put(updateFeed)
+  .put(loginReq, authorizeReq(Feed), updateFeed)
   /**
    *@swagger
    *path:
@@ -176,7 +179,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Feed'
    */
-  .delete(deleteFeed);
+  .delete(loginReq, authorizeReq(Feed), deleteFeed);
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -219,6 +222,12 @@ const imageUpload = multer({ storage });
  *               $ref: '#/components/schemas/Feed'
  */
 // add validation of images for latter
-router.put('/image/:id', imageUpload.single('image'), uploadFeedImage);
+router.put(
+  '/image/:id',
+  loginReq,
+  authorizeReq(Feed),
+  imageUpload.single('image'),
+  uploadFeedImage
+);
 
 module.exports = router;

@@ -11,6 +11,11 @@ const {
   isLiking,
 } = require('../controllers/likeController');
 
+// authentication and authorization
+const { loginReq } = require('../middlewares/authMiddleware');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const LikeFeed = require('../models/LikeFeed');
+
 const router = express.Router();
 
 /**
@@ -21,7 +26,6 @@ const router = express.Router();
  *    Like:
  *      type: object
  *      required:
- *        - userId
  *        - likedObjectId
  *      properties:
  *        id:
@@ -66,7 +70,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Like'
    */
-  .get(getLikes)
+  .get(loginReq, getLikes)
   /**
    *@swagger
    *path:
@@ -99,7 +103,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Like'
    */
-  .post(createLike);
+  .post(loginReq, createLike);
 
 router
   .route('/feeds/:id')
@@ -154,7 +158,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Like'
    */
-  .put(updateLike)
+  .put(loginReq, authorizeReq(LikeFeed), updateLike)
   /**
    *@swagger
    *path:
@@ -177,7 +181,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Like'
    */
-  .delete(deleteLike);
+  .delete(loginReq, authorizeReq(LikeFeed), deleteLike);
 
 /**
  *@swagger
