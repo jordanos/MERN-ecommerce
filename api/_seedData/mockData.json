@@ -1,0 +1,121 @@
+{
+  "Users": [
+    {
+      "_id": "dsfg738456972345",
+      "id": "dsfg738456972345",
+      "name": "Eyob",
+      "phone": "251935718188",
+      "email": "eyob@gmail.com",
+      "password": "123456",
+      "address": "addis ababa",
+      "image": "default_image.png",
+      "status": "active",
+      "isVerified": true,
+      "createdAt": "2022-03-14T08:28:54.019Z"
+    },
+    {
+      "_id": "dsfg738456972346",
+      "id": "dsfg738456972346",
+      "name": "Yordanos",
+      "phone": "251912345678",
+      "email": "yordanos@gmail.com",
+      "password": "67654",
+      "address": "addis ababa",
+      "image": "default_image2.png",
+      "status": "active",
+      "isVerified": true,
+      "createdAt": "2022-03-14T08:28:55.019Z"
+    },
+    {
+      "_id": "dsfg738456972349",
+      "id": "dsfg738456972349",
+      "name": "Abel",
+      "phone": "251935819143",
+      "email": "eyob@gmail.com",
+      "password": "19876",
+      "address": "Adama",
+      "image": "default_image3.png",
+      "status": "active",
+      "isVerified": true,
+      "createdAt": "2022-03-14T08:27:54.019Z"
+    }
+  ],
+
+  "Products": [
+    {
+      "_id": "dsfg738456972350",
+      "userId": "dsfg738456972349",
+      "name": "samsung S21 Ultra",
+      "price": "677",
+      "quantity": "2",
+      "Description": "brand new phone",
+      "image": "default_samsung.png",
+      "category": "phone",
+      "productCondition": "new",
+      "brand": "samsung",
+      "createdAt": "2022-03-14T08:26:54.019Z"
+    },
+    {
+      "_id": "dsfg738456972351",
+      "userId": "dsfg738456972345",
+      "name": "Nike Air Jordan",
+      "price": "2000",
+      "quantity": "1",
+      "Description": "brand new shoe",
+      "image": "default_nikeAirJordan.png",
+      "category": "shoe",
+      "productCondition": "new",
+      "brand": "Nike",
+      "createdAt": "2022-03-14T08:26:34.019Z"
+    },
+    {
+      "_id": "dsfg738456972353",
+      "userId": "dsfg738456972346",
+      "name": "Iphone 13",
+      "price": "50000",
+      "quantity": "3",
+      "Description": "brand new iphone product",
+      "image": "default_iphone13.png",
+      "category": "phone",
+      "productCondition": "new",
+      "brand": "Iphone",
+      "createdAt": "2022-03-14T08:23:34.019Z"
+    }
+  ],
+
+  "categories": [
+    {
+      "name": "Trending",
+      "image": "default_trending.png"
+    },
+    {
+      "name": "phone",
+      "image": "default_phone.png"
+    },
+    {
+      "name": "shoe",
+      "image": "default_shoe.png"
+    }
+  ],
+
+  "feed": [
+    {
+      "text": "Feeds are widely used in eCommerce, and product feeds are those that vendors use most often",
+      "image": "default_feed1.jpg",
+      "owner": "dsfg738456972346",
+      "createdAt": "2022-03-14T08:23:34.019Z"
+    },
+    {
+      "text": "Feeds are widely used in eCommerce, and product feeds are those that vendors use most often",
+      "image": "default_feed2.jpg",
+      "owner": "dsfg738456972348",
+      "createdAt": "2022-03-14T08:12:34.019Z"
+    },
+    {
+      "text": "Feeds are widely used in eCommerce, and product feeds are those that vendors use most often",
+      "image": "default_feed3.jpg",
+      "owner": "dsfg738456972348",
+      "createdAt": "2022-03-14T08:15:34.019Z"
+    }
+  ]
+}

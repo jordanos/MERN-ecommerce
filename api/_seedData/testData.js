@@ -26,6 +26,20 @@ exports.seedUser2 = {
   _id: '622efe5d7a8344cd7bb07a6a',
 };
 
+exports.seedProduct1 = {
+  userId: '626a4b6f5d293ad3fbf48044',
+  name: 'iphone',
+  price: 20000,
+  quantity: 12,
+  description: 'cool phone',
+  image: 'http://localhost:5000/media/images/products/default_image.jpg',
+  productCondition: 'new',
+  brand: 'apple',
+  createdAt: '2022-04-29T06:45:20.599Z',
+  _id: '626b8a7404173351fe13dcaf',
+   id: '626b8a7404173351fe13dcaf',
+};
+
 exports.seedFollow1 = {
   followingId: '622efd0f9676958c4d2732cc',
   followerId: '622efe5d7a8344cd7bb07a6a',

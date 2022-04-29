@@ -5,7 +5,7 @@ const { formatImageUrl } = require('../utils/helpers');
 const ProductSchema = new mongoose.Schema(
   {
     userId: {
-      type: Number,
+      type: String,
       required: true,
     },
     name: {

@@ -9,6 +9,17 @@ const { expect } = global;
 //   createdAt: expect.any(String),
 //   owner: expect.any(String),
 // };
+exports.productSchema = {
+  userId: expect.any(String),
+  name: expect.any(String),
+  price: expect.any(String),
+  quantity: expect.any(String),
+  description: expect.any(String),
+  image:expect.any(String),
+  productCondition: expect.any(String),
+  brand: expect.any(String),
+  createdAt: expect.any(String),
+}
 
 exports.userSchema = {
   name: expect.any(String),
