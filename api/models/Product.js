@@ -23,15 +23,6 @@ const ProductSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    image: {
-      type: String,
-      default: 'default_image.jpg',
-      get: (image) => formatImageUrl(productImagesPath, image),
-    },
-    category: {
-      type: String,
-      ref: 'Category',
-    },
     productCondition: {
       type: String,
       required: true,
@@ -39,6 +30,11 @@ const ProductSchema = new mongoose.Schema(
     brand: {
       type: String,
       default: 'unknown',
+    },
+    image: {
+      type: String,
+      default: 'default_image.jpg',
+      get: (image) => formatImageUrl(productImagesPath, image),
     },
     createdAt: {
       type: Date,
