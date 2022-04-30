@@ -62,9 +62,9 @@ const Product = require('../models/Product');
  *          type: file
  *          format: binary
  *          description: image of the product.
- *        category:
- *          type: string
- *          description: image of user.
+ *        categories:
+ *          type: array
+ *          description: category of product.
  *        ProductCondition:
  *          type: string
  *          description: condition of the product.
