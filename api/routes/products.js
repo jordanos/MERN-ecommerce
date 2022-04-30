@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const multer = require('multer');
-const path = require('path');
 const { productImagesPath } = require('../config');
 
 /* const { GetAllProduct, CreateProdcut, GetProductById
@@ -24,6 +22,7 @@ const {
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
 const Product = require('../models/Product');
+const imageUpload = require('../utils/images');
 
 // products route
 
@@ -208,17 +207,6 @@ router
    */
   .delete(loginReq, authorizeReq(Product), deleteProduct);
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, `./public/${productImagesPath}`);
-  },
-  filename(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const imageUpload = multer({ storage });
-
 /**
  *@swagger
  *path:
@@ -253,7 +241,7 @@ router.put(
   '/image/:id',
   loginReq,
   authorizeReq(Product),
-  imageUpload.single('image'),
+  imageUpload(productImagesPath).single('image'),
   uploadImage
 );
 
