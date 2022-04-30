@@ -43,6 +43,7 @@ app.use(paginate.middleware(10, 50));
 // Load Routes
 const usersRoute = require('./routes/users');
 const productRoute = require('./routes/products');
+const categoriesRoute = require('./routes/categories');
 const followsRoute = require('./routes/follows');
 const authRoute = require('./routes/auth');
 const feedsRoute = require('./routes/feeds');
@@ -54,6 +55,7 @@ const notificationsRoute = require('./routes/notifications');
 const apiVersion = '/api/v1';
 app.use(`${apiVersion}/users`, usersRoute);
 app.use(`${apiVersion}/products`, productRoute);
+app.use(`${apiVersion}/categories`, categoriesRoute);
 app.use(`${apiVersion}/follows`, followsRoute);
 app.use(`${apiVersion}/auth`, authRoute);
 app.use(`${apiVersion}/feeds`, feedsRoute);
