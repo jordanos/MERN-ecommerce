@@ -222,19 +222,19 @@ const imageUpload = multer({ storage });
 /**
  *@swagger
  *path:
- * /api/v1/users/image/{id}:
+ * /api/v1/products/image/{id}:
  *   put:
  *     consumes:
  *     - multipart/form-data
  *     summary: uploads a user image.
- *     tags: [Users]
+ *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The user id
+ *         description: The product id
  *       - in: formData
  *         name: image
  *         type: file

@@ -22,6 +22,10 @@ const productSchema = Joi.object({
   productCondition: Joi.string().required(),
 });
 
+const categorySchema = Joi.object({
+  name: Joi.string().required(),
+});
+
 const followSchema = Joi.object({
   followerId: Joi.string().hex().length(24).required(),
   followingId: Joi.string().hex().length(24).required(),
@@ -79,6 +83,13 @@ exports.validateProductInput = async (req) => {
   const userDoc = await User.findById(req.body.userId);
   if (!userDoc) {
     throw new CustomError('notification reciever object reference error', 400);
+  }
+};
+
+exports.validateCategoryInput = (req) => {
+  const { error } = categorySchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
   }
 };
 
