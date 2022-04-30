@@ -7,7 +7,7 @@ const CategorySchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true,
+    default: 'default_image.png',
   },
   createdAt: {
     type: Date,

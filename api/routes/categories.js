@@ -1,11 +1,15 @@
 const router = require('express').Router();
+const multer = require('multer');
+const path = require('path');
 
+const { categoryImagesPath } = require('../config');
 const {
   getCategories,
   createCategory,
   getCategory,
   updateCategory,
   deleteCategory,
+  uploadImage,
 } = require('../controllers/categoryController');
 
 // categories route
@@ -158,5 +162,50 @@ router
    *               $ref: '#/components/schemas/Category'
    */
   .get(getCategory);
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, `./public/${categoryImagesPath}`);
+  },
+  filename(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const imageUpload = multer({ storage });
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/categories/image/{id}:
+ *   put:
+ *     consumes:
+ *     - multipart/form-data
+ *     summary: uploads a category image.
+ *     tags: [Categories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user id
+ *       - in: formData
+ *         name: image
+ *         type: file
+ *         required: true
+ *         description: image file
+ *     responses:
+ *       "200":
+ *         description: returnes data object with acknowledged=true.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+// add validation of images for latter
+router.put('/image/:id', imageUpload.single('image'), uploadImage);
+
+module.exports = router;
 
 module.exports = router;
