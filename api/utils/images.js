@@ -1,20 +1,17 @@
 const multer = require('multer');
-const path = require('path');
 
-// const storage = multer.memoryStorage();
+const filter = (req, file, cb) => {
+  if (file.mimetype.split('/')[0] === 'image') {
+    cb(null, true);
+  } else {
+    cb(new Error('Only images are allowed!'));
+  }
+};
 
-// const filter = (req, file, cb) => {
-//   if (file.mimetype.split('/')[0] === 'image') {
-//     cb(null, true);
-//   } else {
-//     cb(new Error('Only images are allowed!'));
-//   }
-// };
-
-// exports.imageUploader = multer({
-//   storage,
-//   fileFilter: filter,
-// });
+const imageInMemory = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: filter,
+});
 
 // app.post('/', imageUploader.single('photo'), async (req, res, next) => {
 //   // req.file includes the buffer
@@ -26,19 +23,16 @@ const path = require('path');
 //   next();
 // });
 
-const storage = (imagePath) =>
-  multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, `./public/${imagePath}`);
-    },
-    filename(req, file, cb) {
-      cb(null, Date.now() + path.extname(file.originalname));
-    },
-  });
+// const storage = (imagePath) =>
+//   multer.memoryStorage({
+//     destination(req, file, cb) {
+//       cb(null, `./public/${imagePath}`);
+//     },
+//     filename(req, file, cb) {
+//       cb(null, Date.now() + path.extname(file.originalname));
+//     },
+//   });
 
-const imageUpload = (imagePath) => {
-  const multerUpload = multer({ storage: storage(imagePath) });
-  return multerUpload;
-};
+const imageUpload = () => imageInMemory;
 
 module.exports = imageUpload;
