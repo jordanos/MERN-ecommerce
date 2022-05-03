@@ -10,8 +10,7 @@ exports.login = async (req, res, next) => {
   try {
     // Get req data and init required datas
     const { phone, password } = req.body;
-    const user = await User.findOne({ phone });
-    console.log(user);
+    const user = await User.findOne({ phone }).exec();
     if (!(user && (await bcrypt.compare(password, user.password)))) {
       throw new CustomError('Invalid Credentials', 401);
     }
@@ -25,7 +24,7 @@ exports.login = async (req, res, next) => {
     // user.token = token;
     // user.save();
 
-    res.status(200).json({ data: { token } });
+    res.status(200).json({ data: { token, ...user } });
   } catch (e) {
     next(e);
   }
