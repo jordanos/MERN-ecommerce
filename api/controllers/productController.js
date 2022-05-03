@@ -45,3 +45,12 @@ exports.uploadImage = (req, res, next) => {
 
   updateOne.execute();
 };
+
+exports.getHeroImages = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Product, 'product');
+
+  // transform to get only images
+  getAll.transform = async () => getAll.doc.map((product) => product.image);
+
+  getAll.execute();
+};

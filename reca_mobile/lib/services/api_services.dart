@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -543,6 +542,7 @@ class ApiServices {
     // for (var item in heroResponse.data) {
     //   print(item.image);
     // }
+    print(heroResponse.data);
     return heroResponse.data;
   }
 
@@ -756,6 +756,7 @@ class ApiServices {
     final packageResponse = checkStatusFromJson(response.body);
     // print('Check package status response : ${packageResponse.data}');
 
+    print(packageResponse);
     return packageResponse.data;
   }
 
