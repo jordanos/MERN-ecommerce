@@ -61,6 +61,9 @@ const router = express.Router();
  *                 token:
  *                   type: string
  *                   description: token of the auth
+ *                 user:
+ *                   type: object
+ *                   $ref: '#/components/schemas/User'
  */
 router.route('/login').post(login);
 
