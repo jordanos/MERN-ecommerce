@@ -16,6 +16,7 @@ const {
   updateProduct,
   deleteProduct,
   uploadImage,
+  getHeroImages,
 } = require('../controllers/productController');
 
 // authentication and authorization
@@ -246,5 +247,22 @@ router.put(
   saveImage(productImagesPath),
   uploadImage
 );
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/products/hero/images:
+ *   get:
+ *     summary: Lists all hero images of products
+ *     tags: [Products]
+ *     responses:
+ *       "200":
+ *         description: list of images.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
+router.get('/hero/images', getHeroImages);
 
 module.exports = router;
