@@ -10,7 +10,8 @@ class BaseTemplate {
     this.model = model;
     this.modelName = modelName;
     // if filter is set to some value, it will be used in sub classes
-    this.filter = null;
+    this.filter = {};
+    this.sort = {};
   }
 
   // do database stuff and save the result in this.doc, and must get implemented in sub classes
@@ -41,18 +42,14 @@ exports.GetAll = class GetAll extends BaseTemplate {
   async doMongo() {
     this.req.query.skip = this.req.query.skip || 0;
     this.req.query.skip = parseInt(this.req.query.skip, 10);
-    if (this.filter)
-      this.doc = await this.model
-        .find(this.filter)
-        .limit(this.req.query.limit)
-        .skip(this.req.query.skip)
-        .exec();
-    else
-      this.doc = await this.model
-        .find()
-        .limit(this.req.query.limit)
-        .skip(this.req.query.skip)
-        .exec();
+
+    this.doc = await this.model
+      .find(this.filter)
+      .sort(this.sort)
+      .limit(this.req.query.limit)
+      .skip(this.req.query.skip)
+      .exec();
+
     if (this.transform) {
       this.doc = await this.transform();
     }
