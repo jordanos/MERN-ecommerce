@@ -50,7 +50,13 @@ exports.getHeroImages = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Product, 'product');
 
   // transform to get only images
-  getAll.transform = async () => getAll.doc.map((product) => product.image);
+  getAll.transform = async () => {
+    const docs = [];
+    for (let i = 0; i < 2; i += 1) {
+      docs.push(getAll.doc[i].image);
+    }
+    return docs;
+  };
 
   getAll.execute();
 };

@@ -11,6 +11,7 @@ const { validateFeedInput } = require('../utils/validators');
 
 exports.getFeeds = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Feed, 'feed');
+  getAll.sort = { createdAt: -1 };
   getAll.execute();
 };
 

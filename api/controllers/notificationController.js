@@ -11,6 +11,7 @@ const { validateNotificationInput } = require('../utils/validators');
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Notification, 'Notification');
+  getAll.filter = { userId: req.user.id };
   getAll.execute();
 };
 
