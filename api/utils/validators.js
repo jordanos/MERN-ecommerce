@@ -4,13 +4,12 @@ const Feed = require('../models/Feed');
 const User = require('../models/User');
 
 const userSchema = Joi.object().keys({
-  name: Joi.string().required(),
+  name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string()
     .length(12)
-    .pattern(/^[0-9]+$/)
-    .required(),
-  password: Joi.string().min(6).required(),
+    .pattern(/^[0-9]+$/),
+  password: Joi.string().min(6),
 });
 
 const productSchema = Joi.object({

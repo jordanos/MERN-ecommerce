@@ -66,10 +66,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/notifications:
+   * /api/v1/notifications?skip=0:
    *   get:
    *     summary: Lists all the Notifications
    *     tags: [Notifications]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of Notifications.
@@ -82,16 +88,10 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/notifications?skip=0:
+   * /api/v1/notifications:
    *   post:
    *     summary: Creates a Notification.
    *     tags: [Notifications]
-   *     parameters:
-   *     - in: query
-   *       name: skip
-   *       schema:
-   *         type: integer
-   *       description: pagination value to skip to
    *     requestBody:
    *       required: true
    *       content:
