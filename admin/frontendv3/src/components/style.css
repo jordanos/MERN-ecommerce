@@ -1,0 +1,412 @@
+/* Login style */
+
+body {
+    background-color: white;
+}
+
+.logo {}
+
+.form {
+    width: 550px;
+    height: 300px;
+    border: 1px solid rgb(163, 162, 156);
+    padding: 50px;
+    margin-top: 80px;
+    margin-left: 300px;
+    border-radius: 15px;
+}
+
+.login_title {
+    margin-top: -20px;
+    margin-left: 350px;
+    color: darkorange;
+}
+
+.input {
+    border-radius: 35px;
+    height: 30px;
+    margin-bottom: 10px;
+    margin-left: 350px;
+    border: 1px solid rgb(168, 170, 172);
+    text-align: start;
+    width: 200px;
+}
+
+.login_btn {
+    background-color: #f7921f;
+    border: none;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 37px;
+    font-size: 20px;
+    width: 200px;
+    height: 40px;
+    margin-left: 350px;
+}
+
+.forget {
+    margin-left: 350px;
+    text-decoration: none;
+    font-size: 13px;
+    border-right: 2px solid rgb(168, 170, 172);
+    color: #f7921f;
+    margin-top: 20px;
+}
+
+.create {
+    text-decoration: none;
+    font-size: 13px;
+    margin-left: 3px;
+    color: #f7921f;
+}
+
+.fb_gmail_btn {
+    background-color: white;
+    border: 1px solid rgb(168, 170, 172);
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 37px;
+    font-size: 13px;
+    width: 200px;
+    height: 30px;
+    margin-left: 350px;
+    margin-top: 10px;
+}
+
+.fb_gmail_btn1 {
+    background-color: white;
+    border: 1px solid rgb(168, 170, 172);
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 37px;
+    font-size: 13px;
+    width: 200px;
+    height: 30px;
+    margin-left: 350px;
+    margin-top: 10px;
+}
+
+.fb_gmail_btn i {
+    margin-left: -23px;
+    color: blue;
+    font-size: 24px;
+}
+
+::placeholder {
+    padding-left: 10px;
+}
+
+.fb_gmail_btn1 img {
+    margin-left: -40px;
+}
+
+.login_img {
+    float: left;
+    float: top;
+    margin-top: -270px;
+    height: 250px;
+}
+
+.vl {
+    border-left: 1px solid rgb(168, 170, 172);
+    height: 200px;
+    float: left;
+    margin-left: 260px;
+    margin-top: -250px;
+}
+
+.error {
+    font-size: 10px;
+    font-style: normal;
+    margin-left: 330px;
+    color: red;
+}
+
+.success {
+    font-size: 10px;
+    font-style: normal;
+    margin-left: 350px;
+    color: red;
+}
+
+
+/* Signup style */
+
+.form1 {
+    width: 550px;
+    height: 350px;
+    border: 1px solid rgb(163, 162, 156);
+    padding: 50px;
+    margin-top: 70px;
+    margin-left: 350px;
+    border-radius: 15px;
+}
+
+.signup {
+    color: #f7921f;
+    margin-top: -40px;
+    text-align: center;
+}
+
+.reg_h3 {
+    font-size: 14px;
+    text-align: center;
+}
+
+.input11 {
+    margin-left: 70px;
+    border-radius: 37px;
+    border: 1px solid rgb(168, 170, 172);
+    width: 170px;
+    height: 35px;
+}
+
+.input12 {
+    margin-left: 30px;
+    border-radius: 37px;
+    border: 1px solid rgb(168, 170, 172);
+    width: 170px;
+    height: 35px;
+}
+
+.label1 {
+    margin-left: 70px;
+    margin-top: 110px;
+}
+
+.label2 {
+    margin-left: 140px;
+    margin-top: 110px;
+}
+
+.tel {
+    margin-left: 70px;
+    border-radius: 37px;
+    border: 1px solid rgb(168, 170, 172);
+    width: 380px;
+    height: 35px;
+}
+
+.pass_lab {
+    margin-left: 70px;
+    border-radius: 37px;
+    border: 1px solid rgb(168, 170, 172);
+    width: 380px;
+    height: 35px;
+}
+
+.reg_btn {
+    border-radius: 37px;
+    border: none;
+    background-color: #f7921f;
+    color: white;
+    margin-left: 200px;
+    width: 170px;
+    height: 35px;
+    font-size: 20px;
+}
+
+.log {
+    color: black;
+    margin-left: 200px;
+    margin-top: 10px;
+}
+
+.log_reg {
+    color: #f7921f;
+    text-decoration: none;
+}
+
+.error_reg {
+    text-align: center;
+    color: red;
+    font-size: 10px;
+}
+
+.success_reg {
+    font-size: 10px;
+    font-style: normal;
+    text-align: center;
+    color: red;
+}
+
+
+/* Card style */
+
+.cardlist {
+    width: 90vw;
+    max-width: 1170px;
+    display: grid;
+    gap: 2rem;
+    column-gap: -200px;
+    margin-left: 10px;
+    margin-top: 20px;
+    scroll-margin-left: 6px;
+    /* overflow: auto; */
+    /* display: inline-box; */
+}
+
+@media screen and (max-width:768px) {
+    .cardlist {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    border: 1px solid rgb(204, 202, 202);
+    width: 180px;
+    height: auto;
+    display: inline-block;
+}
+
+.card img {
+    display: inline-block;
+    column-gap: 20px;
+}
+
+.card h1 {
+    margin-top: 0.5rem;
+    font-size: medium;
+}
+
+.card h4 {
+    color: #000000;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    font-size: medium;
+}
+
+.card h3 {
+    color: #fdd700;
+    margin-top: 0.25rem;
+    font-size: medium;
+}
+
+
+/* Sideshow */
+
+.slideimg {
+    margin-right: 100px;
+    margin-top: 30px;
+    width: 800px;
+    float: right;
+}
+
+
+/* Catagories style */
+
+h2 {
+    margin-left: 70px;
+}
+
+hr {
+    margin-left: 70px;
+}
+
+.nav1 {
+    width: 250px;
+    position: absolute;
+    padding: 10px 10px;
+    float: right;
+    margin-left: 70px;
+}
+
+ui span {
+    margin-left: 300px;
+    position: absolute;
+    /* background-color: #f7921f; */
+    color: #000000;
+    border-radius: 50%;
+    font-size: 30px;
+}
+
+ui li img {
+    border-radius: 50%;
+    /* border: 0.3px solid black; */
+}
+
+ui {
+    position: relative;
+    list-style-type: none;
+}
+
+ui li {
+    display: flex;
+    align-items: center;
+}
+
+ui li:hover {
+    color: #f7921f;
+    cursor: pointer;
+}
+
+ui ui {
+    position: absolute;
+    left: 310px;
+    /* width: 350; */
+    height: auto;
+    /* top: ; */
+    padding: 10px 10px;
+    background-color: rgb(240, 241, 239);
+    display: none;
+    /* border-radius: 20px; */
+    color: black;
+    /* border: 3px solid #f1cf0e; */
+    /* transition: .3s linear; */
+}
+
+ui ui li:hover {
+    /* color: black; */
+    color: #f7921f;
+    box-sizing: inherit;
+    cursor: pointer;
+    display: block;
+    line-height: normal;
+}
+
+ui .dropdown {
+    position: relative;
+}
+
+ui .dropdown:hover ui {
+    display: initial;
+}
+
+
+/* Media quirey */
+
+@media screen and (max-width: 1200px) {
+    .nav1 {
+        margin: 1em 2em;
+    }
+    .slideimg {
+        margin-top: -50px;
+        width: 400px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav1 {
+        margin: 1em 2em;
+    }
+    .slideimg {
+        margin-top: 500px;
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 32px) {
+    .nav1 {
+        margin: 1em 2em;
+    }
+    .slideimg {
+        margin-top: 500px;
+        width: auto;
+    }
+}
