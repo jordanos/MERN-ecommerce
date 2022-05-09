@@ -46,5 +46,6 @@ const ProductSchema = new mongoose.Schema(
     toObject: { getters: true, virtuals: true },
   }
 );
+ProductSchema.index({name: 'text'});
 
 module.exports = mongoose.model('Product', ProductSchema);

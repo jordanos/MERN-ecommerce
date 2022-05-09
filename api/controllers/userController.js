@@ -1,5 +1,5 @@
 const User = require('../models/User');
-
+const Feed = require('../models/Feed');
 const {
   GetAll,
   CreateOne,
@@ -23,7 +23,7 @@ exports.createUser = (req, res, next) => {
   createOne.execute();
 };
 
-exports.getUser = (req, res, next) => {
+exports.getUser = (req, res, next,) => {
   const getOne = new GetOne(req, res, next, User, 'user');
   getOne.execute();
 };

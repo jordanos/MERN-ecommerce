@@ -54,6 +54,7 @@ exports.getLikings = (req, res, next) => {
         $in: ids,
       },
     })
+
       .limit(getAll.req.query.limit)
       .skip(getAll.req.query.skip)
       .exec();
@@ -85,7 +86,7 @@ exports.getLikers = (req, res, next) => {
 
 exports.isLiking = (req, res, next) => {
   const getOne = new GetOne(req, res, next, LikeFeed, 'Like');
-  //   custom function to check Likeing
+  //   custom function to check Liking
   getOne.doMongo = async () => {
     const { userId, feedId } = getOne.req.params;
     validateId(userId);

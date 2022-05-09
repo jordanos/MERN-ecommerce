@@ -38,6 +38,9 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    follower:Array,
+    following:Array,
+    posts: Array,
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -49,7 +52,7 @@ const UserSchema = new mongoose.Schema(
     runSettersOnQuery: true,
   }
 );
-
+UserSchema.index({ name: 'text' });
 // mongoose Middleware To Encrypt Password
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {

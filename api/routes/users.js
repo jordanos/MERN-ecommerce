@@ -10,6 +10,7 @@ const {
   updateUser,
   deleteUser,
   uploadImage,
+  getPosts,
 } = require('../controllers/userController');
 
 // authentication and authorization
@@ -145,7 +146,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .get(getUser)
+  .get(getPosts)
   /**
    *@swagger
    *path:
