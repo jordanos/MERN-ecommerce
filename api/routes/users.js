@@ -1,6 +1,4 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const { userImagesPath } = require('../config');
 
 const {
@@ -16,7 +14,9 @@ const {
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const saveImage = require('../middlewares/saveImage');
 const User = require('../models/User');
+const imageUpload = require('../utils/images');
 
 const router = express.Router();
 
@@ -146,7 +146,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .get(getPosts)
+  .get(getUser)
   /**
    *@swagger
    *path:
@@ -200,17 +200,6 @@ router
    */
   .delete(loginReq, authorizeReq, deleteUser);
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, `./public/${userImagesPath}`);
-  },
-  filename(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const imageUpload = multer({ storage });
-
 /**
  *@swagger
  *path:
@@ -245,7 +234,8 @@ router.put(
   '/image/:id',
   loginReq,
   authorizeReq(User),
-  imageUpload.single('image'),
+  imageUpload().single('image'),
+  saveImage(userImagesPath),
   uploadImage
 );
 

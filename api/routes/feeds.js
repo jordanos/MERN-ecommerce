@@ -1,6 +1,4 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const { feedImagesPath } = require('../config');
 
 const {
@@ -15,7 +13,9 @@ const {
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const saveImage = require('../middlewares/saveImage');
 const Feed = require('../models/Feed');
+const imageUpload = require('../utils/images');
 
 const router = express.Router();
 
@@ -181,17 +181,6 @@ router
    */
   .delete(loginReq, authorizeReq(Feed), deleteFeed);
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, `./public/${feedImagesPath}`);
-  },
-  filename(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const imageUpload = multer({ storage });
-
 /**
  *@swagger
  *path:
@@ -226,7 +215,8 @@ router.put(
   '/image/:id',
   loginReq,
   authorizeReq(Feed),
-  imageUpload.single('image'),
+  imageUpload().single('image'),
+  saveImage(feedImagesPath),
   uploadFeedImage
 );
 

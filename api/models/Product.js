@@ -4,10 +4,6 @@ const { formatImageUrl } = require('../utils/helpers');
 
 const ProductSchema = new mongoose.Schema(
   {
-    userId: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -31,10 +27,19 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: 'unknown',
     },
+    categories: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: 'Category',
+    },
     image: {
       type: String,
       default: 'default_image.jpg',
       get: (image) => formatImageUrl(productImagesPath, image),
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     createdAt: {
       type: Date,

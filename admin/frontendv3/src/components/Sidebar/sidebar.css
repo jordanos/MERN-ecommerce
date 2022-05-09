@@ -1,0 +1,17 @@
+.sidebar {
+    width: 350px;
+    row-gap: 1px;
+    min-width: 250px;
+    padding: 20px 20px;
+    margin-top: 30px;
+    box-shadow: 0 0 6px hsl(210 14% 90%);
+    float: left;
+}
+
+.sidebar a {
+    display: none;
+}
+
+.sidebar SidebarLink:hover {
+    display: inline;
+}

@@ -22,7 +22,8 @@ class HeroModel {
   factory HeroModel.fromJson(Map<String, dynamic> json) => HeroModel(
         status: json["status"],
         message: json["message"],
-        data: List<HeroImg>.from(json["data"].map((x) => HeroImg.fromJson(x))),
+        data: List<HeroImg>.from(
+            json["data"]["data"].map((x) => HeroImg.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

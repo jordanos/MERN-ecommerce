@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const multer = require('multer');
-const path = require('path');
 const { productImagesPath } = require('../config');
 
 /* const { GetAllProduct, CreateProdcut, GetProductById
@@ -18,12 +16,15 @@ const {
   updateProduct,
   deleteProduct,
   uploadImage,
+  getHeroImages,
 } = require('../controllers/productController');
 
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const saveImage = require('../middlewares/saveImage');
 const Product = require('../models/Product');
+const imageUpload = require('../utils/images');
 
 // products route
 
@@ -62,9 +63,9 @@ const Product = require('../models/Product');
  *          type: file
  *          format: binary
  *          description: image of the product.
- *        category:
- *          type: string
- *          description: image of user.
+ *        categories:
+ *          type: array
+ *          description: category of product.
  *        ProductCondition:
  *          type: string
  *          description: condition of the product.
@@ -208,33 +209,22 @@ router
    */
   .delete(loginReq, authorizeReq(Product), deleteProduct);
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, `./public/${productImagesPath}`);
-  },
-  filename(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
-
-const imageUpload = multer({ storage });
-
 /**
  *@swagger
  *path:
- * /api/v1/users/image/{id}:
+ * /api/v1/products/image/{id}:
  *   put:
  *     consumes:
  *     - multipart/form-data
  *     summary: uploads a user image.
- *     tags: [Users]
+ *     tags: [Products]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The user id
+ *         description: The product id
  *       - in: formData
  *         name: image
  *         type: file
@@ -253,8 +243,26 @@ router.put(
   '/image/:id',
   loginReq,
   authorizeReq(Product),
-  imageUpload.single('image'),
+  imageUpload().single('image'),
+  saveImage(productImagesPath),
   uploadImage
 );
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/products/hero/images:
+ *   get:
+ *     summary: Lists all hero images of products
+ *     tags: [Products]
+ *     responses:
+ *       "200":
+ *         description: list of images.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
+router.get('/hero/images', getHeroImages);
 
 module.exports = router;

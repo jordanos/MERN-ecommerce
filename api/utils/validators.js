@@ -4,21 +4,20 @@ const Feed = require('../models/Feed');
 const User = require('../models/User');
 
 const userSchema = Joi.object().keys({
-  name: Joi.string().required(),
+  name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string()
     .length(12)
-    .pattern(/^[0-9]+$/)
-    .required(),
-  password: Joi.string().min(6).required(),
+    .pattern(/^[0-9]+$/),
+  password: Joi.string().min(6),
 });
 
 const productSchema = Joi.object({
   name: Joi.string().required(),
   price: Joi.number().required(),
   quantity: Joi.number().integer().required(),
-  brand: Joi.string().required(),
-  description: Joi.string().required(),
+  brand: Joi.string(),
+  description: Joi.string(),
   productCondition: Joi.string().required(),
 });
 
@@ -26,10 +25,18 @@ const ratingSchema = Joi.object({
   rateCount: Joi.number().min(1).max(5).required(),
   review: Joi.string(),
 });
+const categorySchema = Joi.object({
+  name: Joi.string().required(),
+});
 
 const followSchema = Joi.object({
   followerId: Joi.string().hex().length(24).required(),
   followingId: Joi.string().hex().length(24).required(),
+});
+
+const packageSchema = Joi.object({
+  name: Joi.string().required(),
+  price: Joi.number().required(),
 });
 
 const adminSchema = Joi.object({
@@ -74,6 +81,13 @@ exports.validateUserInput = async (req) => {
   }
 };
 
+exports.validatePackageInput = async (req) => {
+  const { error } = packageSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+};
+
 exports.validateProductInput = async (req) => {
   const { error } = productSchema.validate(req.body, options);
   if (error) {
@@ -89,6 +103,13 @@ exports.validateProductInput = async (req) => {
 
 exports.validateRateInput = async (req) => {
   const { error } = ratingSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+};
+
+exports.validateCategoryInput = (req) => {
+  const { error } = categorySchema.validate(req.body, options);
   if (error) {
     throw new CustomError(error.message, 400);
   }
@@ -148,7 +169,7 @@ exports.validateMessageInput = async (req) => {
   const toDoc = await User.findById(req.body.toId);
   if (!fromDoc || !toDoc) {
     throw new CustomError(
-      "sender or reciever object reference error. id doesn't exist!",
+      "sender or receiver object reference error. id doesn't exist!",
       400
     );
   }
