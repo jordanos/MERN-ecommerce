@@ -48,6 +48,12 @@ router
    *   get:
    *     summary: Lists all the product rates
    *     tags: [Rates]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of rates.
@@ -65,12 +71,6 @@ router
    *   post:
    *     summary: Creates a rate.
    *     tags: [Rates]
-   *     parameters:
-   *     - in: query
-   *       name: skip
-   *       schema:
-   *         type: integer
-   *       description: pagination value to skip to
    *     requestBody:
    *       required: true
    *       content:
@@ -78,10 +78,10 @@ router
    *           schema:
    *             type: object
    *             properties:
-   *               userId:
-   *                 type: string
    *               productId:
    *                 type: string
+   *               rate:
+   *                 type: integer
    *     responses:
    *       "201":
    *         description: returns data object with acknowledged=true.

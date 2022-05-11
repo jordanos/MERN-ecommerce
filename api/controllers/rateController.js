@@ -10,6 +10,7 @@ const {
 // const User = require('../models/User');
 // const Product = require('../models/Product');
 const { validateRateInput } = require('../utils/validators');
+const Product = require('../models/Product');
 
 exports.getRatings = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Rate, 'Rate');
@@ -17,9 +18,23 @@ exports.getRatings = (req, res, next) => {
 };
 
 exports.createRating = (req, res, next) => {
-  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
-  const createOne = new CreateOne(modfiedReq, res, next, Rate, 'Rate');
+  const modifiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  const createOne = new CreateOne(modifiedReq, res, next, Rate, 'Rate');
   createOne.validate = validateRateInput;
+  createOne.transform = async () => {
+    const rates = await Rate.find({
+      productId: modifiedReq.body.productId,
+    }).exec();
+    let sum = 0;
+    rates.forEach((rate) => {
+      sum += rate.rate;
+    });
+    await Product.findOneAndUpdate(
+      { id: modifiedReq.user.id },
+      { rate: sum / rates.length }
+    ).exec();
+    return createOne.doc;
+  };
   createOne.execute();
 };
 

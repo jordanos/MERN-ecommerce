@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Feed = require('../models/Feed');
+const Product = require('../models/Product');
 const {
   GetAll,
   CreateOne,
@@ -9,6 +9,8 @@ const {
 } = require('./templates');
 const { validateUserInput } = require('../utils/validators');
 const { hashPassword } = require('../utils/helpers');
+const Feed = require('../models/Feed');
+const Follow = require('../models/Follow');
 
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
@@ -25,6 +27,27 @@ exports.createUser = (req, res, next) => {
 
 exports.getUser = (req, res, next,) => {
   const getOne = new GetOne(req, res, next, User, 'user');
+  getOne.transform = async () => {
+    // add products count
+    // add following count
+    // add followers count
+    // add posts count
+    const { id } = req.params;
+    const productsCount = await Product.countDocuments({ userId: id });
+    const feedsCount = await Feed.countDocuments({ userId: id });
+    const followersCount = await Follow.countDocuments({ followingId: id });
+    const followingCount = await Follow.countDocuments({ followerId: id });
+
+    getOne.doc = {
+      user: getOne.doc,
+      productsCount,
+      feedsCount,
+      followersCount,
+      followingCount,
+    };
+
+    return getOne.doc;
+  };
   getOne.execute();
 };
 

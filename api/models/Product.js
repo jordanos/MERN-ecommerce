@@ -36,6 +36,10 @@ const ProductSchema = new mongoose.Schema(
       default: 'default_image.jpg',
       get: (image) => formatImageUrl(productImagesPath, image),
     },
+    rate: {
+      type: Number,
+      default: 0,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

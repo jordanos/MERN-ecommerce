@@ -27,19 +27,22 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.updateProduct = (req, res, next) => {
-  const updateOne = new UpdateOne(req, res, next, Product, 'product');
+  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  const updateOne = new UpdateOne(modfiedReq, res, next, Product, 'product');
   updateOne.validate = validateProductInput;
   updateOne.execute();
 };
 
 exports.deleteProduct = (req, res, next) => {
-  const deleteOne = new DeleteOne(req, res, next, Product, 'product');
+  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  const deleteOne = new DeleteOne(modfiedReq, res, next, Product, 'product');
   deleteOne.execute();
 };
 
 exports.uploadImage = (req, res, next) => {
-  req.body = { image: req.file.filename };
-  const updateOne = new UpdateOne(req, res, next, Product, 'product');
+  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  modfiedReq.body = { image: req.file.filename };
+  const updateOne = new UpdateOne(modfiedReq, res, next, Product, 'product');
   // setup a vallidaion function otherwise an error will be thrown
   updateOne.validate = () => {};
 
