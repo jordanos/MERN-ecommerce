@@ -50,6 +50,8 @@ const feedsRoute = require('./routes/feeds');
 const likesRoute = require('./routes/likes');
 const messagesRoute = require('./routes/messages');
 const notificationsRoute = require('./routes/notifications');
+const packageRoute = require('./routes/packageTypes');
+const ratingReviewRoutes = require('./routes/ratingReview');
 const searchRoute = require('./routes/search');
 const rateRoute = require('./routes/rates');
 
@@ -64,9 +66,10 @@ app.use(`${apiVersion}/feeds`, feedsRoute);
 app.use(`${apiVersion}/likes`, likesRoute);
 app.use(`${apiVersion}/messages`, messagesRoute);
 app.use(`${apiVersion}/notifications`, notificationsRoute);
+app.use(`${apiVersion}/packages`, packageRoute);
+app.use(`${apiVersion}/rates`, ratingReviewRoutes);
 app.use(`${apiVersion}/search`, searchRoute);
 app.use(`${apiVersion}/rates`, rateRoute);
-
 const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware
 app.use(errorHandler);

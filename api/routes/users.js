@@ -8,6 +8,7 @@ const {
   updateUser,
   deleteUser,
   uploadImage,
+  getPosts,
 } = require('../controllers/userController');
 
 // authentication and authorization
