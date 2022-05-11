@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema(
       default: 'default_image.png',
       get: (image) => formatImageUrl(userImagesPath, image),
     },
+    lastSeen: {
+      type: Date,
+      default: Date.now(),
+    },
     status: {
       type: String,
       default: 'active',

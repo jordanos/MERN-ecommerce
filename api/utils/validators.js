@@ -3,6 +3,13 @@ const CustomError = require('./CustomError');
 const Feed = require('../models/Feed');
 const User = require('../models/User');
 
+// schema options
+const options = {
+  abortEarly: false, // include all errors
+  allowUnknown: true, // ignore unknown props
+  stripUnknown: true, // remove unknown props
+};
+
 const userSchema = Joi.object().keys({
   name: Joi.string(),
   email: Joi.string().email(),
@@ -12,13 +19,24 @@ const userSchema = Joi.object().keys({
   password: Joi.string().min(6),
 });
 
-const productSchema = Joi.object({
-  name: Joi.string().required(),
-  price: Joi.number().required(),
-  quantity: Joi.number().integer().required(),
-  brand: Joi.string(),
-  description: Joi.string(),
-  productCondition: Joi.string().required(),
+const productSchema = Joi.when(Joi.ref('$method'), {
+  is: 'PUT',
+  then: Joi.object().keys({
+    name: Joi.string(),
+    price: Joi.number(),
+    quantity: Joi.number().integer(),
+    brand: Joi.string(),
+    description: Joi.string(),
+    productCondition: Joi.string(),
+  }),
+  otherwise: Joi.object().keys({
+    name: Joi.string().required(),
+    price: Joi.number().required(),
+    quantity: Joi.number().integer().required(),
+    brand: Joi.string(),
+    description: Joi.string(),
+    productCondition: Joi.string().required(),
+  }),
 });
 
 const categorySchema = Joi.object({
@@ -58,12 +76,10 @@ const notificationSchema = Joi.object({
   userId: Joi.string().hex().length(24).required(),
 });
 
-// schema options
-const options = {
-  abortEarly: false, // include all errors
-  allowUnknown: true, // ignore unknown props
-  stripUnknown: true, // remove unknown props
-};
+const rateSchema = Joi.object({
+  rate: Joi.number().min(1).max(5).required(),
+  review: Joi.string(),
+});
 
 exports.validateUserInput = async (req) => {
   const { error } = userSchema.validate(req.body, options);
@@ -73,7 +89,10 @@ exports.validateUserInput = async (req) => {
 };
 
 exports.validateProductInput = async (req) => {
-  const { error } = productSchema.validate(req.body, options);
+  const { error } = productSchema.validate(req.body, {
+    ...options,
+    context: { method: req.method },
+  });
   if (error) {
     throw new CustomError(error.message, 400);
   }
@@ -81,7 +100,7 @@ exports.validateProductInput = async (req) => {
   // check if reference exists
   const userDoc = await User.findById(req.body.userId);
   if (!userDoc) {
-    throw new CustomError('notification reciever object reference error', 400);
+    throw new CustomError('product owner user object reference error', 400);
   }
 };
 
@@ -161,5 +180,12 @@ exports.validateNotificationInput = async (req) => {
   const userDoc = await User.findById(req.body.userId);
   if (!userDoc) {
     throw new CustomError('product user id object reference error', 400);
+  }
+};
+
+exports.validateRateInput = async (req) => {
+  const { error } = rateSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
   }
 };

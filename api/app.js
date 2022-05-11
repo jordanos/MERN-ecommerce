@@ -38,7 +38,7 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // pagination middleware
-app.use(paginate.middleware(10, 50));
+app.use(paginate.middleware(50, 50));
 
 // Load Routes
 const usersRoute = require('./routes/users');

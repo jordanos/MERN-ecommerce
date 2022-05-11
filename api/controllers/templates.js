@@ -31,6 +31,9 @@ class BaseTemplate {
   async execute() {
     try {
       await this.doMongo();
+      if (this.transform) {
+        this.doc = await this.transform();
+      }
       return this.performReq();
     } catch (e) {
       return this.next(e);
@@ -50,9 +53,6 @@ exports.GetAll = class GetAll extends BaseTemplate {
       .skip(this.req.query.skip)
       .exec();
 
-    if (this.transform) {
-      this.doc = await this.transform();
-    }
     const itemCount = await this.model.count({});
     this.pageCount = Math.ceil(itemCount / this.req.query.limit);
   }
