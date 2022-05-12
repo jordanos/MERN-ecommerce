@@ -3,3 +3,4 @@ exports.userImagesPath = '/media/images/users/';
 exports.feedImagesPath = '/media/images/feeds/';
 exports.productImagesPath = '/media/images/products/';
 exports.categoryImagesPath = '/media/images/categories/';
+exports.heroImagesPath = '/media/images/hero/';

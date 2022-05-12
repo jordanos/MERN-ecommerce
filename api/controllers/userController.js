@@ -46,7 +46,6 @@ exports.deleteUser = (req, res, next) => {
 };
 
 exports.uploadImage = (req, res, next) => {
-  console.log(req.file.filename);
   req.body = { image: req.file.filename };
   const updateOne = new UpdateOne(req, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown

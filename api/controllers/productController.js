@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Hero = require('../models/Hero');
 
 const {
   GetAll,
@@ -47,12 +48,15 @@ exports.uploadImage = (req, res, next) => {
 };
 
 exports.getHeroImages = (req, res, next) => {
-  const getAll = new GetAll(req, res, next, Product, 'product');
+  const getAll = new GetAll(req, res, next, Hero, 'hero');
 
   // transform to get only images
   getAll.transform = async () => {
     const docs = [];
-    for (let i = 0; i < 2; i += 1) {
+    for (let i = 0; i < getAll.doc.length; i += 1) {
+      if (i >= 2) {
+        break;
+      }
       docs.push(getAll.doc[i].image);
     }
     return docs;
