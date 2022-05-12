@@ -31,6 +31,7 @@ exports.authorizeReq = function outer(model) {
     return next();
   }
 
+
   async function innerMessage(req, res, next) {
     const doc = await model.findById(req.params.id);
     if (!doc || !doc.fromId.equals(new mongoose.Types.ObjectId(req.user.id)))

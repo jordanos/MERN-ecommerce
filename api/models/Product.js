@@ -36,6 +36,10 @@ const ProductSchema = new mongoose.Schema(
       default: 'default_image.jpg',
       get: (image) => formatImageUrl(productImagesPath, image),
     },
+    rate: {
+      type: Number,
+      default: 0,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -51,5 +55,6 @@ const ProductSchema = new mongoose.Schema(
     toObject: { getters: true, virtuals: true },
   }
 );
+ProductSchema.index({name: 'text'});
 
 module.exports = mongoose.model('Product', ProductSchema);

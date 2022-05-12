@@ -38,7 +38,7 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // pagination middleware
-app.use(paginate.middleware(10, 50));
+app.use(paginate.middleware(50, 50));
 
 // Load Routes
 const usersRoute = require('./routes/users');
@@ -50,6 +50,8 @@ const feedsRoute = require('./routes/feeds');
 const likesRoute = require('./routes/likes');
 const messagesRoute = require('./routes/messages');
 const notificationsRoute = require('./routes/notifications');
+const packageRoute = require('./routes/packageTypes');
+const ratingReviewRoutes = require('./routes/ratingReview');
 const searchRoute = require('./routes/search');
 const rateRoute = require('./routes/rates');
 const appRoute = require('./routes/appRoute');
@@ -65,6 +67,8 @@ app.use(`${apiVersion}/feeds`, feedsRoute);
 app.use(`${apiVersion}/likes`, likesRoute);
 app.use(`${apiVersion}/messages`, messagesRoute);
 app.use(`${apiVersion}/notifications`, notificationsRoute);
+app.use(`${apiVersion}/packages`, packageRoute);
+app.use(`${apiVersion}/rates`, ratingReviewRoutes);
 app.use(`${apiVersion}/search`, searchRoute);
 app.use(`${apiVersion}/rates`, rateRoute);
 app.use(`${apiVersion}/app`, appRoute);
