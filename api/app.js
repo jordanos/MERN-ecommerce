@@ -54,6 +54,7 @@ const packageRoute = require('./routes/packageTypes');
 const ratingReviewRoutes = require('./routes/ratingReview');
 const searchRoute = require('./routes/search');
 const rateRoute = require('./routes/rates');
+const appRoute = require('./routes/appRoute');
 
 // Use Routes
 const apiVersion = '/api/v1';
@@ -70,6 +71,8 @@ app.use(`${apiVersion}/packages`, packageRoute);
 app.use(`${apiVersion}/rates`, ratingReviewRoutes);
 app.use(`${apiVersion}/search`, searchRoute);
 app.use(`${apiVersion}/rates`, rateRoute);
+app.use(`${apiVersion}/app`, appRoute);
+
 const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware
 app.use(errorHandler);
