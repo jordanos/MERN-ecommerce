@@ -53,24 +53,3 @@ exports.deleteRating = (req, res, next) => {
   const deleteOne = new DeleteOne(req, res, next, Rate, 'Rate');
   deleteOne.execute();
 };
-
-// get ratings users to products map
-/* exports.getRatingss = (req, res, next) => {
-  const getAll = new GetAll(req, res, next, Rate, 'Rate');
-  getAll.filter = { userId: req.params.id };
-  getAll.transform = async () => {
-    const ids = getAll.doc.map((doc) => [doc.productId]);
-    const docs = await Product.find({
-      _id: {
-        $in: ids,
-      },
-    })
-
-      .limit(getAll.req.query.limit)
-      .skip(getAll.req.query.skip)
-      .exec();
-    return docs;
-  };
-
-  getAll.execute();
-}; */

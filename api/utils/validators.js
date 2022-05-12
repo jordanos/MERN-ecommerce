@@ -39,10 +39,6 @@ const productSchema = Joi.when(Joi.ref('$method'), {
   }),
 });
 
-const ratingSchema = Joi.object({
-  rate: Joi.number().min(1).max(5).required(),
-  review: Joi.string(),
-});
 const categorySchema = Joi.object({
   name: Joi.string().required(),
 });
@@ -87,7 +83,7 @@ const notificationSchema = Joi.object({
 
 const rateSchema = Joi.object({
   rate: Joi.number().min(1).max(5).required(),
-  review: Joi.string(),
+  text: Joi.string(),
 });
 
 exports.validateUserInput = async (req) => {
@@ -117,13 +113,6 @@ exports.validateProductInput = async (req) => {
   const userDoc = await User.findById(req.body.userId);
   if (!userDoc) {
     throw new CustomError('notification receiver object reference error', 400);
-  }
-};
-
-exports.validateRateInput = async (req) => {
-  const { error } = ratingSchema.validate(req.body, options);
-  if (error) {
-    throw new CustomError(error.message, 400);
   }
 };
 
