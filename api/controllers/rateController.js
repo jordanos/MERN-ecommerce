@@ -7,8 +7,7 @@ const {
   DeleteOne,
   UpdateOne,
 } = require('./templates');
-// const User = require('../models/User');
-// const Product = require('../models/Product');
+
 const { validateRateInput } = require('../utils/validators');
 const Product = require('../models/Product');
 
@@ -21,6 +20,7 @@ exports.createRating = (req, res, next) => {
   const modifiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
   const createOne = new CreateOne(modifiedReq, res, next, Rate, 'Rate');
   createOne.validate = validateRateInput;
+
   createOne.transform = async () => {
     const rates = await Rate.find({
       productId: modifiedReq.body.productId,
@@ -30,7 +30,7 @@ exports.createRating = (req, res, next) => {
       sum += rate.rate;
     });
     await Product.findOneAndUpdate(
-      { id: modifiedReq.user.id },
+      { _id: modifiedReq.body.productId },
       { rate: sum / rates.length }
     ).exec();
     return createOne.doc;
