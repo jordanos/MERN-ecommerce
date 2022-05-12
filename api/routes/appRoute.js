@@ -10,7 +10,7 @@ const {
   uploadImage,
 } = require('../controllers/heroController');
 
-const saveImage = require('../middlewares/saveImage');
+const { saveImageNoCompression } = require('../middlewares/saveImage');
 
 const imageUpload = require('../utils/images');
 
@@ -210,7 +210,7 @@ router
 router.put(
   '/heros/image/:id',
   imageUpload().single('image'),
-  saveImage(heroImagesPath),
+  saveImageNoCompression(heroImagesPath),
   uploadImage
 );
 

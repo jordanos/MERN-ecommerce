@@ -8,13 +8,12 @@ const {
   updateUser,
   deleteUser,
   uploadImage,
-  getPosts,
 } = require('../controllers/userController');
 
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
-const saveImage = require('../middlewares/saveImage');
+const { saveImage } = require('../middlewares/saveImage');
 const User = require('../models/User');
 const imageUpload = require('../utils/images');
 
