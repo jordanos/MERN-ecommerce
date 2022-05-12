@@ -40,7 +40,7 @@ const productSchema = Joi.when(Joi.ref('$method'), {
 });
 
 const ratingSchema = Joi.object({
-  rateCount: Joi.number().min(1).max(5).required(),
+  rate: Joi.number().min(1).max(5).required(),
   review: Joi.string(),
 });
 const categorySchema = Joi.object({
