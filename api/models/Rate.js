@@ -13,7 +13,7 @@ const rateSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  review: {
+  text: {
     type: String,
   },
   createdAt: {

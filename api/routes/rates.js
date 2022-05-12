@@ -9,9 +9,6 @@ const {
 
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
-// const Product = require('../models/Product');
-// const RatingReview = require('../models/RatingReview');
-// Rating route
 
 /**
  *
