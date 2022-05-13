@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const User = require('../models/User');
 const Product = require('../models/Product');
 const {
@@ -11,6 +12,7 @@ const { validateUserInput } = require('../utils/validators');
 const { hashPassword } = require('../utils/helpers');
 const Feed = require('../models/Feed');
 const Follow = require('../models/Follow');
+const { FormatPhone } = require('../utils/Formatter');
 
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
@@ -18,14 +20,22 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.createUser = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, User, 'user');
+  let modifiedReq = req;
+  const formatPhone = new FormatPhone();
+  const { phone } = req.body;
+  if (phone)
+    modifiedReq = {
+      ...req,
+      body: { ...req.body, phone: formatPhone.exec(phone) },
+    };
+  const createOne = new CreateOne(modifiedReq, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown
   createOne.validate = validateUserInput;
 
   createOne.execute();
 };
 
-exports.getUser = (req, res, next,) => {
+exports.getUser = (req, res, next) => {
   const getOne = new GetOne(req, res, next, User, 'user');
   getOne.transform = async () => {
     // add products count
@@ -52,6 +62,11 @@ exports.getUser = (req, res, next,) => {
 };
 
 exports.updateUser = async (req, res, next) => {
+  const formatPhone = new FormatPhone();
+  const { phone } = req.body;
+  if (phone)
+    req = { ...req, body: { ...req.body, phone: formatPhone.exec(phone) } };
+
   const updateOne = new UpdateOne(req, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown
   updateOne.validate = validateUserInput;

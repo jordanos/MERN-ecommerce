@@ -17,6 +17,7 @@ const {
   deleteProduct,
   uploadImage,
   getHeroImages,
+  filterByCategories,
 } = require('../controllers/productController');
 
 // authentication and authorization
@@ -87,7 +88,7 @@ const imageUpload = require('../utils/images');
  *@swagger
  *tags:
  *  name: Products
- *  description: API to manage lkmklnm.
+ *  description: API to manage products.
  */
 
 router
@@ -95,10 +96,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/products/:
+   * /api/v1/products/?skip=0:
    *   get:
    *     summary: Lists all the products
    *     tags: [Products]
+   *     parameters:
+   *     - in: query
+   *       name: skip
+   *       schema:
+   *         type: integer
+   *       description: pagination value to skip to
    *     responses:
    *       "200":
    *         description: list of products.
@@ -264,5 +271,33 @@ router.put(
  *               $ref: '#/components/schemas/Product'
  */
 router.get('/hero/images', getHeroImages);
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/products/filter/categories?skip=0&&cat=Shoe:
+ *   get:
+ *     summary: Lists all the products by filter
+ *     tags: [Products]
+ *     parameters:
+ *     - in: query
+ *       name: skip
+ *       schema:
+ *         type: integer
+ *       description: pagination value to skip to
+ *     - in: query
+ *       name: cat
+ *       schema:
+ *         type: string
+ *       description: category name
+ *     responses:
+ *       "200":
+ *         description: list of products.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
+router.get('/filter/categories', filterByCategories);
 
 module.exports = router;
