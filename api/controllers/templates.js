@@ -12,7 +12,7 @@ class BaseTemplate {
     // below variables are used to build query later
     this.filter = {};
     this.sort = null;
-    this.populate = null;
+    this.populate = [];
   }
 
   // do database stuff and save the result in this.doc, and must get implemented in sub classes
@@ -51,7 +51,8 @@ exports.GetAll = class GetAll extends BaseTemplate {
 
     // build quiery using chaining
     if (this.sort) query.sort(this.sort);
-    if (this.populate) query.populate(this.populate);
+    if (this.populate.length > 0)
+      this.populate.forEach((populate) => query.populate(populate));
 
     // generate pagination
     query.limit(this.req.query.limit);
@@ -91,7 +92,11 @@ exports.GetOne = class GetOne extends BaseTemplate {
     const { id } = this.req.params;
     validateId(id);
 
-    this.doc = await this.model.findById(id);
+    const query = this.model.findById(id);
+    // build quiery using chaining
+    if (this.populate.length > 0)
+      this.populate.forEach((populate) => query.populate(populate));
+    this.doc = await query.exec();
   }
 
   performReq() {

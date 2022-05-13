@@ -1,14 +1,6 @@
 const router = require('express').Router();
 const { productImagesPath } = require('../config');
 
-/* const { GetAllProduct, CreateProdcut, GetProductById
-, EditProduct, GetAllProductByUserId, DeleteProduct,
- GetAllProductCatagory, GetProductByBrand, RateProduct, 
- GetHighRatedProduct, GetLowPricedProduct, GetHighPricedProduct,
-  GetRelatedProducts, GetTrendingProducts, GetHeroProducts,
-   RemoveTrendingProduct, RemoveHeroProduct, CreateHeroProduct, 
-   CreateTrendingProduct } = require('../controllers/productController') */
-
 const {
   getProducts,
   createProduct,
@@ -64,7 +56,7 @@ const imageUpload = require('../utils/images');
  *          type: file
  *          format: binary
  *          description: image of the product.
- *        categories:
+ *        category:
  *          type: array
  *          description: category of product.
  *        ProductCondition:
@@ -73,6 +65,9 @@ const imageUpload = require('../utils/images');
  *        brand:
  *          type: string
  *          description: brand of the product
+ *        tags:
+ *          type: array
+ *          description: tags of a product
  *        createdAt:
  *          type: string
  *          format: date

@@ -11,10 +11,17 @@ const {
 } = require('./templates');
 const { validateProductInput } = require('../utils/validators');
 
+const populateCategory = { path: 'category', select: 'name' };
+const populateUser = { path: 'userId', select: 'name image' };
+const populateTags = { path: 'tags', select: 'name' };
+
 exports.getProducts = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Product, 'product');
-  // add join to change categoryId to category name
-  getAll.populate = { path: 'category', select: 'name' };
+  // add joins
+  getAll.populate.push(populateCategory);
+  getAll.populate.push(populateUser);
+  getAll.populate.push(populateTags);
+
   getAll.execute();
 };
 
@@ -27,6 +34,11 @@ exports.createProduct = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const getOne = new GetOne(req, res, next, Product, 'product');
+  // add joins
+  getOne.populate.push(populateCategory);
+  getOne.populate.push(populateUser);
+  getOne.populate.push(populateTags);
+
   getOne.execute();
 };
 

@@ -9,26 +9,16 @@ const {
 } = require('./templates');
 const { validateFeedInput } = require('../utils/validators');
 
+// populate with user data
+const populateUser = {
+  path: 'userId',
+  select: '-password -status -isVerified -createdAt',
+};
+
 exports.getFeeds = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Feed, 'feed');
   getAll.sort = { createdAt: -1 };
-
-  getAll.doMongo = async () => {
-    getAll.req.query.skip = getAll.req.query.skip || 0;
-    getAll.req.query.skip = parseInt(getAll.req.query.skip, 10);
-
-    getAll.doc = await getAll.model
-      .find(getAll.filter)
-      // .populate('userId', 'name', 'image', 'phone')
-      .sort(getAll.sort)
-      .limit(getAll.req.query.limit)
-      .skip(getAll.req.query.skip)
-      .exec();
-
-    const itemCount = await getAll.model.count({});
-    getAll.pageCount = Math.ceil(itemCount / getAll.req.query.limit);
-  };
-
+  getAll.populate = populateUser;
   getAll.execute();
 };
 
@@ -43,6 +33,7 @@ exports.createFeed = (req, res, next) => {
 
 exports.getFeed = (req, res, next) => {
   const getOne = new GetOne(req, res, next, Feed, 'feed');
+  getOne.populate = populateUser;
   getOne.execute();
 };
 
