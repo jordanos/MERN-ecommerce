@@ -207,5 +207,3 @@ const imageUpload = multer({ storage });
 router.put('/image/:id', imageUpload.single('image'), uploadImage);
 
 module.exports = router;
-
-module.exports = router;

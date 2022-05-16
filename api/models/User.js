@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Please provide a password'],
-      select: true,
     },
     address: {
       type: String,
@@ -42,9 +41,6 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    follower:Array,
-    following:Array,
-    posts: Array,
     createdAt: {
       type: Date,
       default: Date.now(),
