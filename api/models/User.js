@@ -38,9 +38,8 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    follower:Array,
-    following:Array,
-    posts: Array,
+
+
     createdAt: {
       type: Date,
       default: Date.now(),

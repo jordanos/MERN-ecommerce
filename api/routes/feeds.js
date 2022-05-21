@@ -79,7 +79,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Feed'
    */
-  .get(loginReq, getFeeds)
+  .get(getFeeds)
   /**
    *@swagger
    *path:

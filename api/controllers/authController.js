@@ -5,6 +5,7 @@ const Otp = require('../models/Otp');
 const TokenBlackList = require('../models/TokenBlackList');
 const CustomError = require('../utils/CustomError');
 const { validateId } = require('../utils/validators');
+const Admin = require('../models/Admin');
 
 exports.login = async (req, res, next) => {
   try {
@@ -29,7 +30,30 @@ exports.login = async (req, res, next) => {
     next(e);
   }
 };
+exports.adminLogin = async (req, res, next) => {
+  try {
+    // Get req data and init required datas
+    const { phone, password } = req.body;
+    const admin = await Admin.findOne({ phone });
+    if (!(admin && (await bcrypt.compare(password, admin.password)))) {
+      throw new CustomError('Invalid Credentials', 401);
+    }
 
+    // Create token
+    const token = jwt.sign({ id: admin.id }, process.env.SECRET_KEY, {
+      expiresIn: '9999d',
+    });
+
+    // save user token
+    // user.token = token;
+    // user.save();
+
+    res.status(200).json({ data: { token, admin } });
+  } catch (e) {
+    next(e);
+  }
+};
+ 
 exports.logout = async (req, res, next) => {
   try {
     const { token } = req.params;

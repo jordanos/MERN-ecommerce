@@ -15,13 +15,13 @@ exports.loginReq = async (req, res, next) => {
     return next(new CustomError('Invalid Token', 401));
   }
 
-  try {
+  /*   try {
     const { id } = req.user;
     const user = await User.findById(id).exec();
     if (!user.isVerified) throw new CustomError('User must be verified', 403);
   } catch (e) {
     next(e);
-  }
+  } */
 
   return next();
 };

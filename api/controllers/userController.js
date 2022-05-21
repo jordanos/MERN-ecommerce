@@ -9,6 +9,7 @@ const {
 } = require('./templates');
 const { validateUserInput } = require('../utils/validators');
 const { hashPassword } = require('../utils/helpers');
+const Admin = require('../models/Admin');
 
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
@@ -23,7 +24,17 @@ exports.createUser = (req, res, next) => {
   createOne.execute();
 };
 
-exports.getUser = (req, res, next,) => {
+exports.createAdmin = (req, res, next) => {
+  const createOne = new CreateOne(req, res, next, Admin, 'admin');
+  createOne.validate = validateUserInput;
+  createOne.execute();
+};
+exports.getAdmin = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Admin, 'user');
+  getAll.execute();
+};
+
+exports.getUser = (req, res, next) => {
   const getOne = new GetOne(req, res, next, User, 'user');
   getOne.execute();
 };
