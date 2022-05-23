@@ -32,8 +32,8 @@ class ApiServices {
     };
 
     String requestBody = jsonEncode({
-      'fullname': '$firstName $lastName',
-      'phonenumber': phoneNo,
+      'name': '$firstName',
+      'phone': phoneNo,
       'password': password,
       'address': 'Addis Ababa',
     });
