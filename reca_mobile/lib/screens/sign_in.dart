@@ -18,9 +18,16 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool loading = false;
 
   bool _isObscure = true;
   final storage = FlutterSecureStorage();
+
+  void _setLoading(bool state) {
+    setState(() {
+      loading = state;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +36,6 @@ class _SignInState extends State<SignIn> {
       child: Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: true,
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   backgroundColor: Colors.white,
-        //   // leading: const Icon(Icons.arrow_back_ios_new_outlined),
-        // ),
         body: Form(
           key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -173,6 +175,12 @@ class _SignInState extends State<SignIn> {
                         height: 8,
                       ),
                       ElevatedButton(
+                        child: loading
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                'Sign in',
+                                style: TextStyle(fontSize: 17),
+                              ),
                         style: ElevatedButton.styleFrom(
                           onPrimary: Colors.white,
                           primary: const Color(0xfff7921f),
@@ -186,9 +194,10 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                         onPressed: () async {
-                          print('Sign in button pressed');
+                          _setLoading(true);
                           var loginResponse = await ApiServices().logIn(
                               phoneController.text, passwordController.text);
+                          _setLoading(false);
                           if (loginResponse == null) {
                             Get.snackbar(
                               'Login Error',
@@ -202,32 +211,23 @@ class _SignInState extends State<SignIn> {
 
                             storage.write(
                                 key: 'name',
-                                value: loginResponse.data[0].fullname);
+                                value: loginResponse.user.fullname);
                             storage.write(
                                 key: 'id',
-                                value: loginResponse.data[0].userid.toString());
+                                value: loginResponse.user.toString());
                             storage.write(
                                 key: 'phone',
-                                value: loginResponse.data[0].phonenumber
-                                    .toString());
-                            // storage.write(
-                            //     key: 'pass', value: loginResponse.data[0].password);
-                            // storage.write(
-                            //     key: 'address',
-                            //     value: loginResponse.data[0].address);
+                                value:
+                                    loginResponse.user.phonenumber.toString());
                             storage.write(
                                 key: 'ppic',
-                                value: loginResponse.data[0].profileimage);
+                                value: loginResponse.user.profileimage);
                             storage.write(
                                 key: 'cpic',
-                                value: loginResponse.data[0].coverimage);
+                                value: loginResponse.user.coverimage);
                             Get.offAll(() => MainPage());
                           }
                         },
-                        child: const Text(
-                          'Sign in',
-                          style: TextStyle(fontSize: 17),
-                        ),
                       ),
                       const SizedBox(
                         height: 25,
@@ -256,59 +256,6 @@ class _SignInState extends State<SignIn> {
                       const SizedBox(
                         height: 20,
                       ),
-                      // ElevatedButton.icon(
-                      //   style: ElevatedButton.styleFrom(
-                      //     elevation: 0,
-                      //     minimumSize: const Size(290, 50),
-                      //     maximumSize: const Size(290, 50),
-                      //     shape: RoundedRectangleBorder(
-                      //         side: BorderSide(
-                      //             width: 1,
-                      //             color: Colors.grey.withOpacity(0.5)),
-                      //         borderRadius: BorderRadius.circular(32.0)),
-                      //   ),
-                      //   onPressed: () {
-                      //     print('Facebook sign in button pressed');
-                      //   },
-                      //   icon: FaIcon(
-                      //     FontAwesomeIcons.facebook,
-                      //     size: 30,
-                      //   ),
-                      //   // icon: const SizedBox(
-                      //   //     width: 40,
-                      //   //     height: 40,
-                      //   //     child: Image(
-                      //   //         image: AssetImage('assets/images/fb.png'))),
-                      //   label: const Text('Sign in with Facebook'),
-                      // ),
-                      // const SizedBox(
-                      //   height: 8,
-                      // ),
-                      // ElevatedButton.icon(
-                      //   style: ElevatedButton.styleFrom(
-                      //     elevation: 0,
-                      //     minimumSize: const Size(290, 50),
-                      //     maximumSize: const Size(290, 50),
-                      //     shape: RoundedRectangleBorder(
-                      //         side: BorderSide(
-                      //             width: 1,
-                      //             color: Colors.grey.withOpacity(0.5)),
-                      //         borderRadius: BorderRadius.circular(32.0)),
-                      //   ),
-                      //   onPressed: () {
-                      //     print('Google signin button pressed');
-                      //   },
-                      //   icon: FaIcon(
-                      //     FontAwesomeIcons.google,
-                      //     size: 30,
-                      //   ),
-                      //   // icon: SizedBox(
-                      //   //     width: 28,
-                      //   //     height: 28,
-                      //   //     child: Image(
-                      //   //         image: AssetImage('assets/images/google.png'))),
-                      //   label: Text('Sign in with Google'),
-                      // ),
                     ],
                   ),
                 ),

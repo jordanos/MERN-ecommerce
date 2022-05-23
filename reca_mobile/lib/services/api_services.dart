@@ -18,13 +18,11 @@ import 'package:reca_mobile/models/product_response_model.dart';
 import 'package:reca_mobile/models/profile_by_id.dart';
 import 'package:reca_mobile/models/profile_with_follower.dart';
 import 'package:reca_mobile/models/user_login_response_model.dart';
-import 'package:reca_mobile/models/user_signup_response_model.dart';
 
 class ApiServices {
   //USER API SERVICES
 
-  dynamic registerUser(
-      var firstName, var lastName, var phoneNo, var password) async {
+  dynamic registerUser(String name, String phone, String password) async {
     var url = Uri.http(Config.apiUrl, Config.registerUserApi);
 
     Map<String, String> header = {
@@ -32,26 +30,25 @@ class ApiServices {
     };
 
     String requestBody = jsonEncode({
-      'name': '$firstName',
-      'phone': phoneNo,
+      'name': name,
+      'phone': phone,
       'password': password,
       'address': 'Addis Ababa',
     });
     try {
       final response = await http.post(url, headers: header, body: requestBody);
 
-      if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        final userSignUpResponse = userSignUpResponseFromJson(response.body);
-        return userSignUpResponse.status;
+      if (response.statusCode == 201) {
+        return response;
+      } else {
+        return null;
       }
     } catch (e) {
-      print('Registration e $e');
       return null;
     }
   }
 
-  dynamic logIn(var phoneNo, var password) async {
+  Future<UserLoginResponse?> logIn(var phoneNo, var password) async {
     var url = Uri.http(Config.apiUrl, Config.loginUserApi);
 
     Map<String, String> header = {
@@ -59,21 +56,19 @@ class ApiServices {
     };
 
     String requestBody = jsonEncode({
-      'phonenumber': phoneNo,
+      'phone': phoneNo,
       'password': password,
     });
     try {
       final response = await http.post(url, headers: header, body: requestBody);
 
-      final userLoginResponse = userLoginResponseFromJson(response.body);
-
-      List<UserData> datum = userLoginResponse.data;
-      if (userLoginResponse.status == 200) {
-        // print(datum[0].profileimage);
+      if (response.statusCode == 200) {
+        final userLoginResponse = userLoginResponseFromJson(response.body);
         return userLoginResponse;
+      } else {
+        return null;
       }
     } catch (e) {
-      print('ecxeption $e');
       return null;
     }
   }

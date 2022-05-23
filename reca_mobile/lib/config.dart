@@ -1,8 +1,9 @@
 class Config {
-  static const String appName = "rica_mobile";
+  static const String appName = "ricashoppings";
   static const String host = "192.168.0.126";
   static const String apiUrl = host + ":5000";
   static const String messageUrl = host + ":8900";
+  static const String api = "/api/v1";
   static const String postApi = "/feed";
   static const String heroApi = "/api/v1/products/hero/images";
   static const String postByUserIdApi = "/feed/user/";
@@ -13,10 +14,10 @@ class Config {
   static const String getAllowedPostApi = "/feed/getallowed";
   static const String getPostByIdApi = "/feed/getfeed";
   static const String getAllUserApi = "/user/all";
-  static const String loginUserApi = "/user/login";
+  static const String loginUserApi = api + "/auth/login";
   static const String followUserApi = "/user/follow";
   static const String unfollowUserApi = "/user/unfollow";
-  static const String registerUserApi = "/user/register";
+  static const String registerUserApi = api + "/users";
   static const String changePasswordApi = "/user/changepassword";
   static const String profileByIdApi = "/user/profile";
   static const String editProfileApi = "/user/editprofile/";
