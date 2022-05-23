@@ -24,7 +24,7 @@ const {
  *          type: string
  *          description: password of user.
  *      example:
- *          phone: "251919804354"
+ *          phone: "251919803164"
  *          password: "123456"
  */
 

@@ -1,5 +1,6 @@
 const Product = require('../models/Product');
 const Hero = require('../models/Hero');
+const Category = require('../models/Category');
 
 const {
   GetAll,
@@ -10,8 +11,17 @@ const {
 } = require('./templates');
 const { validateProductInput } = require('../utils/validators');
 
+const populateCategory = { path: 'category', select: 'name' };
+const populateUser = { path: 'userId', select: 'name image' };
+const populateTags = { path: 'tags', select: 'name' };
+
 exports.getProducts = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Product, 'product');
+  // add joins
+  getAll.populate.push(populateCategory);
+  getAll.populate.push(populateUser);
+  getAll.populate.push(populateTags);
+
   getAll.execute();
 };
 
@@ -24,6 +34,11 @@ exports.createProduct = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const getOne = new GetOne(req, res, next, Product, 'product');
+  // add joins
+  getOne.populate.push(populateCategory);
+  getOne.populate.push(populateUser);
+  getOne.populate.push(populateTags);
+
   getOne.execute();
 };
 
@@ -64,6 +79,19 @@ exports.getHeroImages = (req, res, next) => {
     }
     return docs;
   };
+
+  getAll.execute();
+};
+
+exports.filterByCategories = async (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Product, 'product');
+  // get category id from name of category
+  const { cat } = req.query;
+  const catId = await Category.find({ name: cat }).exec();
+
+  getAll.filter = { category: catId };
+  // add join to change categoryId to category name
+  getAll.populate = { path: 'category', select: 'name' };
 
   getAll.execute();
 };

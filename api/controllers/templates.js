@@ -9,9 +9,10 @@ class BaseTemplate {
     this.next = next;
     this.model = model;
     this.modelName = modelName;
-    // if filter is set to some value, it will be used in sub classes
+    // below variables are used to build query later
     this.filter = {};
-    this.sort = {};
+    this.sort = null;
+    this.populate = [];
   }
 
   // do database stuff and save the result in this.doc, and must get implemented in sub classes
@@ -46,12 +47,18 @@ exports.GetAll = class GetAll extends BaseTemplate {
     this.req.query.skip = this.req.query.skip || 0;
     this.req.query.skip = parseInt(this.req.query.skip, 10);
 
-    this.doc = await this.model
-      .find(this.filter)
-      .sort(this.sort)
-      .limit(this.req.query.limit)
-      .skip(this.req.query.skip)
-      .exec();
+    const query = this.model.find(this.filter);
+
+    // build quiery using chaining
+    if (this.sort) query.sort(this.sort);
+    if (this.populate.length > 0)
+      this.populate.forEach((populate) => query.populate(populate));
+
+    // generate pagination
+    query.limit(this.req.query.limit);
+    query.skip(this.req.query.skip);
+    // run query
+    this.doc = await query.exec();
 
     const itemCount = await this.model.count({});
     this.pageCount = Math.ceil(itemCount / this.req.query.limit);
@@ -85,7 +92,11 @@ exports.GetOne = class GetOne extends BaseTemplate {
     const { id } = this.req.params;
     validateId(id);
 
-    this.doc = await this.model.findById(id);
+    const query = this.model.findById(id);
+    // build quiery using chaining
+    if (this.populate.length > 0)
+      this.populate.forEach((populate) => query.populate(populate));
+    this.doc = await query.exec();
   }
 
   performReq() {
