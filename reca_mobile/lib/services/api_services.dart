@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:reca_mobile/config.dart';
+import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/models/all_users.dart';
 import 'package:reca_mobile/models/category_list.dart';
 import 'package:reca_mobile/models/conversation_model.dart';
@@ -73,22 +75,28 @@ class ApiServices {
     }
   }
 
-  Future<ProfileById> getUserById(var id) async {
-    var url = Uri.http(Config.apiUrl, Config.profileByIdApi);
-    String requestBody = jsonEncode({
-      'userid': id,
-    });
+  Future<ProfileById?> getUserById(var id) async {
+    StorageController controller = Get.find<StorageController>();
+    // print("user id: ${controller.id}");
+    var url =
+        Uri.http(Config.apiUrl, "${Config.profileByIdApi}/${controller.id}");
+
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
     };
 
-    final response = await http.post(url, headers: header, body: requestBody);
-    // print(response.body);
-    final profileById = profileByIdFromJson(response.body);
+    final response = await http.get(url);
 
-    UserDataByID datum = profileById.data;
-
-    return profileById;
+    try {
+      if (response.statusCode == 200) {
+        ProfileById profileById = profileByIdFromJson(response.body);
+        return profileById;
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 
   Future<List<AllUserData>> getAllUsers() async {
@@ -349,7 +357,7 @@ class ApiServices {
     return feedResponse;
   }
 
-  Future<GeneralResponse> likePost(int id, int postId, var token) async {
+  Future<GeneralResponse> likePost(String id, String postId, var token) async {
     var url = Uri.http(Config.apiUrl, Config.likePostApi);
 
     String requestBody = jsonEncode({
@@ -416,30 +424,23 @@ class ApiServices {
 
   Future<List<FeedData>?> getallowedPost(var id) async {
     var url = Uri.http(Config.apiUrl, Config.getAllowedPostApi);
-    String requestBody = jsonEncode({
-      'userid': id.toString(),
-    });
+    StorageController controller = Get.find<StorageController>();
     Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
+      'Content-type': 'application/json; charset=UTF-8',
+      'Authorization': controller.jwt,
     };
 
-    var response = await http.post(url, body: requestBody, headers: header);
+    var response = await http.get(url, headers: header);
 
-    var statusCode = response.statusCode;
-    var data = response.body;
-
-    final feedResponse = feedResponseFromJson(data);
-    var list = feedResponse.data;
-    // if (list != null) {
-    //   for (var item in list) {
-    //     print('Get allowed feed response data ${item.fullname}');
-    //   }
-    // }
-
-    if (feedResponse.data == null) {
-      return null;
-    } else {
-      return feedResponse.data;
+    try {
+      if (response.statusCode == 200) {
+        final feedResponse = feedResponseFromJson(response.body);
+        return feedResponse.data;
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
     }
   }
 
@@ -530,27 +531,29 @@ class ApiServices {
 
     var response = await http.get(url);
 
-    var statusCode = response.statusCode;
-
-    var data = response.body;
-    final heroResponse = heroFromJson(data);
-    // for (var item in heroResponse.data) {
-    //   print(item.image);
-    // }
-    print(heroResponse.data);
-    return heroResponse.data;
+    if (response.statusCode == 200) {
+      final heroResponse = heroFromJson(response.body);
+      return heroResponse.data;
+    }
+    return [];
   }
 
   Future<List<ProductData>> getProductData() async {
     var url = Uri.http(Config.apiUrl, Config.productApi);
 
-    var response = await http.post(url);
-    var data = response.body;
-    final productResponse = productResponseFromJson(data);
+    var response = await http.get(url);
 
-    List<ProductData> datum = productResponse.data;
+    try {
+      if (response.statusCode == 200) {
+        final productResponse = productResponseFromJson(response.body);
+        // print(productResponse.products[0].name);
+        return productResponse.products;
+      }
 
-    return datum;
+      return [];
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<ProductData>> getProductDataWithRating(
@@ -572,7 +575,7 @@ class ApiServices {
 
     final productResponse = productResponseFromJson(data);
     // print('Product with rating data is Rated:  ${productResponse.data[0]}');
-    List<ProductData> datum = productResponse.data;
+    List<ProductData> datum = productResponse.products;
 
     return datum;
   }
@@ -584,29 +587,29 @@ class ApiServices {
     var data = response.body;
     final productResponse = productResponseFromJson(data);
 
-    List<ProductData> datum = productResponse.data;
+    List<ProductData> datum = productResponse.products;
 
     return datum;
   }
 
   Future<List<ProductData>> getProductsByCategory(var category) async {
-    var url = Uri.http(Config.apiUrl, Config.productByCategoryApi);
-
-    String requestBody = jsonEncode({
-      'catagory': category,
-    });
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
+    final queryParams = {
+      "cat": category,
     };
-    var response = await http.post(url, headers: header, body: requestBody);
-    // var statusCode = response.statusCode;
-    var data = response.body;
+    var url = Uri.http(Config.apiUrl, Config.productByCategoryApi, queryParams);
 
-    final productResponseCat = productResponseFromJson(data);
+    var response = await http.get(url);
 
-    List<ProductData> datum = productResponseCat.data;
+    try {
+      if (response.statusCode == 200) {
+        final productResponse = productResponseFromJson(response.body);
+        return productResponse.products;
+      }
 
-    return datum;
+      return [];
+    } catch (e) {
+      return [];
+    }
   }
 
   Future<List<CategoryData>> getCategoryList() async {
@@ -638,7 +641,7 @@ class ApiServices {
 
     final productResponse = productResponseFromJson(response.body);
 
-    List<ProductData>? datum = productResponse.data;
+    List<ProductData>? datum = productResponse.products;
     return datum;
   }
 

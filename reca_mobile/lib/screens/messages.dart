@@ -1,19 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/chat_controller.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/list.dart';
 import 'package:reca_mobile/models/one_to_one_model.dart';
 import 'package:reca_mobile/models/profile_by_id.dart';
-import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../config.dart';
-import 'dart:async';
 
 class MessagePage extends StatefulWidget {
   MessagePage({Key? key}) : super(key: key);
@@ -348,7 +344,7 @@ class _MessagePageState extends State<MessagePage> {
                       children: [
                         SizedBox(
                           height: 40,
-                          child: FutureBuilder<ProfileById>(
+                          child: FutureBuilder<ProfileById?>(
                               future: ApiServices().getUserById(argument[1]),
                               builder: (context, snapshot) {
                                 var data = snapshot.data;
@@ -508,7 +504,7 @@ class GetProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<ProfileById>(
+    return StreamBuilder<ProfileById?>(
         stream: ApiServices().getUserById(id).asStream(),
         builder: (context, snapshot) {
           var data = snapshot.data;

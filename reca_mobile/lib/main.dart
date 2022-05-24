@@ -1,32 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:reca_mobile/config.dart';
-import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/models/user_login_response_model.dart';
-import 'package:reca_mobile/screens/first_launch/intro_page.dart';
-import 'package:reca_mobile/screens/home_page.dart';
 import 'package:reca_mobile/screens/main_page.dart';
-import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/screens/sign_in.dart';
-import 'package:http/http.dart' as http;
 
 final storage = FlutterSecureStorage();
 
 void main() async {
-  // try {
-  //   // var url = Uri.http(Config.apiUrl, Config.postApi);
-  //   final result = await InternetAddress.lookup('https://www.google.com');
-  //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-  //     print('connected');
-  //   }
-  // } on SocketException catch (_) {
-  //   print('not connected e : $_');
-  // StorageController controller = Get.put(StorageController());
-
-  // }
   runApp(MyApp());
 }
 
@@ -45,7 +25,7 @@ const MaterialColor white = MaterialColor(0xFFFEFEFE, <int, Color>{
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
-  @override
+
   Future<String> get jwtOrEmpty async {
     var jwt = await storage.read(key: "jwt");
     var id = await storage.read(key: "id");

@@ -1,14 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/list.dart';
-import 'package:reca_mobile/main.dart';
 import 'package:reca_mobile/models/profile_by_id.dart';
-import 'package:reca_mobile/models/user_login_response_model.dart';
 import 'package:reca_mobile/screens/my_feed.dart';
 import 'package:reca_mobile/screens/profile_edit.dart';
 import 'package:reca_mobile/screens/settings.dart';
@@ -27,7 +23,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late Future<ProfileById> getInfo;
+  late Future<ProfileById?> getInfo;
   StorageController controller = Get.find();
 
   late String ppic;
@@ -81,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      FutureBuilder<ProfileById>(
+                      FutureBuilder<ProfileById?>(
                           future: getInfo,
                           builder: (context, snapshot) {
                             var data = snapshot.data;
@@ -174,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             // color: Colors.grey,
                             child: Column(
                               children: [
-                                FutureBuilder<ProfileById>(
+                                FutureBuilder<ProfileById?>(
                                     future: getInfo,
                                     builder: (context, snapshot) {
                                       final data = snapshot.data;
@@ -667,7 +663,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Positioned(
                     left: MediaQuery.of(context).size.width / 2.4,
                     top: 100,
-                    child: FutureBuilder<ProfileById>(
+                    child: FutureBuilder<ProfileById?>(
                         future: ApiServices().getUserById(controller.id),
                         builder: (context, snapshot) {
                           var data = snapshot.data;

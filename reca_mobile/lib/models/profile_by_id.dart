@@ -7,30 +7,16 @@ import 'dart:convert';
 ProfileById profileByIdFromJson(String str) =>
     ProfileById.fromJson(json.decode(str));
 
-String profileByIdToJson(ProfileById data) => json.encode(data.toJson());
-
 class ProfileById {
   ProfileById({
-    required this.status,
-    required this.message,
     required this.data,
   });
 
-  int status;
-  String message;
   UserDataByID data;
 
   factory ProfileById.fromJson(Map<String, dynamic> json) => ProfileById(
-        status: json["status"],
-        message: json["message"],
         data: UserDataByID.fromJson(json["data"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": data.toJson(),
-      };
 }
 
 class UserDataByID {
@@ -47,9 +33,9 @@ class UserDataByID {
     required this.follower,
   });
 
-  int userid;
+  String userid;
   String fullname;
-  int phonenumber;
+  String phonenumber;
   String address;
   String profileimage;
   String coverimage;
@@ -58,29 +44,16 @@ class UserDataByID {
   int following;
   int follower;
 
-  factory UserDataByID.fromJson(Map<String, dynamic> json) => UserDataByID(
-        userid: json["userid"],
-        fullname: json["fullname"],
-        phonenumber: json["phonenumber"],
-        address: json["address"],
-        profileimage: json["profileimage"],
-        coverimage: json["coverimage"],
-        post: json["post"],
-        product: json["product"],
-        following: json["following"],
-        follower: json["follower"],
+  factory UserDataByID.fromJson(Map<String, dynamic> user) => UserDataByID(
+        userid: user["user"]["id"],
+        fullname: user["user"]["name"],
+        phonenumber: user["user"]["phone"],
+        address: user["user"]["address"],
+        profileimage: user["user"]["image"],
+        coverimage: user["user"]["image"],
+        post: user["feedsCount"],
+        product: user["productsCount"],
+        following: user["followingCount"],
+        follower: user["followersCount"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "userid": userid,
-        "fullname": fullname,
-        "phonenumber": phonenumber,
-        "address": address,
-        "profileimage": profileimage,
-        "coverimage": coverimage,
-        "post": post,
-        "product": product,
-        "following": following,
-        "follower": follower,
-      };
 }

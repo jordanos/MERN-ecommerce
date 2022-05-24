@@ -1,8 +1,8 @@
 import 'dart:ui';
 
+import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -11,12 +11,9 @@ import 'package:get/get.dart';
 import 'package:reca_mobile/list.dart';
 import 'package:reca_mobile/models/hero_model.dart';
 import 'package:reca_mobile/models/product_response_model.dart';
-import 'package:reca_mobile/models/user_login_response_model.dart';
 import 'package:reca_mobile/screens/category.dart';
-import 'package:reca_mobile/screens/product_detail.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/product_card.dart';
-import 'package:reca_mobile/widgets/rating.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,17 +33,6 @@ class _HomePageState extends State<HomePage> {
     getHeroImg = ApiServices().getHero();
     super.initState();
   }
-
-  // void getHero() async {
-  //   var hero = await ApiServices().getHero();
-  //   for (var item in hero) {
-  //     images.add(Image.network(
-  //       item.image,
-  //       fit: BoxFit.cover,
-  //     ));
-  //   }
-  //   setStateIfMounted(() {});
-  // }
 
   void setStateIfMounted(f) {
     if (mounted) setState(f);
@@ -227,15 +213,15 @@ class _HomePageState extends State<HomePage> {
                       }),
                 ),
                 futureBuilder(
-                    'Trending Products', ApiServices().getTrendingProduct()),
+                    'Trending Products', ApiServices().getProductData()),
                 futureBuilder('All Products', ApiServices().getProductData()),
 
+                futureBuilder('Phones',
+                    ApiServices().getProductsByCategory('Electronics')),
                 futureBuilder(
-                    'Phones', ApiServices().getProductsByCategory('phone')),
+                    'Clothing', ApiServices().getProductsByCategory('Clothes')),
                 futureBuilder(
-                    'Clothing', ApiServices().getProductsByCategory('dress')),
-                futureBuilder(
-                    'Shoes', ApiServices().getProductsByCategory('shoes')),
+                    'Shoes', ApiServices().getProductsByCategory('Shoe')),
                 // futureBuilder('All Products', ApiServices().getProductData()),
               ],
             ),
@@ -260,19 +246,6 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) => ProductShimmerHP(),
-                // Column(
-                //       mainAxisSize: MainAxisSize.min,
-                //       children: const [
-                //         SizedBox(
-                //           height: 8,
-                //         ),
-                //         ProductShimmerHP(),
-                //         SizedBox(
-                //           height: 8,
-                //         ),
-                //         // ProductShimmerHP(),
-                //       ],
-                //     ),
                 separatorBuilder: (context, index) => const SizedBox(
                       width: 20,
                     ),
@@ -312,8 +285,6 @@ class _HomePageState extends State<HomePage> {
               ],
             );
           } else {
-            // return const Center(child: CircularProgressIndicator(
-            //   color: Color(0xfff7921f),));
             return Container(
               margin: const EdgeInsets.only(left: 20),
               height: 230,
@@ -321,19 +292,6 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.horizontal,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) => ProductShimmerHP(),
-                  // Column(
-                  //       mainAxisSize: MainAxisSize.min,
-                  //       children: const [
-                  //         SizedBox(
-                  //           height: 8,
-                  //         ),
-                  //         ProductShimmerHP(),
-                  //         SizedBox(
-                  //           height: 8,
-                  //         ),
-                  //         // ProductShimmerHP(),
-                  //       ],
-                  //     ),
                   separatorBuilder: (context, index) => const SizedBox(
                         width: 20,
                       ),
