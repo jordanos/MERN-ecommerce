@@ -7,31 +7,17 @@ import 'dart:convert';
 Conversation conversationFromJson(String str) =>
     Conversation.fromJson(json.decode(str));
 
-String conversationToJson(Conversation data) => json.encode(data.toJson());
-
 class Conversation {
   Conversation({
-    required this.status,
-    required this.message,
     required this.data,
   });
 
-  int status;
-  String message;
   List<AllConversation> data;
 
   factory Conversation.fromJson(Map<String, dynamic> json) => Conversation(
-        status: json["status"],
-        message: json["message"],
         data: List<AllConversation>.from(
             json["data"].map((x) => AllConversation.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
 }
 
 class AllConversation {
@@ -44,29 +30,20 @@ class AllConversation {
     required this.unread,
   });
 
-  int conversationid;
-  int senderid;
-  int reciverid;
+  String conversationid;
+  String senderid;
+  String reciverid;
   DateTime time;
   DateTime lastseen;
-  int unread;
+  String unread;
 
-  factory AllConversation.fromJson(Map<String, dynamic> json) =>
+  factory AllConversation.fromJson(Map<String, dynamic> message) =>
       AllConversation(
-        conversationid: json["conversationid"],
-        senderid: json["senderid"],
-        reciverid: json["reciverid"],
-        time: DateTime.parse(json["time"]),
-        lastseen: DateTime.parse(json["last_seen"]),
-        unread: json["unread"],
+        conversationid: message["id"],
+        senderid: message["fromId"],
+        reciverid: message["toId"],
+        time: DateTime.parse(message["createdAt"]),
+        lastseen: DateTime.now(),
+        unread: "read",
       );
-
-  Map<String, dynamic> toJson() => {
-        "conversationid": conversationid,
-        "senderid": senderid,
-        "reciverid": reciverid,
-        "time": time.toIso8601String(),
-        "last_seen": time.toIso8601String(),
-        "unread": unread,
-      };
 }

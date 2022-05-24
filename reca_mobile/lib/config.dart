@@ -20,10 +20,10 @@ class Config {
   static const String registerUserApi = api + "/users";
   static const String changePasswordApi = "/user/changepassword";
   static const String profileByIdApi = api + "/users";
-  static const String editProfileApi = "/user/editprofile/";
+  static const String editProfileApi = api + "/users";
   static const String uploadCoverApi = "/user/uploadcoverpic/";
-  static const String getAllConversationApi = "/conversation/get/";
-  static const String getMessagesApi = "/conversation/message";
+  static const String getAllConversationApi = api + "/messages";
+  static const String getMessagesApi = api + "/messages";
   static const String markAllAsRead = "/conversation/readallmessage";
   static const String createConversationApi =
       "/conversation/createconversation/";

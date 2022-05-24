@@ -40,13 +40,6 @@ class _AllMessagesState extends State<AllMessages> {
     }
   }
 
-  // Future<void> f() async {
-  //   getAllMessage = ApiServices().getAllCoversation(controller.id);
-  //   setState(() {
-  //     getAllMessage = ApiServices().getAllCoversation(controller.id);
-  //   });
-  // }
-
   bool isVisible = true;
   bool unread = false;
   @override
@@ -156,7 +149,7 @@ class _AllMessagesState extends State<AllMessages> {
                         var data = snapshot.data;
                         if (data != null) {
                           for (var item in data) {
-                            if (item.unread == 1) {
+                            if (item.unread == "unread") {
                               setState(() {
                                 unread = true;
                               });
@@ -171,9 +164,8 @@ class _AllMessagesState extends State<AllMessages> {
                                 itemCount: length,
                                 itemBuilder: (context, index) {
                                   var userData = data[index];
-                                  int finalId;
-                                  userData.senderid.toString() ==
-                                          controller.id.toString()
+                                  String finalId;
+                                  userData.senderid == controller.id
                                       ? finalId = userData.reciverid
                                       : finalId = userData.senderid;
 
@@ -401,8 +393,8 @@ class _AllMessagesState extends State<AllMessages> {
                                                               const SizedBox(
                                                                 height: 20,
                                                               ),
-                                                              userData.unread >=
-                                                                      0
+                                                              userData.unread ==
+                                                                      "unread"
                                                                   ? Visibility(
                                                                       visible:
                                                                           isVisible,
@@ -424,7 +416,7 @@ class _AllMessagesState extends State<AllMessages> {
                                                                           child:
                                                                               Text(
                                                                             msgData != null
-                                                                                ? (userData.unread + msgData!.length).toString()
+                                                                                ? (msgData!.length).toString()
                                                                                 : userData.unread.toString(),
                                                                             style:
                                                                                 const TextStyle(color: Colors.white),

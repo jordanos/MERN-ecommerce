@@ -40,10 +40,6 @@ class _MessagePageState extends State<MessagePage> {
       setStateIfMounted(() {
         msgData!.add(message);
       });
-      // setState(() {
-      //   getAllMessage = ApiServices().getMessages(argument[0]);
-      // });
-      // update();
     });
     super.initState();
   }
@@ -319,7 +315,7 @@ class _MessagePageState extends State<MessagePage> {
                                       setStateIfMounted(() {
                                         msgData!.add(OtOMessages(
                                             conversationid: argument[0],
-                                            sender: int.parse(controller.id),
+                                            sender: controller.id,
                                             text: finalText,
                                             time: DateTime.now()));
                                       });

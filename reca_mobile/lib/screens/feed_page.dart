@@ -22,6 +22,20 @@ class _FeedPageState extends State<FeedPage> {
   late List<FeedData>? myList;
   late int length;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  late Future<List<FeedData>?> getPosts;
+  int counter = 0;
+
+  _incrementCounter() {
+    setState(() {
+      counter += 1;
+    });
+  }
+
+  @override
+  void initState() {
+    getPosts = ApiServices().getallowedPost(controller.id);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +63,9 @@ class _FeedPageState extends State<FeedPage> {
           color: const Color(0xfff7921f),
           onRefresh: () {
             Future<void> f() async {
-              setState(() {});
+              setState(() {
+                getPosts = ApiServices().getallowedPost(controller.id);
+              });
             }
 
             return f();
@@ -57,7 +73,7 @@ class _FeedPageState extends State<FeedPage> {
           child: Container(
             color: Colors.white,
             child: FutureBuilder<List<FeedData>?>(
-              future: ApiServices().getallowedPost(controller.id),
+              future: getPosts,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return ListView.separated(

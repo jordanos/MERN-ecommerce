@@ -31,10 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // print('Profile page ID: ${controller.id}');
-
     getInfo = ApiServices().getUserById(controller.id);
-
     super.initState();
   }
 

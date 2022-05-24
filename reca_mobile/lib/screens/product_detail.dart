@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/models/conversation_model.dart';
 import 'package:reca_mobile/models/coversation_model_nolastseen.dart';
 import 'package:reca_mobile/models/product_response_model.dart';
 import 'package:reca_mobile/screens/messages.dart';
@@ -11,7 +10,6 @@ import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/rating.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -50,32 +48,7 @@ class _ProductDetailState extends State<ProductDetail> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      appBar:
-          //  PreferredSize(
-          //     child: Row(
-          //       crossAxisAlignment: CrossAxisAlignment.end,
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         Padding(
-          //           padding: const EdgeInsets.only(top: 10, left: 20),
-          //           child: IconButton(
-          //             onPressed: () {
-          //               Navigator.pop(context);
-          //             },
-          //             icon: const Icon(Icons.arrow_back_outlined),
-          //           ),
-          //         ),
-          //         Padding(
-          //           padding: EdgeInsets.only(top: 10, right: 20),
-          //           child: Align(
-          //             alignment: Alignment.centerRight,
-          //             child: Icon(Icons.share),
-          //           ),
-          //         )
-          //       ],
-          //     ),
-          //     preferredSize: const Size.fromHeight(30)),
-          AppBar(
+      appBar: AppBar(
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -195,77 +168,23 @@ class _ProductDetailState extends State<ProductDetail> {
                         shape: BoxShape.circle,
                         color: Colors.transparent,
                       ),
-                      child: FutureBuilder<List<AllConversationNew>>(
-                          future: ApiServices().createNewCoversation(
-                              controller.id, argumentData[0].postedby),
-                          builder: (context, snapshot) {
-                            print(
-                                'Product detail page text future output: ${snapshot.data}');
-
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.hasData) {
-                                print(
-                                    'Product detail page text future output: ${snapshot.data}');
-                                var data = snapshot.data![0];
-
-                                var length = data;
-                                var finalId;
-                                data.senderid.toString() ==
-                                        controller.id.toString()
-                                    ? finalId = data.reciverid
-                                    : finalId = data.senderid;
-                                return argumentData[0].postedby.toString() !=
-                                        controller.id.toString()
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => MessagePage(),
-                                              // );
-                                              arguments: [
-                                                data.conversationid,
-                                                finalId
-                                              ]);
-                                        },
-                                        child: const Icon(
-                                          Icons.message_outlined,
-                                          size: 20,
-                                          color: Colors.black,
-                                        ),
-                                      )
-                                    : const Icon(
-                                        Icons.message_outlined,
-                                        size: 20,
-                                        color: Colors.black,
-                                      );
-                              } else {
-                                return IconButton(
-                                    onPressed: () {
-                                      print('Refresh button pressed');
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.replay_outlined,
-                                      size: 20,
-                                      color: Color(0xfff7921f),
-                                    ));
-                              }
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator.adaptive();
-                            } else {
-                              return IconButton(
-                                  onPressed: () {
-                                    print('Refresh button pressed');
-                                    setState(() {});
-                                  },
-                                  icon: const Icon(
-                                    Icons.replay_outlined,
-                                    size: 20,
-                                    color: Color(0xfff7921f),
-                                  ));
-                            }
-                          }),
+                      child: argumentData[0].postedby != controller.id
+                          ? GestureDetector(
+                              onTap: () {
+                                Get.to(() => MessagePage(),
+                                    // );
+                                    arguments: [
+                                      argumentData[0].postedby,
+                                      controller.id
+                                    ]);
+                              },
+                              child: const Icon(
+                                Icons.message_outlined,
+                                size: 20,
+                                color: Colors.black,
+                              ),
+                            )
+                          : null,
                     ),
                     ElevatedButton.icon(
                         icon: const Icon(Icons.phone_outlined),
@@ -388,8 +307,7 @@ class _OverViewState extends State<OverView> {
                     const TextSpan(
                       text: ' ',
                     ),
-                    controller.id.toString() ==
-                            widget.argumentDataO[0].postedby.toString()
+                    controller.id == widget.argumentDataO[0].postedby
                         ? TextSpan(
                             recognizer: TapGestureRecognizer()..onTap = () {},
                             text: widget.argumentDataO[0].fullname,

@@ -5,8 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/screens/main_page.dart';
-import 'package:reca_mobile/screens/profile.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
 
@@ -338,7 +336,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                               nameController.text,
                               addressController.text,
                               imagefile);
-                          if (res.status == 200) {
+                          if (res) {
                             Get.back();
                             Get.snackbar('Edit', 'Profile edited successfully',
                                 duration: const Duration(seconds: 3));
