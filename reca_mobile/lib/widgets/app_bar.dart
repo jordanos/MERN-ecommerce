@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/list.dart';
 import 'package:reca_mobile/models/notification_model.dart';
 import 'package:reca_mobile/models/profile_by_id.dart';
 import 'package:reca_mobile/screens/profile_visit.dart';
@@ -31,7 +30,7 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _MyAppBarState extends State<MyAppBar> {
   late Future<List<Notifications>?> notificationFuture;
-  late Future<ProfileById> getInfo;
+  late Future<ProfileById?> getInfo;
 
   bool isBackButton = false;
   bool isSearchPage = false;
@@ -62,7 +61,7 @@ class _MyAppBarState extends State<MyAppBar> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               !isBackButton
-                  ? FutureBuilder<ProfileById>(
+                  ? FutureBuilder<ProfileById?>(
                       future: ApiServices().getUserById(controller.id),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -81,9 +80,8 @@ class _MyAppBarState extends State<MyAppBar> {
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.hasData) {
-                            var data = snapshot.data;
+                            ProfileById? data = snapshot.data;
                             return Container(
-                              // padding: const EdgeInsets.only(left: 10),
                               margin:
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: CircleAvatar(

@@ -27,15 +27,25 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: 'unknown',
     },
-    categories: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'Category',
-    },
     image: {
       type: String,
       default: 'default_image.jpg',
       get: (image) => formatImageUrl(productImagesPath, image),
     },
+    rate: {
+      type: Number,
+      default: 0,
+    },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag',
+      },
+    ],
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -51,6 +61,6 @@ const ProductSchema = new mongoose.Schema(
     toObject: { getters: true, virtuals: true },
   }
 );
-ProductSchema.index({name: 'text'});
+ProductSchema.index({ name: 'text' });
 
 module.exports = mongoose.model('Product', ProductSchema);

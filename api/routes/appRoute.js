@@ -1,20 +1,17 @@
 const express = require('express');
-const { userImagesPath } = require('../config');
+const { heroImagesPath } = require('../config');
 
 const {
-  getUsers,
-  createUser,
-  getUser,
-  updateUser,
-  deleteUser,
+  getHeros,
+  createHero,
+  getHero,
+  updateHero,
+  deleteHero,
   uploadImage,
-} = require('../controllers/userController');
+} = require('../controllers/heroController');
 
-// authentication and authorization
-const { loginReq } = require('../middlewares/authMiddleware');
-const { authorizeReq } = require('../middlewares/authorizationMiddleware');
-const { saveImage } = require('../middlewares/saveImage');
-const User = require('../models/User');
+const { saveImageNoCompression } = require('../middlewares/saveImage');
+
 const imageUpload = require('../utils/images');
 
 const router = express.Router();
@@ -26,12 +23,9 @@ const router = express.Router();
  *@swagger
  *components:
  *  schemas:
- *    User:
+ *    App:
  *      type: object
  *      required:
- *        - name
- *        - phone
- *        - password
  *      properties:
  *        id:
  *          type: String
@@ -39,50 +33,33 @@ const router = express.Router();
  *        name:
  *          type: string
  *          description: name of the user.
- *        email:
- *          type: string
- *          description: email of user.
- *        phone:
- *          type: string
- *          description: phone number of user.
- *        password:
- *          type: string
- *          description: password of user.
- *        address:
- *          type: string
- *          description: address of user.
  *        image:
  *          type: string
  *          description: image of user.
- *        status:
- *          type: string
- *          description: status of user.
  *        createdAt:
  *          type: string
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        name: "Abebe"
- *        phone: "251919803245"
- *        password: "123456"
+ *        name: "hero 1"
  */
 
 /**
  *@swagger
  *tags:
- *  name: Users
- *  description: API to manage users.
+ *  name: App
+ *  description: API to manage app.
  */
 
 router
-  .route('/')
+  .route('/heros')
   /**
    *@swagger
    *path:
-   * /api/v1/users/?skip=0:
+   * /api/v1/app/heros/?skip=0:
    *   get:
-   *     summary: Lists all the users
-   *     tags: [Users]
+   *     summary: Lists all the heros
+   *     tags: [App]
    *     parameters:
    *     - in: query
    *       name: skip
@@ -91,130 +68,130 @@ router
    *       description: pagination value to skip to
    *     responses:
    *       "200":
-   *         description: list of users.
+   *         description: list of heros.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/App'
    */
-  .get(getUsers)
+  .get(getHeros)
   /**
    *@swagger
    *path:
-   * /api/v1/users/:
+   * /api/v1/app/heros/:
    *   post:
-   *     summary: Creates a user.
-   *     tags: [Users]
+   *     summary: Creates a hero.
+   *     tags: [App]
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/User'
+   *             $ref: '#/components/schemas/App'
    *     responses:
    *       "201":
-   *         description: returns data object with acknowledged=true.
+   *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/App'
    */
-  .post(createUser);
+  .post(createHero);
 
 router
-  .route('/:id')
+  .route('/heros/:id')
   /**
    *@swagger
    *path:
-   * /api/v1/users/{id}:
+   * /api/v1/app/hero/{id}:
    *   get:
-   *     summary: gets a user.
-   *     tags: [Users]
+   *     summary: gets a hero.
+   *     tags: [App]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The user id
+   *         description: The hero id
    *     responses:
    *       "200":
-   *         description: returnes a user.
+   *         description: returnes a hero.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/App'
    */
-  .get(getUser)
+  .get(getHero)
   /**
    *@swagger
    *path:
-   * /api/v1/users/{id}:
+   * /api/v1/app/heros/{id}:
    *   put:
-   *     summary: edits/updates a user.
-   *     tags: [Users]
+   *     summary: edits/updates a hero.
+   *     tags: [App]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The user id
+   *         description: The hero id
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/User'
+   *             $ref: '#/components/schemas/App'
    *     responses:
    *       "200":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/App'
    */
-  .put(loginReq,authorizeReq(User), updateUser)
+  .put(updateHero)
   /**
    *@swagger
    *path:
-   * /api/v1/users/{id}:
+   * /api/v1/app/heros/{id}:
    *   delete:
-   *     summary: deletes a user.
-   *     tags: [Users]
+   *     summary: deletes a hero.
+   *     tags: [App]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The user id
+   *         description: The hero id
    *     responses:
    *       "200":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/User'
+   *               $ref: '#/components/schemas/App'
    */
-  .delete(loginReq, authorizeReq, deleteUser);
+  .delete(deleteHero);
 
 /**
  *@swagger
  *path:
- * /api/v1/users/image/{id}:
+ * /api/v1/app/heros/image/{id}:
  *   put:
  *     consumes:
  *     - multipart/form-data
- *     summary: uploads a user image.
- *     tags: [Users]
+ *     summary: uploads a hero image.
+ *     tags: [App]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The user id
+ *         description: The hero id
  *       - in: formData
  *         name: image
  *         type: file
@@ -226,15 +203,14 @@ router
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/schemas/App'
  */
+
 // add validation of images for latter
 router.put(
-  '/image/:id',
-  loginReq,
-  authorizeReq(User),
+  '/heros/image/:id',
   imageUpload().single('image'),
-  saveImage(userImagesPath),
+  saveImageNoCompression(heroImagesPath),
   uploadImage
 );
 

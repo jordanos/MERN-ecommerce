@@ -53,7 +53,7 @@ exports.adminLogin = async (req, res, next) => {
     next(e);
   }
 };
- 
+
 exports.logout = async (req, res, next) => {
   try {
     const { token } = req.params;

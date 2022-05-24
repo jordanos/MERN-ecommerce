@@ -4,36 +4,22 @@
 
 import 'dart:convert';
 
-ProductResponse productResponseFromJson(String str) =>
-    ProductResponse.fromJson(json.decode(str));
-
-String productResponseToJson(ProductResponse data) =>
-    json.encode(data.toJson());
+ProductResponse productResponseFromJson(String body) =>
+    ProductResponse.fromJson(json.decode(body));
 
 class ProductResponse {
   ProductResponse({
-    required this.status,
-    required this.message,
-    required this.data,
+    required this.products,
   });
 
-  int status;
-  String message;
-  List<ProductData> data;
+  List<ProductData> products;
 
-  factory ProductResponse.fromJson(Map<String, dynamic> json) =>
-      ProductResponse(
-        status: json["status"],
-        message: json["message"],
-        data: List<ProductData>.from(
-            json["data"].map((x) => ProductData.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
+  factory ProductResponse.fromJson(Map<String, dynamic> body) {
+    return ProductResponse(
+      products: List<ProductData>.from(
+          body["data"].map((product) => ProductData.fromJson(product))),
+    );
+  }
 }
 
 class ProductData {
@@ -56,10 +42,10 @@ class ProductData {
     required this.israted,
   });
 
-  int productid;
-  int postedby;
+  String productid;
+  String postedby;
   String fullname;
-  int phonenumber;
+  String phonenumber;
   String name;
   int price;
   int quantity;
@@ -70,44 +56,25 @@ class ProductData {
   DateTime date;
   String productcondition;
   String brand;
-  int ratecount;
+  var ratecount;
   String? israted;
 
-  factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
-        productid: json["productid"],
-        postedby: json["postedby"],
-        fullname: json["fullname"],
-        phonenumber: json["phonenumber"],
-        name: json["name"],
-        price: json["price"],
-        quantity: json["quantity"],
-        description: json["description"],
-        image: List<String>.from(json["image"].map((x) => x)),
-        rate: json["rate"],
-        category: json["category"],
-        date: DateTime.parse(json["date"]),
-        productcondition: json["productcondition"],
-        brand: json["brand"],
-        ratecount: json["ratecount"],
-        israted: json["israted"],
+  factory ProductData.fromJson(Map<String, dynamic> product) => ProductData(
+        productid: product["id"],
+        postedby: product["userId"]["id"],
+        fullname: product["userId"]["name"],
+        phonenumber: "251",
+        name: product["name"],
+        price: product["price"],
+        quantity: product["quantity"],
+        description: product["description"] ??= "",
+        image: [product["image"]],
+        rate: product["rate"],
+        category: product["category"]["name"],
+        date: DateTime.parse(product["createdAt"]),
+        productcondition: product["productCondition"],
+        brand: product["brand"],
+        ratecount: product["rate"],
+        israted: 'true',
       );
-
-  Map<String, dynamic> toJson() => {
-        "productid": productid,
-        "postedby": postedby,
-        "fullname": fullname,
-        "phonenumber": phonenumber,
-        "name": name,
-        "price": price,
-        "quantity": quantity,
-        "description": description,
-        "image": List<String>.from(image.map((x) => x)),
-        "rate": rate,
-        "category": category,
-        "date": date.toIso8601String(),
-        "productcondition": productcondition,
-        "brand": brand,
-        "ratecount": ratecount,
-        "israted": israted,
-      };
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/models/feed_response_model.dart';
 import 'package:reca_mobile/services/api_services.dart';
-import 'package:like_button/like_button.dart';
 
 class LikeButtonP extends StatefulWidget {
   var feedId;
@@ -72,10 +72,8 @@ class _LikeButtonPState extends State<LikeButtonP> {
                     }
 
                     if (!isLiked) {
-                      var unlike = await ApiServices().likePost(
-                          int.parse(controller.id),
-                          data.feedid,
-                          controller.jwt);
+                      var unlike = await ApiServices()
+                          .likePost(controller.id, data.feedid, controller.jwt);
 
                       print('Like message ${unlike.message}');
                       return !isLiked;

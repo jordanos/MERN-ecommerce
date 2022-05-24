@@ -1,18 +1,12 @@
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/list.dart';
 import 'package:reca_mobile/models/feed_response_model.dart';
 import 'package:reca_mobile/screens/create_post.dart';
-import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/feed_card.dart';
-import 'package:reca_mobile/widgets/like_button.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
-import 'package:expandable_widget/expandable.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
@@ -84,11 +78,6 @@ class _FeedPageState extends State<FeedPage> {
                   if (snapshot.hasData) {
                     if (snapshot.data!.isNotEmpty) {
                       final data = snapshot.data;
-                      List myList = [];
-                      for (var i = 0; i < 10; i++) {
-                        myList.add(data![i]);
-                      }
-                      length = data!.length;
 
                       return FeedCard(feedData: data);
                     } else {

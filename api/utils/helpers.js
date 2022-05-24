@@ -8,3 +8,5 @@ exports.hashPassword = async (password) => {
   const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 };
+
+exports.formatPhoneNumber = (phone) => {};

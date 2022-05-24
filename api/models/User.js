@@ -19,7 +19,6 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Please provide a password'],
-      select: true,
     },
     address: {
       type: String,
@@ -30,6 +29,10 @@ const UserSchema = new mongoose.Schema(
       default: 'default_image.png',
       get: (image) => formatImageUrl(userImagesPath, image),
     },
+    lastSeen: {
+      type: Date,
+      default: Date.now(),
+    },
     status: {
       type: String,
       default: 'active',
@@ -38,7 +41,6 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
 
     createdAt: {
       type: Date,

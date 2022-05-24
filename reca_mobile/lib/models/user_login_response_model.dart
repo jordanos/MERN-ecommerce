@@ -7,37 +7,19 @@ import 'dart:convert';
 UserLoginResponse userLoginResponseFromJson(String str) =>
     UserLoginResponse.fromJson(json.decode(str));
 
-String userLoginResponseToJson(UserLoginResponse data) =>
-    json.encode(data.toJson());
-
 class UserLoginResponse {
+  UserData user;
+  String token;
+
   UserLoginResponse({
-    required this.status,
-    required this.message,
-    required this.data,
+    required this.user,
     required this.token,
   });
 
-  int status;
-  String message;
-  List<UserData> data;
-  String token;
-
-  factory UserLoginResponse.fromJson(Map<String, dynamic> json) =>
+  factory UserLoginResponse.fromJson(Map<String, dynamic> body) =>
       UserLoginResponse(
-        status: json["status"],
-        message: json["message"],
-        data:
-            List<UserData>.from(json["data"].map((x) => UserData.fromJson(x))),
-        token: json["token"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "token": token,
-      };
+          user: UserData.fromJson(body["data"]["user"]),
+          token: body["data"]["token"]);
 }
 
 class UserData {
@@ -51,31 +33,21 @@ class UserData {
     required this.coverimage,
   });
 
-  int userid;
+  String userid;
   String fullname;
-  int phonenumber;
+  String phonenumber;
   String password;
   String address;
   String profileimage;
   String? coverimage;
 
-  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-        userid: json["userid"],
-        fullname: json["fullname"],
-        phonenumber: json["phonenumber"],
-        password: json["password"],
-        address: json["address"],
-        profileimage: json["profileimage"],
-        coverimage: json["coverimage"],
+  factory UserData.fromJson(Map<String, dynamic> user) => UserData(
+        userid: user["id"],
+        fullname: user["name"],
+        phonenumber: user["phone"],
+        password: user["password"],
+        address: user["address"],
+        profileimage: user["image"],
+        coverimage: user["image"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "userid": userid,
-        "fullname": fullname,
-        "phonenumber": phonenumber,
-        "password": password,
-        "address": address,
-        "profileimage": profileimage,
-        "coverimage": coverimage,
-      };
 }

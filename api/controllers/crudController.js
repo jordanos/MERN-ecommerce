@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 
 const {
@@ -16,29 +17,29 @@ class BaseAdapter {
     this.name = name;
   }
 
-  static getAll() {
+  getAll() {
     throw new ImplementaionError();
   }
 
-  static createOne() {
+  createOne() {
     throw new ImplementaionError();
   }
 
-  static getOne() {
+  getOne() {
     throw new ImplementaionError();
   }
 
-  static updateOne() {
+  updateOne() {
     throw new ImplementaionError();
   }
 
-  static deleteOne() {
+  deleteOne() {
     throw new ImplementaionError();
   }
 }
 
 exports.CrudController = class CrudController extends BaseAdapter {
-  static getAll(req, res, next) {
+  getAll(req, res, next) {
     const getAll = new GetAll(req, res, next, this.model, this.name);
     getAll.execute();
   }

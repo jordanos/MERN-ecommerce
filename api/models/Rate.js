@@ -9,11 +9,11 @@ const rateSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Product',
   },
-  rateCount: {
+  rate: {
     type: Number,
     required: true,
   },
-  review: {
+  text: {
     type: String,
   },
   createdAt: {
@@ -21,4 +21,7 @@ const rateSchema = new mongoose.Schema({
     default: Date.now(),
   },
 });
+
+rateSchema.index({ userId: 1, productId: 1 }, { unique: true });
+
 module.exports = mongoose.model('Rate', rateSchema);

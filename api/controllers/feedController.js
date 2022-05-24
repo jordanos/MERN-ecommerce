@@ -9,9 +9,16 @@ const {
 } = require('./templates');
 const { validateFeedInput } = require('../utils/validators');
 
+// populate with user data
+const populateUser = {
+  path: 'userId',
+  select: '-password -status -isVerified -createdAt',
+};
+
 exports.getFeeds = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Feed, 'feed');
   getAll.sort = { createdAt: -1 };
+  getAll.populate.push(populateUser);
   getAll.execute();
 };
 
@@ -26,6 +33,7 @@ exports.createFeed = (req, res, next) => {
 
 exports.getFeed = (req, res, next) => {
   const getOne = new GetOne(req, res, next, Feed, 'feed');
+  getOne.populate.push(populateUser);
   getOne.execute();
 };
 
