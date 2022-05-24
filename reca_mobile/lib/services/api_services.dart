@@ -65,10 +65,7 @@ class ApiServices {
       final response = await http.post(url, headers: header, body: requestBody);
 
       if (response.statusCode == 200) {
-        print("logging in");
         final userLoginResponse = userLoginResponseFromJson(response.body);
-        print(userLoginResponse.user.fullname);
-        print(userLoginResponse.user.userid);
         return userLoginResponse;
       } else {
         return null;
