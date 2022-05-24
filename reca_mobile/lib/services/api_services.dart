@@ -40,20 +40,19 @@ class ApiServices {
       'password': password,
       'address': 'Addis Ababa',
     });
-    try {
-      final response = await http.post(url, headers: header, body: requestBody);
+    final response = await http.post(url, headers: header, body: requestBody);
 
-      if (response.statusCode == 201) {
-        return response;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
+    if (response.statusCode != 201) {
+      throw Exception(json.decode(response.body)["error"]);
     }
+    return response;
   }
 
-  Future<UserLoginResponse?> logIn(var phoneNo, var password) async {
+  String getError(var response) {
+    return jsonDecode(response.body)["error"];
+  }
+
+  Future<UserLoginResponse> logIn(var phoneNo, var password) async {
     var url = Uri.http(Config.apiUrl, Config.loginUserApi);
 
     Map<String, String> header = {
@@ -64,18 +63,14 @@ class ApiServices {
       'phone': phoneNo,
       'password': password,
     });
-    try {
-      final response = await http.post(url, headers: header, body: requestBody);
 
-      if (response.statusCode == 200) {
-        final userLoginResponse = userLoginResponseFromJson(response.body);
-        return userLoginResponse;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
+    final response = await http.post(url, headers: header, body: requestBody);
+
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
     }
+    final userLoginResponse = userLoginResponseFromJson(response.body);
+    return userLoginResponse;
   }
 
   Future<ProfileById?> getUserById(var id) async {
@@ -498,29 +493,19 @@ class ApiServices {
     return list![0];
   }
 
-  Future<GeneralResponse> createPost(
-      var postedBy, String? text, List<XFile>? images) async {
+  Future createPost(var postedBy, String? text, List<XFile>? images) async {
     var url = Uri.http(Config.apiUrl, Config.createPostApi);
-    var request = http.MultipartRequest('POST', url);
-    request.fields['postedby'] = postedBy;
-    request.fields['text'] = text ?? '';
 
-    if (images != null) {
-      var path = (images.map((el) => el.path));
-
-      for (var item in path) {
-        request.files
-            .add(await http.MultipartFile.fromPath('multi-files', item));
-      }
-    } else {
-      request.fields['multi-files'] = '';
+    var body = json.encode({"text": text});
+    var response =
+        await http.post(url, headers: await getHeaders(), body: body);
+    if (response.statusCode != 201) {
+      throw Exception(getError(response));
     }
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
-
-    final generalResponse = generalResponseFromJson(response.body);
-
-    return generalResponse;
+    String feedId = json.decode(response.body)["data"]["id"];
+    changeImage(
+        Uri.http(Config.apiUrl, Config.createPostApi + "/image/$feedId"),
+        images != null ? images : []);
   }
 
   Future<List<FeedData>?> getPostData() async {

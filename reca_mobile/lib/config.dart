@@ -9,7 +9,7 @@ class Config {
   static const String postByUserIdApi = "/feed/user/";
   static const String likePostApi = "/feed/like";
   static const String unLikePostApi = "/feed/unlike";
-  static const String createPostApi = "/feed/create";
+  static const String createPostApi = api + "/feeds";
   static const String deletePostApi = "/feed/delete";
   static const String getAllowedPostApi = api + "/feeds";
   static const String getPostByIdApi = "/feed/getfeed";
