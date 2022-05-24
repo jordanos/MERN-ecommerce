@@ -1,14 +1,13 @@
 import 'dart:io';
 
+import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/material.dart';
-import 'package:reca_mobile/models/profile_by_id.dart';
-import 'package:reca_mobile/screens/my_feed.dart';
-import 'package:reca_mobile/services/api_services.dart';
-import 'package:reca_mobile/widgets/app_bar.dart';
-import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
+import 'package:reca_mobile/controller/storage_controller.dart';
+import 'package:reca_mobile/models/profile_by_id.dart';
+import 'package:reca_mobile/services/api_services.dart';
+import 'package:reca_mobile/widgets/app_bar.dart';
 
 class CreatePost extends StatefulWidget {
   CreatePost({Key? key}) : super(key: key);
@@ -40,7 +39,7 @@ class _CreatePostState extends State<CreatePost> {
           padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
           child: Column(
             children: [
-              FutureBuilder<ProfileById>(
+              FutureBuilder<ProfileById?>(
                 future: ApiServices().getUserById(controller.id),
                 builder: (context, snapshot) {
                   var data = snapshot.data;

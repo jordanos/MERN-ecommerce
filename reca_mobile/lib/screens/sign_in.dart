@@ -206,19 +206,16 @@ class _SignInState extends State<SignIn> {
                               duration: const Duration(seconds: 5),
                             );
                           } else {
-                            var jwt = loginResponse.token;
-                            storage.write(key: "jwt", value: jwt);
-
+                            storage.write(
+                                key: "jwt", value: loginResponse.token);
                             storage.write(
                                 key: 'name',
                                 value: loginResponse.user.fullname);
                             storage.write(
-                                key: 'id',
-                                value: loginResponse.user.toString());
+                                key: 'id', value: loginResponse.user.userid);
                             storage.write(
                                 key: 'phone',
-                                value:
-                                    loginResponse.user.phonenumber.toString());
+                                value: loginResponse.user.phonenumber);
                             storage.write(
                                 key: 'ppic',
                                 value: loginResponse.user.profileimage);

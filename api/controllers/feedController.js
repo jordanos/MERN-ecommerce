@@ -18,7 +18,7 @@ const populateUser = {
 exports.getFeeds = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Feed, 'feed');
   getAll.sort = { createdAt: -1 };
-  getAll.populate = populateUser;
+  getAll.populate.push(populateUser);
   getAll.execute();
 };
 
@@ -33,7 +33,7 @@ exports.createFeed = (req, res, next) => {
 
 exports.getFeed = (req, res, next) => {
   const getOne = new GetOne(req, res, next, Feed, 'feed');
-  getOne.populate = populateUser;
+  getOne.populate.push(populateUser);
   getOne.execute();
 };
 

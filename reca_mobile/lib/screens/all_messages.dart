@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reca_mobile/config.dart';
 import 'package:reca_mobile/controller/chat_controller.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/list.dart';
 import 'package:reca_mobile/models/conversation_model.dart';
 import 'package:reca_mobile/models/profile_by_id.dart';
 import 'package:reca_mobile/models/socket_response_model.dart';
-import 'package:reca_mobile/models/user_login_response_model.dart';
 import 'package:reca_mobile/screens/messages.dart';
 import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/services/api_services.dart';
-import 'package:reca_mobile/widgets/app_bar.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
 
 class AllMessages extends StatefulWidget {
@@ -181,7 +177,7 @@ class _AllMessagesState extends State<AllMessages> {
                                       ? finalId = userData.reciverid
                                       : finalId = userData.senderid;
 
-                                  return FutureBuilder<ProfileById>(
+                                  return FutureBuilder<ProfileById?>(
                                       future:
                                           ApiServices().getUserById(finalId),
                                       builder: (context, snapshot) {

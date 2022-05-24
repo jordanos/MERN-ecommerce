@@ -12,7 +12,7 @@ const {
 const { validateProductInput } = require('../utils/validators');
 
 const populateCategory = { path: 'category', select: 'name' };
-const populateUser = { path: 'userId', select: 'name image' };
+const populateUser = { path: 'userId', select: 'name image phone' };
 const populateTags = { path: 'tags', select: 'name' };
 
 exports.getProducts = (req, res, next) => {
@@ -90,8 +90,10 @@ exports.filterByCategories = async (req, res, next) => {
   const catId = await Category.find({ name: cat }).exec();
 
   getAll.filter = { category: catId };
-  // add join to change categoryId to category name
-  getAll.populate = { path: 'category', select: 'name' };
+  // add joins
+  getAll.populate.push(populateCategory);
+  getAll.populate.push(populateUser);
+  getAll.populate.push(populateTags);
 
   getAll.execute();
 };
