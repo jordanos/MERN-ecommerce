@@ -91,12 +91,13 @@ function DashboardContent() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [stat, setstat] = useState("");
+  const [stat, setState] = useState("");
 
  
   useEffect(()=>{
-     axios.get(`${url}/stat/all`).then((res)=>{
-        setstat(res.data.data)
+     axios.get(`${url}/api/v1/users/`).then((res)=>{
+        setState(res.data.data)
+      
       
      })
   },[])
