@@ -25,6 +25,17 @@ exports.getProducts = (req, res, next) => {
   getAll.execute();
 };
 
+exports.getMyProducts = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Product, 'product');
+  getAll.filter = { userId: req.user.id };
+  // add joins
+  getAll.populate.push(populateCategory);
+  getAll.populate.push(populateUser);
+  getAll.populate.push(populateTags);
+
+  getAll.execute();
+};
+
 exports.createProduct = (req, res, next) => {
   const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
   const createOne = new CreateOne(modfiedReq, res, next, Product, 'product');

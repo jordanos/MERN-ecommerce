@@ -523,7 +523,7 @@ class ApiServices {
       throw Exception(getError(response));
     }
     String feedId = json.decode(response.body)["data"]["id"];
-    changeImage(
+    bool isChanged = await changeImage(
         Uri.http(Config.apiUrl, Config.createPostApi + "/image/$feedId"),
         images != null ? images : []);
   }
@@ -668,12 +668,23 @@ class ApiServices {
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
     };
-    String requestBody = jsonEncode({
-      'userid': id,
-    });
 
-    final response = await http.post(url, headers: header, body: requestBody);
-    // print('Get producet by user id response: ${response.body}');
+    final response = await http.get(url, headers: await getHeaders());
+
+    final productResponse = productResponseFromJson(response.body);
+
+    List<ProductData>? datum = productResponse.products;
+    return datum;
+  }
+
+  Future<List<ProductData>> getMyProducts() async {
+    var url = Uri.http(Config.apiUrl, Config.productByUserIdApi);
+
+    Map<String, String> header = {
+      'Content-type': 'application/json; charset=UTF-8'
+    };
+
+    final response = await http.get(url, headers: await getHeaders());
 
     final productResponse = productResponseFromJson(response.body);
 
@@ -702,18 +713,13 @@ class ApiServices {
   }
 
   Future deleteProduct(var productId, var userId, var token) async {
-    var url =
-        Uri.http(Config.apiUrl, Config.deleteProductApi + productId.toString());
+    var url = Uri.http(Config.apiUrl, Config.deleteProductApi + "/$productId");
 
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-    String requestBody = jsonEncode({
-      'userid': userId,
-      'token': token.toString(),
-    });
-
-    final response = await http.delete(url, headers: header, body: requestBody);
+    final response = await http.delete(url, headers: await getHeaders());
+    if (response != 200) {
+      throw Exception(getError(response));
+    }
+    return true;
   }
 
   Future<GeneralResponse> editProduct(var productId, var userId, var token,
@@ -738,7 +744,7 @@ class ApiServices {
     return generalResponse;
   }
 
-  Future<GeneralResponse> createProduct(
+  Future createProduct(
       var postedBy,
       var name,
       var price,
@@ -749,27 +755,41 @@ class ApiServices {
       var condition,
       List<XFile>? images) async {
     var url = Uri.http(Config.apiUrl, Config.createProductApi);
-    var request = http.MultipartRequest('POST', url);
-    request.fields['postedby'] = postedBy;
-    request.fields['name'] = name;
-    request.fields['price'] = price;
-    request.fields['category'] = category;
-    request.fields['description'] = description;
-    request.fields['quantity'] = quantity;
-    request.fields['brand'] = brand;
-    request.fields['condition'] = condition;
-
-    var path = (images!.map((el) => el.path));
-
-    for (var item in path) {
-      request.files.add(await http.MultipartFile.fromPath('images', item));
+    String categoryId = "";
+    if (category == "electronics") {
+      categoryId = "6278f1a3cb3c6f7cec9f89a8";
     }
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
-    print(response.body);
-    final generalResponse = generalResponseFromJson(response.body);
+    if (category == "dress") {
+      categoryId = "627b591a376e823fc303e6b8";
+    }
+    if (category == "shoes") {
+      categoryId = "627b5909376e823fc303e6b6";
+    }
+    if (category == "phones") {
+      categoryId = "6278f1a3cb3c6f7cec9f89a8";
+    }
+    final body = json.encode({
+      "name": name,
+      "price": price,
+      "category": categoryId,
+      "description": description,
+      "quantity": quantity,
+      "brand": brand,
+      "productCondition": condition,
+    });
 
-    return generalResponse;
+    final response =
+        await http.post(url, headers: await getHeaders(), body: body);
+    if (response.statusCode != 201) {
+      print(getError(response));
+      throw Exception(getError(response));
+    }
+    String productId = json.decode(response.body)["data"]["id"];
+    bool isChanged = await changeImage(
+        Uri.http(
+            Config.apiUrl, Config.createProductApi + '/image/${productId}'),
+        images != null ? images : []);
+    return true;
   }
 
   //PACKAGE API

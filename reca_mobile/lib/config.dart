@@ -33,12 +33,12 @@ class Config {
   static const String productWithRatingApi = "/product/getproduct";
   static const String getTrendingProductApi = "/product/trendingproduct";
   static const String editProductApi = "/product/edit";
-  static const String deleteProductApi = "/product/delete";
-  static const String productByUserIdApi = "/product/user";
+  static const String deleteProductApi = api + "/products";
+  static const String productByUserIdApi = api + "/products/my/products";
   static const String rateProductApi = "/product/rate";
   static const String productByCategoryApi =
       api + "/products/filter/categories";
-  static const String createProductApi = "/product/create";
+  static const String createProductApi = api + "/products";
   static const String checkPackageApi = "/package/checkstatus";
   static const String buyPackageApi = "/package/buy";
   static const String getPackageApi = "/package/detail";

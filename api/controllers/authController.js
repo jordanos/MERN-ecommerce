@@ -18,7 +18,7 @@ exports.login = async (req, res, next) => {
       formattedPhone = formatPhone.exec(phone);
     }
 
-    const user = await User.findOne({ formattedPhone });
+    const user = await User.findOne({ phone: formattedPhone });
     if (!(user && (await bcrypt.compare(password, user.password)))) {
       throw new CustomError('Invalid Credentials', 401);
     }

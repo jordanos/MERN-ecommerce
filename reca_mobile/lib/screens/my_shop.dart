@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/models/product_response_model.dart';
-import 'package:reca_mobile/models/profile_by_id.dart';
 import 'package:reca_mobile/screens/product_edit.dart';
 import 'package:reca_mobile/screens/product_post.dart';
 import 'package:reca_mobile/services/api_services.dart';
-import 'package:reca_mobile/widgets/app_bar.dart';
-import 'package:reca_mobile/widgets/shimmer.dart';
 
 class MyShop extends StatefulWidget {
   const MyShop({Key? key}) : super(key: key);
@@ -185,7 +182,7 @@ class _MyShopState extends State<MyShop> {
                   ),
                   const Divider(),
                   FutureBuilder<List<ProductData>>(
-                    future: ApiServices().getProductByUserId(controller.id),
+                    future: ApiServices().getMyProducts(),
                     builder: (context, snapshot) {
                       final data = snapshot.data;
                       // final orientation = MediaQuery.of(context).orientation;
@@ -198,17 +195,6 @@ class _MyShopState extends State<MyShop> {
                               backgroundColor: Color(0xfff7921f),
                             ),
                           ),
-                          // child: GridView.builder(
-                          //     physics: const ScrollPhysics(),
-                          //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          //         crossAxisCount:
-                          //             (orientation == Orientation.portrait) ? 3 : 4,
-                          //         mainAxisSpacing: 0,
-                          //         crossAxisSpacing: 5,
-                          //         childAspectRatio: 1 / 2),
-                          //     itemBuilder: (context, index) =>
-                          //         const ProductShimmerSP(),
-                          //     itemCount: 7),
                         );
                       } else if (snapshot.connectionState ==
                           ConnectionState.none) {
