@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -41,7 +41,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#f7921f"
-  image: "assets/images/reca logo2.png"
+  image: "assets/images/rica splash.png"
   android: true
   ios: true
 

@@ -253,22 +253,18 @@ class _ChangePasswordState extends State<ChangePassword> {
                             )),
                         onPressed: () async {
                           final FormState? form = _formKey.currentState;
-                          print('Change password button pressed');
-                          if (form!.validate()) {
-                            var respose = await ApiServices().changePassword(
-                                controller.jwt,
-                                controller.phone,
-                                passwordController.text,
-                                passwordConfirmationController.text);
-
-                            if (respose.status == 200) {
+                          if (form!.validate() &&
+                              passwordController.text ==
+                                  passwordConfirmationController.text) {
+                            try {
+                              var response = await ApiServices().changePassword(
+                                  passwordConfirmationController.text);
                               Get.snackbar('Password',
                                   'Success! Password Changed Successfully',
                                   duration: const Duration(seconds: 5));
-                              Get.off(() => MainPage());
-                            } else {
+                            } catch (e) {
                               Get.snackbar('Password',
-                                  'Password change unsuccessful. Please check your internet connection and try again',
+                                  'Password change unsuccessful. $e',
                                   duration: const Duration(seconds: 5));
                             }
                           } else {

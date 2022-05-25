@@ -287,13 +287,13 @@ class _MessagePageState extends State<MessagePage> {
                                     print('Send button pressed once');
                                     String reciever = argument[1];
                                     String finalText = txtController.text;
+
                                     if (finalText.removeAllWhitespace != '') {
                                       txtController.text = '';
-                                      print("sending text");
 
                                       var res = await ApiServices()
                                           .sendMessage(argument[1], finalText);
-
+                                      print('sending message');
                                       setStateIfMounted(() {
                                         msgData!.add(OtOMessages(
                                             conversationid: argument[0],

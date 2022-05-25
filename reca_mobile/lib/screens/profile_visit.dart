@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/models/coversation_model_nolastseen.dart';
 import 'package:reca_mobile/models/profile_with_follower.dart';
-import 'package:reca_mobile/screens/messages.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
 import 'package:reca_mobile/widgets/feed_by_id.dart';
@@ -423,81 +421,43 @@ class _ProfileVisitState extends State<ProfileVisit> {
                                                                             5)),
                                                       ),
                                                     ),
-                                              FutureBuilder<
-                                                      List<AllConversationNew>>(
-                                                  future: ApiServices()
-                                                      .createNewCoversation(
-                                                          controller.id,
-                                                          data.data.userid),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.hasData) {
-                                                      // print(
-                                                      //     'Product detail page text future output: ${snapshot.data!}');
-                                                      var data =
-                                                          snapshot.data![0];
-
-                                                      var finalId;
-                                                      data.senderid
-                                                                  .toString() ==
-                                                              controller.id
-                                                                  .toString()
-                                                          ? finalId =
-                                                              data.reciverid
-                                                          : finalId =
-                                                              data.senderid;
-                                                      return ElevatedButton(
-                                                        onPressed: () {
-                                                          Get.to(
-                                                              () =>
-                                                                  MessagePage(),
-                                                              arguments: [
-                                                                data.conversationid,
-                                                                finalId
-                                                              ]);
-                                                        },
-                                                        child: const Text(
-                                                          'MESSAGE',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          elevation: 0,
-                                                          onPrimary:
-                                                              Colors.black,
-                                                          primary: Colors.white,
-                                                          minimumSize:
-                                                              const Size(
-                                                                  90, 35),
-                                                          maximumSize:
-                                                              const Size(
-                                                                  90, 35),
-                                                          shape: RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5)),
-                                                          side:
-                                                              const BorderSide(
-                                                            width: 0.5,
-                                                            color: Colors.grey,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      return Skeleton(
-                                                        width: 95,
-                                                        height: 35,
-                                                      );
-                                                    }
-                                                  }),
+                                              // ElevatedButton(
+                                              //   onPressed: () {
+                                              //     Get.to(() => MessagePage(),
+                                              //         arguments: [
+                                              //           data.conversationid,
+                                              //           finalId
+                                              //         ]);
+                                              //   },
+                                              //   child: const Text(
+                                              //     'MESSAGE',
+                                              //     style: TextStyle(
+                                              //       fontSize: 10,
+                                              //       fontWeight: FontWeight.w600,
+                                              //     ),
+                                              //   ),
+                                              //   style: ElevatedButton.styleFrom(
+                                              //     elevation: 0,
+                                              //     onPrimary: Colors.black,
+                                              //     primary: Colors.white,
+                                              //     minimumSize:
+                                              //         const Size(90, 35),
+                                              //     maximumSize:
+                                              //         const Size(90, 35),
+                                              //     shape: RoundedRectangleBorder(
+                                              //         borderRadius:
+                                              //             BorderRadius.circular(
+                                              //                 5)),
+                                              //     side: const BorderSide(
+                                              //       width: 0.5,
+                                              //       color: Colors.grey,
+                                              //     ),
+                                              //   ),
+                                              // ),
                                               ElevatedButton(
                                                 onPressed: () {
                                                   launch(
-                                                      'tel://+251${data.data.phonenumber.toString()}');
+                                                      'tel://+${data.data.phonenumber.toString()}');
                                                 },
                                                 child: const Text(
                                                   'CALL',

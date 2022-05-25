@@ -16,10 +16,12 @@ class MyShop extends StatefulWidget {
 class _MyShopState extends State<MyShop> {
   StorageController controller = Get.find();
   late Future getStatusInfo;
+  late Future<List<ProductData>> products;
 
   @override
   void initState() {
     getStatusInfo = ApiServices().checkPackage(controller.id);
+    products = ApiServices().getMyProducts();
     // setState(() {});
     super.initState();
   }
@@ -57,111 +59,84 @@ class _MyShopState extends State<MyShop> {
                           var data = snapshot.data;
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
-                            if (data == null) {
-                              return const Text('No information available');
-                            } else {
-                              int daysBetween(DateTime from, DateTime to) {
-                                from =
-                                    DateTime(from.year, from.month, from.day);
-                                to = DateTime(to.year, to.month, to.day);
-
-                                return (to.difference(from).inHours / 24)
-                                    .round();
-                              }
-
-                              print(
-                                  'Date time ende : ${data.subscriptionEndTimestamp}');
-                              final expiringDate =
-                                  data.subscriptionEndTimestamp;
-                              final date2 = DateTime.now();
-                              final difference =
-                                  daysBetween(date2, expiringDate);
-
-                              return Align(
-                                alignment: Alignment.centerLeft,
-                                child: SizedBox(
-                                  // margin: const EdgeInsets.only(bottom: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Column(
-                                        // crossAxisAlignment:
-                                        //     CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: 40,
-                                            height: 40,
-                                            margin: const EdgeInsets.only(
-                                                right: 20, left: 20, bottom: 5),
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Color(0xffd1f6e4),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                data.postleft.toString(),
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xff36cd70)),
-                                              ),
+                            return Align(
+                              alignment: Alignment.centerLeft,
+                              child: SizedBox(
+                                // margin: const EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 40,
+                                          height: 40,
+                                          margin: const EdgeInsets.only(
+                                              right: 20, left: 20, bottom: 5),
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color(0xffd1f6e4),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "100",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xff36cd70)),
                                             ),
                                           ),
-                                          const Text('Remaining Product Posts',
-                                              style: TextStyle(
-                                                  color: Color(0xff36cd70))),
-                                        ],
-                                      ),
-                                      Column(
-                                        // crossAxisAlignment:
-                                        //     CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Container(
-                                            width: 40,
-                                            height: 40,
-                                            margin: const EdgeInsets.only(
-                                                right: 20, left: 20, bottom: 5),
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Color(0xffedeafe),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                difference.toString(),
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Color(0xff5633ed)),
-                                              ),
+                                        ),
+                                        const Text('Remaining Product Posts',
+                                            style: TextStyle(
+                                                color: Color(0xff36cd70))),
+                                      ],
+                                    ),
+                                    Column(
+                                      // crossAxisAlignment:
+                                      //     CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: 40,
+                                          height: 40,
+                                          margin: const EdgeInsets.only(
+                                              right: 20, left: 20, bottom: 5),
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Color(0xffedeafe),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "30",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xff5633ed)),
                                             ),
                                           ),
-                                          const Text('Remaining days',
-                                              style: TextStyle(
-                                                  color: Color(0xff5633ed))),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        const Text('Remaining days',
+                                            style: TextStyle(
+                                                color: Color(0xff5633ed))),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              );
-                            }
+                              ),
+                            );
                           }
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return Container();
-                            // Center(
-                            //   child: CircularProgressIndicator.adaptive(
-                            //     strokeWidth: 0.0,
-                            //     backgroundColor: Color(0xfff7921f),
-                            //   ),
-                            // );
                           } else {
                             return SizedBox(
                               height: 240,
@@ -169,7 +144,10 @@ class _MyShopState extends State<MyShop> {
                                   child: IconButton(
                                       onPressed: () {
                                         print('Refresh button pressed');
-                                        setState(() {});
+                                        setState(() {
+                                          products =
+                                              ApiServices().getMyProducts();
+                                        });
                                       },
                                       icon: const Icon(
                                         Icons.replay_outlined,
@@ -182,7 +160,7 @@ class _MyShopState extends State<MyShop> {
                   ),
                   const Divider(),
                   FutureBuilder<List<ProductData>>(
-                    future: ApiServices().getMyProducts(),
+                    future: products,
                     builder: (context, snapshot) {
                       final data = snapshot.data;
                       // final orientation = MediaQuery.of(context).orientation;

@@ -1,14 +1,10 @@
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
-import 'package:expandable_widget/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/models/feed_response_model.dart';
 import 'package:reca_mobile/screens/create_post.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
-import 'package:reca_mobile/widgets/like_button.dart';
 import 'package:reca_mobile/widgets/my_feed_card.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
 
@@ -40,7 +36,7 @@ class _MyFeedState extends State<MyFeed> {
         child: SizedBox(
           // padding: const EdgeInsets.all(8),
           child: FutureBuilder<List<FeedData>?>(
-            future: ApiServices().getPostByUserId(controller.id, null),
+            future: ApiServices().getMyFeeds(),
             builder: (context, snapshot) {
               final data = snapshot.data;
 

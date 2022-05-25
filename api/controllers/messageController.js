@@ -16,6 +16,7 @@ exports.getAll = (req, res, next) => {
 
 exports.getMy = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Message, 'Message');
+  getAll.filter = { $or: [{ toId: req.user.id }, { fromId: req.user.id }] };
   getAll.execute();
 };
 
