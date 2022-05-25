@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'dart:io';
+
 import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,18 +35,6 @@ class _ProductPostState extends State<ProductPost> {
   Widget build(BuildContext context) {
     var length = imagefiles?.length ?? 0;
     bool indicator = length > 1 ? true : false;
-    // bool isImageEmpty;
-    // if (imagefiles?.isEmpty) {
-    //   isImageEmpty = true;
-    // } else {
-    //   isImageEmpty = false;
-    // }
-
-    // void _onTap() {
-    //   setState(() => isEnabled = false);
-    //   openImages();
-    //   Timer(const Duration(seconds: 1), () => setState(() => isEnabled = true));
-    // }
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -400,24 +388,24 @@ class _ProductPostState extends State<ProductPost> {
                   ElevatedButton(
                     onPressed: () async {
                       // print('Category product post $categoryController');
-                      var res = await ApiServices().createProduct(
-                          controller.id,
-                          nameContoller.text,
-                          priceContoller.text,
-                          categoryController,
-                          quantityContoller.text,
-                          brandContoller.text,
-                          descContoller.text,
-                          conditionContoller.text,
-                          imagefiles);
-                      if (res.status == 200) {
+
+                      try {
+                        var res = await ApiServices().createProduct(
+                            controller.id,
+                            nameContoller.text,
+                            priceContoller.text,
+                            categoryController,
+                            quantityContoller.text,
+                            brandContoller.text,
+                            descContoller.text,
+                            conditionContoller.text,
+                            imagefiles);
                         Get.back();
                         Get.snackbar('Product', 'Product created successfully',
                             duration: const Duration(seconds: 3));
-                      } else {
-                        Get.snackbar('Product',
-                            'Product not created, please check your internet connection and try again.',
-                            duration: const Duration(seconds: 3));
+                      } catch (e) {
+                        Get.snackbar('Product', 'Product not created, $e',
+                            duration: const Duration(seconds: 5));
                       }
                     },
                     child: const Text(

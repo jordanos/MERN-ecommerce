@@ -24,17 +24,14 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   late Future<ProfileById?> getInfo;
-  StorageController controller = Get.find();
+  StorageController controller = Get.find<StorageController>();
 
   late String ppic;
   late String cpic;
 
   @override
   void initState() {
-    // print('Profile page ID: ${controller.id}');
-
-    getInfo = ApiServices().getUserById(controller.id);
-
+    getInfo = ApiServices().getCurrentUser();
     super.initState();
   }
 
@@ -55,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onRefresh: () {
             Future<void> f() async {
               setState(() {
-                getInfo = ApiServices().getUserById(controller.id);
+                getInfo = ApiServices().getCurrentUser();
               });
               // return void;
             }
@@ -138,15 +135,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                           fit: BoxFit.fitWidth,
                                         ),
                                       );
-                                // SizedBox(
-                                //     height: 120,
-                                //     child: Image.file(
-                                //       File(imagefile!.path),
-                                //       width: MediaQuery.of(context).size.width,
-                                //       height: 120,
-                                //       fit: BoxFit.fitWidth,
-                                //     ),
-                                //   );
                               } else {
                                 return SizedBox(
                                   height: 120,
@@ -664,7 +652,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     left: MediaQuery.of(context).size.width / 2.4,
                     top: 100,
                     child: FutureBuilder<ProfileById?>(
-                        future: ApiServices().getUserById(controller.id),
+                        future: getInfo,
                         builder: (context, snapshot) {
                           var data = snapshot.data;
                           // print('Profile ppic snapshot data $data');

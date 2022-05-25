@@ -43,7 +43,7 @@ class _MyAppBarState extends State<MyAppBar> {
   void initState() {
     notificationFuture =
         ApiServices().getNotifications(controller.id, controller.jwt);
-    getInfo = ApiServices().getUserById(controller.id);
+    getInfo = ApiServices().getCurrentUser();
     isBackButton = widget.isBackButton;
     isSearchPage = widget.isSearchPage;
     super.initState();
@@ -62,7 +62,7 @@ class _MyAppBarState extends State<MyAppBar> {
             children: [
               !isBackButton
                   ? FutureBuilder<ProfileById?>(
-                      future: ApiServices().getUserById(controller.id),
+                      future: getInfo,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {

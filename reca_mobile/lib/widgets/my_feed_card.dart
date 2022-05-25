@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/models/feed_response_model.dart';
-import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/services/api_services.dart';
 
 import 'like_button.dart';
@@ -169,15 +168,6 @@ class _FeedCardState extends State<MyFeedCard> {
                             ),
                             textAlign: TextAlign.right,
                           ),
-                          // const SizedBox(
-                          //   width: 5,
-                          // ),
-                          // IconButton(
-                          //   iconSize: 14,
-                          //   icon:
-                          //       const Icon(Icons.more_vert_outlined),
-                          //   onPressed: () {},
-                          // ),
                           PopupMenuButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),

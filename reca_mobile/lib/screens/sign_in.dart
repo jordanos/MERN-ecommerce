@@ -195,17 +195,9 @@ class _SignInState extends State<SignIn> {
                         ),
                         onPressed: () async {
                           _setLoading(true);
-                          var loginResponse = await ApiServices().logIn(
-                              phoneController.text, passwordController.text);
-                          _setLoading(false);
-                          if (loginResponse == null) {
-                            Get.snackbar(
-                              'Login Error',
-                              'Can\'t login, Please check your information',
-                              snackPosition: SnackPosition.TOP,
-                              duration: const Duration(seconds: 5),
-                            );
-                          } else {
+                          try {
+                            var loginResponse = await ApiServices().logIn(
+                                phoneController.text, passwordController.text);
                             storage.write(
                                 key: "jwt", value: loginResponse.token);
                             storage.write(
@@ -223,6 +215,15 @@ class _SignInState extends State<SignIn> {
                                 key: 'cpic',
                                 value: loginResponse.user.coverimage);
                             Get.offAll(() => MainPage());
+                            _setLoading(false);
+                          } catch (e) {
+                            _setLoading(false);
+                            Get.snackbar(
+                              'Login Error',
+                              '$e',
+                              snackPosition: SnackPosition.TOP,
+                              duration: const Duration(seconds: 5),
+                            );
                           }
                         },
                       ),

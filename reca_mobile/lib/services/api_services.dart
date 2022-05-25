@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +22,8 @@ import 'package:reca_mobile/models/profile_by_id.dart';
 import 'package:reca_mobile/models/profile_with_follower.dart';
 import 'package:reca_mobile/models/user_login_response_model.dart';
 
+var storage = FlutterSecureStorage();
+
 class ApiServices {
   //USER API SERVICES
 
@@ -37,20 +40,19 @@ class ApiServices {
       'password': password,
       'address': 'Addis Ababa',
     });
-    try {
-      final response = await http.post(url, headers: header, body: requestBody);
+    final response = await http.post(url, headers: header, body: requestBody);
 
-      if (response.statusCode == 201) {
-        return response;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
+    if (response.statusCode != 201) {
+      throw Exception(json.decode(response.body)["error"]);
     }
+    return response;
   }
 
-  Future<UserLoginResponse?> logIn(var phoneNo, var password) async {
+  String getError(var response) {
+    return jsonDecode(response.body)["error"];
+  }
+
+  Future<UserLoginResponse> logIn(var phoneNo, var password) async {
     var url = Uri.http(Config.apiUrl, Config.loginUserApi);
 
     Map<String, String> header = {
@@ -61,25 +63,45 @@ class ApiServices {
       'phone': phoneNo,
       'password': password,
     });
-    try {
-      final response = await http.post(url, headers: header, body: requestBody);
 
+    final response = await http.post(url, headers: header, body: requestBody);
+
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
+    }
+    final userLoginResponse = userLoginResponseFromJson(response.body);
+    return userLoginResponse;
+  }
+
+  Future<ProfileById?> getCurrentUser() async {
+    final storage = FlutterSecureStorage();
+    var userId;
+    var jwt;
+    userId = await storage.read(key: "id");
+    jwt = await storage.read(key: "jwt");
+
+    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/${userId}");
+
+    Map<String, String> header = {
+      'Content-type': 'application/json; charset=UTF-8'
+    };
+
+    final response = await http.get(url);
+
+    try {
       if (response.statusCode == 200) {
-        final userLoginResponse = userLoginResponseFromJson(response.body);
-        return userLoginResponse;
-      } else {
-        return null;
+        ProfileById profileById = profileByIdFromJson(response.body);
+        return profileById;
       }
+      return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }
 
   Future<ProfileById?> getUserById(var id) async {
-    StorageController controller = Get.find<StorageController>();
-    // print("user id: ${controller.id}");
-    var url =
-        Uri.http(Config.apiUrl, "${Config.profileByIdApi}/${controller.id}");
+    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/$id");
 
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
@@ -117,44 +139,76 @@ class ApiServices {
 
   Future<ProfileByIdWithFollower> getUserByIdWithFollowStatus(
       var id, var following) async {
-    var url = Uri.http(Config.apiUrl, Config.profileByIdApi);
-    String requestBody = jsonEncode({
-      'follower': id,
-      'following': following,
-    });
+    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/$id");
+
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
     };
 
-    final response = await http.post(url, headers: header, body: requestBody);
-    final profileById = profileByIdWithFollowerFromJson(response.body);
+    final response = await http.get(url);
 
-    // UserDataWithFollowerID datum = profileById.data;
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
+    }
+    final profileById = profileByIdWithFollowerFromJson(response.body);
 
     return profileById;
   }
 
-  Future<GeneralResponse> editProfile(
-      var id, var token, var name, var address, XFile? images) async {
-    var url = Uri.http(Config.apiUrl, Config.editProfileApi);
-    var request = http.MultipartRequest('PATCH', url);
-    request.fields['userid'] = id;
-    request.fields['token'] = token;
-    request.fields['fullname'] = name;
-    request.fields['address'] = address;
+  Future<Map<String, String>> getHeaders() async {
+    final storage = FlutterSecureStorage();
+    var userId;
+    var jwt;
+    userId = await storage.read(key: "id");
+    jwt = await storage.read(key: "jwt");
+    return {
+      'Content-type': 'application/json; charset=UTF-8',
+      'Authorization': jwt
+    };
+  }
 
-    if (images != null) {
-      var path = images.path;
+  Future<bool> changeImage(Uri url, List<XFile> images) async {
+    var request = http.MultipartRequest('PUT', url);
+    var headers = await getHeaders();
+    request.headers.addAll(headers);
 
-      request.files.add(await http.MultipartFile.fromPath('profilepic', path));
+    try {
+      if (images.length < 1) {
+        return true;
+      }
+      String path = images[0].path;
+      request.files.add(await http.MultipartFile.fromPath('image', path));
+      http.StreamedResponse streamedResponse = await request.send();
+      if (streamedResponse.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
     }
+  }
 
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
+  Future<bool> editProfile(
+      var id, var token, var name, var address, XFile? images) async {
+    var url = Uri.http(Config.apiUrl, Config.editProfileApi + "/$id");
 
-    final generalResponse = generalResponseFromJson(response.body);
+    final body = jsonEncode({"name": name, "address": address});
 
-    return generalResponse;
+    final response =
+        await http.put(url, body: body, headers: await getHeaders());
+    try {
+      if (response.statusCode == 200) {
+        bool isChanged = await changeImage(
+            Uri.http(Config.apiUrl, Config.editProfileApi + "/image/$id"),
+            images != null ? [images] : []);
+        return isChanged;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   Future<GeneralResponse> uploadCover(var token, var id, XFile? images) async {
@@ -254,16 +308,21 @@ class ApiServices {
   }
 
   Future<List<AllConversation>> getAllCoversation(var id) async {
-    var url =
-        Uri.http(Config.apiUrl, Config.getAllConversationApi + id.toString());
+    var url = Uri.http(Config.apiUrl, Config.getAllConversationApi);
+    StorageController controller = Get.find<StorageController>();
 
-    var response = await http.post(url);
+    var response = await http.get(url, headers: await getHeaders());
 
-    var statusCode = response.statusCode;
-    var data = response.body;
-    final convoResponse = conversationFromJson(data);
-    // print(convoResponse.data);
-    return convoResponse.data;
+    try {
+      if (response.statusCode != 200) {
+        throw Exception(json.decode(response.body)["error"]);
+      }
+      final convoResponse = conversationFromJson(response.body);
+      return convoResponse.data;
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
   }
 
   Future<List<AllConversation>> createCoversation(var id1, var id2) async {
@@ -308,40 +367,29 @@ class ApiServices {
 
   Future<List<OtOMessages>> getMessages(var conversationId, var userId) async {
     var url = Uri.http(Config.apiUrl, Config.getMessagesApi);
-    String requestBody =
-        jsonEncode({'conversationid': conversationId, 'userid': userId});
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-    var response = await http.post(url, headers: header, body: requestBody);
-    // print(response.body);
-    var statusCode = response.statusCode;
-    var data = response.body;
-    final oneToOneConvoResponse = oneToOneMessagesFromJson(data);
 
-    // print(oneToOneConvoResponse.data[0].time);
+    var response = await http.get(url, headers: await getHeaders());
+
+    final oneToOneConvoResponse = oneToOneMessagesFromJson(response.body);
     return oneToOneConvoResponse.data;
   }
 
-  Future<GeneralResponse> sendMessage(
-      var conversationId, var senderId, var msg) async {
+  Future<bool> sendMessage(var toId, var msg) async {
     var url = Uri.http(Config.apiUrl, Config.sendMessageApi);
 
-    String requestBody = jsonEncode({
-      'conversationid': conversationId,
-      'sender': senderId,
+    String body = jsonEncode({
+      'toId': toId,
       'text': msg,
     });
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-    var response = await http.post(url, headers: header, body: requestBody);
 
-    var statusCode = response.statusCode;
-    var data = response.body;
-    final sendMsg = generalResponseFromJson(data);
+    var response =
+        await http.post(url, headers: await getHeaders(), body: body);
 
-    return sendMsg;
+    if (response.statusCode != 201) {
+      throw Exception(getError(response));
+    }
+
+    return true;
   }
 
 //FEED API SERVICES
@@ -424,13 +472,8 @@ class ApiServices {
 
   Future<List<FeedData>?> getallowedPost(var id) async {
     var url = Uri.http(Config.apiUrl, Config.getAllowedPostApi);
-    StorageController controller = Get.find<StorageController>();
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8',
-      'Authorization': controller.jwt,
-    };
 
-    var response = await http.get(url, headers: header);
+    var response = await http.get(url, headers: await getHeaders());
 
     try {
       if (response.statusCode == 200) {
@@ -467,29 +510,19 @@ class ApiServices {
     return list![0];
   }
 
-  Future<GeneralResponse> createPost(
-      var postedBy, String? text, List<XFile>? images) async {
+  Future createPost(var postedBy, String? text, List<XFile>? images) async {
     var url = Uri.http(Config.apiUrl, Config.createPostApi);
-    var request = http.MultipartRequest('POST', url);
-    request.fields['postedby'] = postedBy;
-    request.fields['text'] = text ?? '';
 
-    if (images != null) {
-      var path = (images.map((el) => el.path));
-
-      for (var item in path) {
-        request.files
-            .add(await http.MultipartFile.fromPath('multi-files', item));
-      }
-    } else {
-      request.fields['multi-files'] = '';
+    var body = json.encode({"text": text});
+    var response =
+        await http.post(url, headers: await getHeaders(), body: body);
+    if (response.statusCode != 201) {
+      throw Exception(getError(response));
     }
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
-
-    final generalResponse = generalResponseFromJson(response.body);
-
-    return generalResponse;
+    String feedId = json.decode(response.body)["data"]["id"];
+    bool isChanged = await changeImage(
+        Uri.http(Config.apiUrl, Config.createPostApi + "/image/$feedId"),
+        images != null ? images : []);
   }
 
   Future<List<FeedData>?> getPostData() async {
@@ -632,12 +665,23 @@ class ApiServices {
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
     };
-    String requestBody = jsonEncode({
-      'userid': id,
-    });
 
-    final response = await http.post(url, headers: header, body: requestBody);
-    // print('Get producet by user id response: ${response.body}');
+    final response = await http.get(url, headers: await getHeaders());
+
+    final productResponse = productResponseFromJson(response.body);
+
+    List<ProductData>? datum = productResponse.products;
+    return datum;
+  }
+
+  Future<List<ProductData>> getMyProducts() async {
+    var url = Uri.http(Config.apiUrl, Config.productByUserIdApi);
+
+    Map<String, String> header = {
+      'Content-type': 'application/json; charset=UTF-8'
+    };
+
+    final response = await http.get(url, headers: await getHeaders());
 
     final productResponse = productResponseFromJson(response.body);
 
@@ -666,18 +710,13 @@ class ApiServices {
   }
 
   Future deleteProduct(var productId, var userId, var token) async {
-    var url =
-        Uri.http(Config.apiUrl, Config.deleteProductApi + productId.toString());
+    var url = Uri.http(Config.apiUrl, Config.deleteProductApi + "/$productId");
 
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-    String requestBody = jsonEncode({
-      'userid': userId,
-      'token': token.toString(),
-    });
-
-    final response = await http.delete(url, headers: header, body: requestBody);
+    final response = await http.delete(url, headers: await getHeaders());
+    if (response != 200) {
+      throw Exception(getError(response));
+    }
+    return true;
   }
 
   Future<GeneralResponse> editProduct(var productId, var userId, var token,
@@ -702,7 +741,7 @@ class ApiServices {
     return generalResponse;
   }
 
-  Future<GeneralResponse> createProduct(
+  Future createProduct(
       var postedBy,
       var name,
       var price,
@@ -713,27 +752,41 @@ class ApiServices {
       var condition,
       List<XFile>? images) async {
     var url = Uri.http(Config.apiUrl, Config.createProductApi);
-    var request = http.MultipartRequest('POST', url);
-    request.fields['postedby'] = postedBy;
-    request.fields['name'] = name;
-    request.fields['price'] = price;
-    request.fields['category'] = category;
-    request.fields['description'] = description;
-    request.fields['quantity'] = quantity;
-    request.fields['brand'] = brand;
-    request.fields['condition'] = condition;
-
-    var path = (images!.map((el) => el.path));
-
-    for (var item in path) {
-      request.files.add(await http.MultipartFile.fromPath('images', item));
+    String categoryId = "";
+    if (category == "electronics") {
+      categoryId = "6278f1a3cb3c6f7cec9f89a8";
     }
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
-    print(response.body);
-    final generalResponse = generalResponseFromJson(response.body);
+    if (category == "dress") {
+      categoryId = "627b591a376e823fc303e6b8";
+    }
+    if (category == "shoes") {
+      categoryId = "627b5909376e823fc303e6b6";
+    }
+    if (category == "phones") {
+      categoryId = "6278f1a3cb3c6f7cec9f89a8";
+    }
+    final body = json.encode({
+      "name": name,
+      "price": price,
+      "category": categoryId,
+      "description": description,
+      "quantity": quantity,
+      "brand": brand,
+      "productCondition": condition,
+    });
 
-    return generalResponse;
+    final response =
+        await http.post(url, headers: await getHeaders(), body: body);
+    if (response.statusCode != 201) {
+      print(getError(response));
+      throw Exception(getError(response));
+    }
+    String productId = json.decode(response.body)["data"]["id"];
+    bool isChanged = await changeImage(
+        Uri.http(
+            Config.apiUrl, Config.createProductApi + '/image/${productId}'),
+        images != null ? images : []);
+    return true;
   }
 
   //PACKAGE API

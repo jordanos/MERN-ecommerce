@@ -5,13 +5,21 @@ const Otp = require('../models/Otp');
 const TokenBlackList = require('../models/TokenBlackList');
 const CustomError = require('../utils/CustomError');
 const { validateId } = require('../utils/validators');
+const { FormatPhone } = require('../utils/Formatter');
 const Admin = require('../models/Admin');
 
 exports.login = async (req, res, next) => {
   try {
-    // Get req data and init required datas
+    // Get req data and init required data
     const { phone, password } = req.body;
-    const user = await User.findOne({ phone });
+    let formattedPhone = phone;
+    const formatPhone = new FormatPhone();
+
+    if (phone) {
+      formattedPhone = formatPhone.exec(phone);
+    }
+
+    const user = await User.findOne({ phone: formattedPhone });
     if (!(user && (await bcrypt.compare(password, user.password)))) {
       throw new CustomError('Invalid Credentials', 401);
     }
@@ -30,6 +38,7 @@ exports.login = async (req, res, next) => {
     next(e);
   }
 };
+
 exports.adminLogin = async (req, res, next) => {
   try {
     // Get req data and init required datas

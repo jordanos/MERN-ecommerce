@@ -321,19 +321,21 @@ class _SignUpState extends State<SignUp> {
                           final FormState? form = _formKey.currentState;
                           if (form!.validate()) {
                             _setLoading(true);
-                            var response = await ApiServices().registerUser(
-                                nameController.text,
-                                phoneNoController.text,
-                                passwordController.text);
-                            _setLoading(false);
-                            if (response) {
+                            try {
+                              var response = await ApiServices().registerUser(
+                                  nameController.text,
+                                  phoneNoController.text,
+                                  passwordController.text);
+                              _setLoading(false);
+
                               Get.snackbar(
                                   'Resgistrastion', 'Success! Please sign in',
                                   duration: const Duration(seconds: 5));
                               Get.off(() => SignIn());
-                            } else {
+                            } catch (e) {
+                              _setLoading(false);
                               Get.snackbar('Resgistrastion',
-                                  'Registration unsuccessful. Please check your internet connection and try again',
+                                  'Registration unsuccessful. $e',
                                   duration: const Duration(seconds: 5));
                             }
                           } else {

@@ -6,6 +6,7 @@ const {
   getOne,
   updateOne,
   deleteOne,
+  getMy,
 } = require('../controllers/messageController');
 
 // authentication and authorization
@@ -185,4 +186,26 @@ router
    */
   .delete(loginReq, authorizeReq(Message), deleteOne);
 
+/**
+ *@swagger
+ *path:
+ * /api/v1/messages/my/messages?skip=0:
+ *   get:
+ *     summary: Lists all messages of a single user
+ *     tags: [Messages]
+ *     parameters:
+ *     - in: query
+ *       name: skip
+ *       schema:
+ *         type: integer
+ *       description: pagination value to skip to
+ *     responses:
+ *       "200":
+ *         description: list of Messages.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Message'
+ */
+router.get('/my/messages', loginReq, getMy);
 module.exports = router;

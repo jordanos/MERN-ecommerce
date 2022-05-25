@@ -10,6 +10,7 @@ const {
   uploadImage,
   getHeroImages,
   filterByCategories,
+  getMyProducts,
 } = require('../controllers/productController');
 
 // authentication and authorization
@@ -297,5 +298,28 @@ router.get('/hero/images', getHeroImages);
  *               $ref: '#/components/schemas/Product'
  */
 router.get('/filter/categories', filterByCategories);
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/products/my/products?skip=0:
+ *   get:
+ *     summary: Lists all my products
+ *     tags: [Products]
+ *     parameters:
+ *     - in: query
+ *       name: skip
+ *       schema:
+ *         type: integer
+ *       description: pagination value to skip to
+ *     responses:
+ *       "200":
+ *         description: list of products.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ */
+router.get('/my/products', loginReq, getMyProducts);
 
 module.exports = router;

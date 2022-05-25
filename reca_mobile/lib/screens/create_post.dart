@@ -166,19 +166,16 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      print('Feed post ${controller.id}');
-                      print('Feed post ${textController.text}');
-                      print('Feed post ${imagefiles.toString()}');
+                      try {
+                        var res = await ApiServices().createPost(
+                            controller.id, textController.text, imagefiles);
 
-                      var res = await ApiServices().createPost(
-                          controller.id, textController.text, imagefiles);
-                      if (res.status == 200) {
                         Get.back();
                         Get.snackbar('Post', 'Posted successfully',
                             duration: const Duration(seconds: 3));
-                      } else {
-                        Get.snackbar('Post',
-                            'Your data could not be posted, please check your inputs and try again.',
+                      } catch (e) {
+                        Get.snackbar(
+                            'Post', 'Your data could not be posted, $e',
                             duration: const Duration(seconds: 3));
                       }
                     },

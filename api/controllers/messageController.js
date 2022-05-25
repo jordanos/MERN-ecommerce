@@ -14,6 +14,11 @@ exports.getAll = (req, res, next) => {
   getAll.execute();
 };
 
+exports.getMy = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Message, 'Message');
+  getAll.execute();
+};
+
 exports.createOne = (req, res, next) => {
   const modfiedReq = { ...req, body: { ...req.body, fromId: req.user.id } };
   const createOne = new CreateOne(modfiedReq, res, next, Message, 'Message');
