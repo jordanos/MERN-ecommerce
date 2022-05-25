@@ -1,24 +1,13 @@
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
-import 'package:expandable_widget/expandable.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/models/conversation_model.dart';
 import 'package:reca_mobile/models/coversation_model_nolastseen.dart';
-import 'package:reca_mobile/models/feed_response_model.dart';
-import 'package:reca_mobile/models/product_response_model.dart';
-import 'package:reca_mobile/models/profile_by_id.dart';
 import 'package:reca_mobile/models/profile_with_follower.dart';
-import 'package:reca_mobile/screens/all_messages.dart';
 import 'package:reca_mobile/screens/messages.dart';
-import 'package:reca_mobile/screens/product_detail.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
 import 'package:reca_mobile/widgets/feed_by_id.dart';
-import 'package:reca_mobile/widgets/like_button.dart';
 import 'package:reca_mobile/widgets/product_by_id.dart';
-import 'package:reca_mobile/widgets/rating.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:expandable_page_view/expandable_page_view_test.dart';
@@ -39,7 +28,7 @@ class _ProfileVisitState extends State<ProfileVisit> {
     initialPage: 0,
   );
 
-  late int pId;
+  late String pId;
   @override
   void initState() {
     bool fromProduct = userData[1];

@@ -7,32 +7,17 @@ import 'dart:convert';
 ProfileByIdWithFollower profileByIdWithFollowerFromJson(String str) =>
     ProfileByIdWithFollower.fromJson(json.decode(str));
 
-String profileByIdWithFollowerToJson(ProfileByIdWithFollower data) =>
-    json.encode(data.toJson());
-
 class ProfileByIdWithFollower {
   ProfileByIdWithFollower({
-    required this.status,
-    required this.message,
     required this.data,
   });
 
-  int status;
-  String message;
   UserDataWithFollowerID data;
 
   factory ProfileByIdWithFollower.fromJson(Map<String, dynamic> json) =>
       ProfileByIdWithFollower(
-        status: json["status"],
-        message: json["message"],
         data: UserDataWithFollowerID.fromJson(json["data"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-        "data": data.toJson(),
-      };
 }
 
 class UserDataWithFollowerID {
@@ -50,9 +35,9 @@ class UserDataWithFollowerID {
     required this.isfollowing,
   });
 
-  int userid;
+  String userid;
   String fullname;
-  int phonenumber;
+  String phonenumber;
   String address;
   String profileimage;
   String coverimage;
@@ -62,32 +47,18 @@ class UserDataWithFollowerID {
   int follower;
   bool isfollowing;
 
-  factory UserDataWithFollowerID.fromJson(Map<String, dynamic> json) =>
+  factory UserDataWithFollowerID.fromJson(Map<String, dynamic> user) =>
       UserDataWithFollowerID(
-        userid: json["userid"],
-        fullname: json["fullname"],
-        phonenumber: json["phonenumber"],
-        address: json["address"],
-        profileimage: json["profileimage"],
-        coverimage: json["coverimage"],
-        post: json["post"],
-        product: json["product"],
-        following: json["following"],
-        follower: json["follower"],
-        isfollowing: json["isfollowing"],
+        userid: user["user"]["id"],
+        fullname: user["user"]["name"],
+        phonenumber: user["user"]["phone"],
+        address: user["user"]["address"],
+        profileimage: user["user"]["image"],
+        coverimage: user["user"]["image"],
+        post: user["feedsCount"],
+        product: user["productsCount"],
+        following: user["followingCount"],
+        follower: user["followersCount"],
+        isfollowing: false,
       );
-
-  Map<String, dynamic> toJson() => {
-        "userid": userid,
-        "fullname": fullname,
-        "phonenumber": phonenumber,
-        "address": address,
-        "profileimage": profileimage,
-        "coverimage": coverimage,
-        "post": post,
-        "product": product,
-        "following": following,
-        "follower": follower,
-        "isfollowing": isfollowing,
-      };
 }

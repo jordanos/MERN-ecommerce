@@ -73,7 +73,7 @@ class ApiServices {
     return userLoginResponse;
   }
 
-  Future<ProfileById?> getUserById(var id) async {
+  Future<ProfileById?> getCurrentUser() async {
     final storage = FlutterSecureStorage();
     var userId;
     var jwt;
@@ -81,6 +81,27 @@ class ApiServices {
     jwt = await storage.read(key: "jwt");
 
     var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/${userId}");
+
+    Map<String, String> header = {
+      'Content-type': 'application/json; charset=UTF-8'
+    };
+
+    final response = await http.get(url);
+
+    try {
+      if (response.statusCode == 200) {
+        ProfileById profileById = profileByIdFromJson(response.body);
+        return profileById;
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<ProfileById?> getUserById(var id) async {
+    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/$id");
 
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
@@ -118,19 +139,18 @@ class ApiServices {
 
   Future<ProfileByIdWithFollower> getUserByIdWithFollowStatus(
       var id, var following) async {
-    var url = Uri.http(Config.apiUrl, "/dc");
-    String requestBody = jsonEncode({
-      'follower': id,
-      'following': following,
-    });
+    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/$id");
+
     Map<String, String> header = {
       'Content-type': 'application/json; charset=UTF-8'
     };
 
-    final response = await http.post(url, headers: header, body: requestBody);
-    final profileById = profileByIdWithFollowerFromJson(response.body);
+    final response = await http.get(url);
 
-    // UserDataWithFollowerID datum = profileById.data;
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
+    }
+    final profileById = profileByIdWithFollowerFromJson(response.body);
 
     return profileById;
   }

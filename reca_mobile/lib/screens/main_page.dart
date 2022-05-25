@@ -6,35 +6,9 @@ import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/screens/all_messages.dart';
 import 'package:reca_mobile/screens/feed_page.dart';
 import 'package:reca_mobile/screens/home_page.dart';
+import 'package:reca_mobile/screens/my_shop.dart';
 import 'package:reca_mobile/screens/profile.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
-
-// import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-// class MainPage extends StatelessWidget {
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Bottom Navigation Bar Demo',
-//       home: AppBottomNavigationBarController(),
-//     );
-//   }
-// }
-
-// class AppBottomNavigationBarController extends StatefulWidget {
-//   @override
-//   _AppBottomNavigationBarControllerState createState() =>
-//       _AppBottomNavigationBarControllerState();
-// }
-
-// class _AppBottomNavigationBarControllerState
-//     extends State<AppBottomNavigationBarController> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
 
 class MainPage extends StatefulWidget {
   MainPage({
@@ -58,6 +32,7 @@ class _MainPageState extends State<MainPage> {
     AllMessages(
       key: PageStorageKey('messages'),
     ),
+    MyShop(key: PageStorageKey('myshop')),
     ProfilePage(
       key: PageStorageKey('profile'),
     ),
@@ -80,7 +55,6 @@ class _MainPageState extends State<MainPage> {
   Future<String> get jwtOrEmpty async {
     var jwt = await storage.read(key: "jwt");
     id = await storage.read(key: "id");
-    print('Main page id for checkstatus $id');
     if (jwt == null) return "";
     return jwt;
   }
@@ -99,6 +73,8 @@ class _MainPageState extends State<MainPage> {
                 icon: Icon(Icons.feed_outlined), label: 'Feed'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.chat_outlined), label: 'Message'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_bag_outlined), label: 'My Shop'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
           ]);

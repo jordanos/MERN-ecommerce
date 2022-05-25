@@ -22,7 +22,7 @@ class Config {
   static const String profileByIdApi = api + "/users";
   static const String editProfileApi = api + "/users";
   static const String uploadCoverApi = "/user/uploadcoverpic/";
-  static const String getAllConversationApi = api + "/messages";
+  static const String getAllConversationApi = api + "/messages/my/messages";
   static const String getMessagesApi = api + "/messages";
   static const String markAllAsRead = "/conversation/readallmessage";
   static const String createConversationApi =
