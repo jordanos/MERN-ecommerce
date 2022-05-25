@@ -374,25 +374,22 @@ class ApiServices {
     return oneToOneConvoResponse.data;
   }
 
-  Future<GeneralResponse> sendMessage(
-      var conversationId, var senderId, var msg) async {
+  Future<bool> sendMessage(var toId, var msg) async {
     var url = Uri.http(Config.apiUrl, Config.sendMessageApi);
 
-    String requestBody = jsonEncode({
-      'conversationid': conversationId,
-      'sender': senderId,
+    String body = jsonEncode({
+      'toId': toId,
       'text': msg,
     });
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-    var response = await http.post(url, headers: header, body: requestBody);
 
-    var statusCode = response.statusCode;
-    var data = response.body;
-    final sendMsg = generalResponseFromJson(data);
+    var response =
+        await http.post(url, headers: await getHeaders(), body: body);
 
-    return sendMsg;
+    if (response.statusCode != 201) {
+      throw Exception(getError(response));
+    }
+
+    return true;
   }
 
 //FEED API SERVICES

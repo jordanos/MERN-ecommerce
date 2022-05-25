@@ -1,6 +1,6 @@
 class Config {
   static const String appName = "rica_shopping";
-  static const String host = "192.168.0.126";
+  static const String host = "192.168.0.113";
   static const String apiUrl = host + ":5000";
   static const String messageUrl = host + ":8900";
   static const String api = "/api/v1";
@@ -27,7 +27,7 @@ class Config {
   static const String markAllAsRead = "/conversation/readallmessage";
   static const String createConversationApi =
       "/conversation/createconversation/";
-  static const String sendMessageApi = "/conversation/sendmessage/";
+  static const String sendMessageApi = "/messages";
   static const String productApi = api + "/products";
   static const String categoryListApi = "/product/catagorylist";
   static const String productWithRatingApi = "/product/getproduct";

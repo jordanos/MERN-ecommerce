@@ -78,15 +78,6 @@ class _MessagePageState extends State<MessagePage> {
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
-                    // if (snapshot.data != null) {
-                    //   for (OtOMessages item in snapshot.data!) {
-                    //     msgData?.add(item);
-                    //   }
-                    // }
-
-                    // print(
-                    //     'Snapshot data in chat page ${snapshot.data!.toList()}');
-                    // msgData!.addAll(snapshot.data!);
                     msgData = snapshot.data!;
                     // print('Msg Data data in chat page ${msgData.toString()}');
                     var length = msgData!.length;
@@ -293,25 +284,16 @@ class _MessagePageState extends State<MessagePage> {
                                   iconSize: 14,
                                   color: Colors.white,
                                   onPressed: () async {
-                                    print('Send button pressed');
-                                    int reciever = argument[1];
+                                    print('Send button pressed once');
+                                    String reciever = argument[1];
                                     String finalText = txtController.text;
                                     if (finalText.removeAllWhitespace != '') {
                                       txtController.text = '';
+                                      print("sending text");
 
-                                      var res = await ApiServices().sendMessage(
-                                          argument[0],
-                                          controller.id,
-                                          finalText);
-                                      chatController.socket.emit(
-                                        "sendMessage",
-                                        {
-                                          "conversationId": argument[0],
-                                          "senderId": int.parse(controller.id),
-                                          "receiverId": reciever,
-                                          "text": finalText,
-                                        },
-                                      );
+                                      var res = await ApiServices()
+                                          .sendMessage(argument[1], finalText);
+
                                       setStateIfMounted(() {
                                         msgData!.add(OtOMessages(
                                             conversationid: argument[0],
@@ -319,12 +301,6 @@ class _MessagePageState extends State<MessagePage> {
                                             text: finalText,
                                             time: DateTime.now()));
                                       });
-
-                                      // setState(() {
-                                      //   getAllMessage = ApiServices()
-                                      //       .getMessages(
-                                      //           argument[0], controller.id);
-                                      // });
                                     }
                                   }),
                             ),
@@ -455,24 +431,12 @@ class _MessagePageState extends State<MessagePage> {
                                   color: Colors.white,
                                   onPressed: () async {
                                     print('Send button pressed');
-                                    int reciever = argument[1];
-                                    // print('Sender ID ${controller.id}');
+                                    String reciever = argument[1];
+
                                     String finalText = txtController.text;
                                     if (finalText != '') {
-                                      var res = await ApiServices().sendMessage(
-                                          argument[0],
-                                          controller.id,
-                                          finalText);
-                                      chatController.socket.emit(
-                                        "sendMessage",
-                                        {
-                                          "conversationId": argument[0],
-                                          "senderId": int.parse(controller.id),
-                                          "receiverId": reciever,
-                                          "text": finalText,
-                                        },
-                                      );
-                                      print(res);
+                                      var res = await ApiServices()
+                                          .sendMessage(argument[1], finalText);
                                     }
                                   }),
                             ),
