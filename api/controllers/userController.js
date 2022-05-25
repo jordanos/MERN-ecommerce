@@ -10,6 +10,9 @@ const {
 } = require('./templates');
 const { validateUserInput } = require('../utils/validators');
 const { hashPassword } = require('../utils/helpers');
+
+const Admin = require('../models/Admin');
+
 const Feed = require('../models/Feed');
 const Follow = require('../models/Follow');
 const { FormatPhone } = require('../utils/Formatter');
@@ -35,6 +38,15 @@ exports.createUser = (req, res, next) => {
   createOne.execute();
 };
 
+exports.createAdmin = (req, res, next) => {
+  const createOne = new CreateOne(req, res, next, Admin, 'admin');
+  createOne.validate = validateUserInput;
+  createOne.execute();
+};
+exports.getAdmin = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Admin, 'user');
+  getAll.execute();
+};
 exports.getUser = (req, res, next) => {
   const getOne = new GetOne(req, res, next, User, 'user');
   getOne.transform = async () => {

@@ -1,7 +1,7 @@
 const { mongoose } = require('mongoose');
 const Follow = require('../models/Follow');
-const LikeFeed = require('../models/LikeFeed');
 const Message = require('../models/Message');
+const Admin = require('../models/Admin');
 const User = require('../models/User');
 const UnauthorizedError = require('../utils/UnauthorizedError');
 
@@ -31,7 +31,6 @@ exports.authorizeReq = function outer(model) {
     return next();
   }
 
-
   async function innerMessage(req, res, next) {
     const doc = await model.findById(req.params.id);
     if (!doc || !doc.fromId.equals(new mongoose.Types.ObjectId(req.user.id)))
@@ -58,12 +57,13 @@ exports.authorizeReq = function outer(model) {
 };
 
 // Cheks if the user is an admin
-// exports.adminReq = async (req, res, next) => {
-//   //  check the user is an admin
-//   const admin = await Admin.findOne({
-//     owner: new mongoose.Types.ObjectId(req.user.id),
-//   });
-//   if (!admin) return next(new UnauthorizedError());
 
-//   return next();
-// };
+exports.adminReq = async (req, res, next) => {
+  //  check the user is an admin
+  const admin = await Admin.findOne({
+    owner: new mongoose.Types.ObjectId(req.user.id),
+  });
+  if (!admin) return next(new UnauthorizedError());
+
+  return next();
+};

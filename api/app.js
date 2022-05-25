@@ -14,7 +14,7 @@ dotenv.config({ path: './.env' });
 
 // Express App
 const app = express();
-
+app.disable('etag');
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -54,7 +54,10 @@ const notificationsRoute = require('./routes/notifications');
 const packageRoute = require('./routes/packageTypes');
 const searchRoute = require('./routes/search');
 const rateRoute = require('./routes/rates');
+const userPackageRoute = require('./routes/userPackage');
+const adminRoute = require('./routes/admin');
 const appRoute = require('./routes/appRoute');
+
 
 // Use Routes
 const apiVersion = '/api/v1';
@@ -71,7 +74,12 @@ app.use(`${apiVersion}/notifications`, notificationsRoute);
 app.use(`${apiVersion}/packages`, packageRoute);
 app.use(`${apiVersion}/search`, searchRoute);
 app.use(`${apiVersion}/rates`, rateRoute);
+
+app.use(`${apiVersion}/userpackages`, userPackageRoute);
+app.use(`${apiVersion}/admin`, adminRoute);
+
 app.use(`${apiVersion}/app`, appRoute);
+
 
 const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware
