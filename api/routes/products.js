@@ -15,11 +15,8 @@ const {
 
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
-const {
-  authorizeReq,
-  adminReq,
-} = require('../middlewares/authorizationMiddleware');
-const saveImage = require('../middlewares/saveImage');
+const { authorizeReq } = require('../middlewares/authorizationMiddleware');
+const { saveImage } = require('../middlewares/saveImage');
 const Product = require('../models/Product');
 const imageUpload = require('../utils/images');
 
