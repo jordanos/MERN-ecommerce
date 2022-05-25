@@ -22,6 +22,14 @@ exports.getFeeds = (req, res, next) => {
   getAll.execute();
 };
 
+exports.getMyFeeds = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Feed, 'feed');
+  getAll.sort = { createdAt: -1 };
+  getAll.filter = { userId: req.user.id };
+  getAll.populate.push(populateUser);
+  getAll.execute();
+};
+
 exports.createFeed = (req, res, next) => {
   const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
   const createOne = new CreateOne(modfiedReq, res, next, Feed, 'feed');

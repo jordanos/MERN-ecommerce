@@ -8,6 +8,7 @@ const {
   updateFeed,
   deleteFeed,
   uploadFeedImage,
+  getMyFeeds,
 } = require('../controllers/feedController');
 
 // authentication and authorization
@@ -219,5 +220,28 @@ router.put(
   saveImage(feedImagesPath),
   uploadFeedImage
 );
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/feeds/my/feeds?skip=0:
+ *   get:
+ *     summary: Lists all user owned feeds of a user
+ *     tags: [Feeds]
+ *     parameters:
+ *     - in: query
+ *       name: skip
+ *       schema:
+ *         type: integer
+ *       description: pagination value to skip to
+ *     responses:
+ *       "200":
+ *         description: list of Feeds.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Feed'
+ */
+router.get('/my/feeds', loginReq, getMyFeeds);
 
 module.exports = router;

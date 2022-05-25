@@ -62,12 +62,16 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
+  let modifiedReq = req;
   const formatPhone = new FormatPhone();
   const { phone } = req.body;
   if (phone)
-    req = { ...req, body: { ...req.body, phone: formatPhone.exec(phone) } };
+    modifiedReq = {
+      ...req,
+      body: { ...req.body, phone: formatPhone.exec(phone) },
+    };
 
-  const updateOne = new UpdateOne(req, res, next, User, 'user');
+  const updateOne = new UpdateOne(modifiedReq, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown
   updateOne.validate = validateUserInput;
   // hash password if exists
