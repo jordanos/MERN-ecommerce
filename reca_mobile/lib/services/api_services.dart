@@ -124,28 +124,18 @@ class ApiServices {
   Future<List<AllUserData>> getAllUsers() async {
     var url = Uri.http(Config.apiUrl, Config.getAllUserApi);
 
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-
-    final response = await http.get(url);
+    final response = await http.get(url, headers: await getHeaders());
 
     final profileById = allUsersFromJson(response.body);
-
-    // print(response.body);
 
     return profileById.data;
   }
 
   Future<ProfileByIdWithFollower> getUserByIdWithFollowStatus(
       var id, var following) async {
-    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/$id");
+    var url = Uri.http(Config.apiUrl, "${Config.profileByIdApi}/$following");
 
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-
-    final response = await http.get(url);
+    final response = await http.get(url, headers: await getHeaders());
 
     if (response.statusCode != 200) {
       throw Exception(getError(response));
@@ -266,24 +256,19 @@ class ApiServices {
     return generalResponse;
   }
 
-  Future<GeneralResponse> changePassword(
-      var token, var phoneNumber, var password, var newPassword) async {
-    var url = Uri.http(Config.apiUrl, Config.changePasswordApi);
-    String requestBody = jsonEncode({
-      'token': token,
-      'phonenumber': phoneNumber,
-      'password': password,
-      'newpassword': newPassword,
+  Future<bool> changePassword(var newPassword) async {
+    var storage = FlutterSecureStorage();
+    final userId = await storage.read(key: "id");
+    var url = Uri.http(Config.apiUrl, Config.changePasswordApi + "/$userId");
+    String body = jsonEncode({
+      'password': newPassword,
     });
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-    var response = await http.post(url, headers: header, body: requestBody);
-    var data = response.body;
-    print(data);
-    final generalResponse = generalResponseFromJson(data);
 
-    return generalResponse;
+    var response = await http.put(url, headers: await getHeaders(), body: body);
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
+    }
+    return true;
   }
 
   Future<GeneralResponse> marAllAsRead(int id, var token) async {
@@ -449,23 +434,14 @@ class ApiServices {
     return feedResponse;
   }
 
-  Future<List<FeedData>?> getPostByUserId(var id, dynamic loggedInId) async {
+  Future<List<FeedData>?> getMyFeeds() async {
     var url = Uri.http(Config.apiUrl, Config.postByUserIdApi);
-//TODO: Correct http response for this
 
-    String requestBody = jsonEncode({
-      'userid': id,
-      'visitorid': loggedInId,
-    });
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
-
-    var response = await http.post(url, headers: header, body: requestBody);
-    var statusCode = response.statusCode;
-    var data = response.body;
-    final feedResponse = feedResponseFromJson(data);
-    // print('Like status : ${feedResponse.data![0].isliked}');
+    var response = await http.get(url, headers: await getHeaders());
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
+    }
+    final feedResponse = feedResponseFromJson(response.body);
 
     return feedResponse.data;
   }
@@ -719,26 +695,22 @@ class ApiServices {
     return true;
   }
 
-  Future<GeneralResponse> editProduct(var productId, var userId, var token,
-      var price, var description, var quantity) async {
-    var url = Uri.http(Config.apiUrl, Config.editProductApi);
+  Future<bool> editProduct(var productId, var userId, var token, var price,
+      var description, var quantity) async {
+    var url = Uri.http(Config.apiUrl, Config.editProductApi + "/$productId");
 
-    Map<String, String> header = {
-      'Content-type': 'application/json; charset=UTF-8'
-    };
     String requestBody = jsonEncode({
-      'userid': userId,
-      'token': token.toString(),
       'price': price,
       'description': description,
-      'productid': productId,
       'quantity': quantity,
     });
 
-    final response = await http.post(url, headers: header, body: requestBody);
-    final generalResponse = generalResponseFromJson(response.body);
-
-    return generalResponse;
+    final response =
+        await http.put(url, headers: await getHeaders(), body: requestBody);
+    if (response.statusCode != 200) {
+      throw Exception(getError(response));
+    }
+    return true;
   }
 
   Future createProduct(

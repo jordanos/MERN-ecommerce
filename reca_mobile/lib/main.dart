@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
                   height: 300,
                   width: MediaQuery.of(context).size.width / 1.5,
                   image: const AssetImage(
-                    'assets/images/reca logo2.png',
+                    'assets/images/rica logo.png',
                   ),
                 ),
               ),

@@ -1,11 +1,6 @@
-import 'dart:io';
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
-import 'package:reca_mobile/screens/main_page.dart';
-import 'package:reca_mobile/screens/my_shop.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/app_bar.dart';
 
@@ -163,26 +158,21 @@ class _ProductEditState extends State<ProductEdit> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      print(controller.id.toString());
-                      print(priceContoller.text.toString());
-                      print(descContoller.text.toString());
-                      print(quantityContoller.text.toString());
-                      var res = await ApiServices().editProduct(
-                        argument.productid,
-                        controller.id,
-                        controller.jwt,
-                        priceContoller.text.toString(),
-                        descContoller.text.toString(),
-                        quantityContoller.text.toString(),
-                      );
-                      if (res.status == 200) {
+                      try {
+                        var res = await ApiServices().editProduct(
+                          argument.productid,
+                          controller.id,
+                          controller.jwt,
+                          priceContoller.text.toString(),
+                          descContoller.text.toString(),
+                          quantityContoller.text.toString(),
+                        );
                         Get.back();
                         Get.snackbar('Product', 'Product edited successfully',
                             duration: const Duration(seconds: 3));
-                      } else {
-                        Get.snackbar('Product',
-                            'Product not edited, please check your inputs and try again.',
-                            duration: const Duration(seconds: 3));
+                      } catch (e) {
+                        Get.snackbar('Product', 'Product not edited, $e',
+                            duration: const Duration(seconds: 5));
                       }
                     },
                     child: const Text(

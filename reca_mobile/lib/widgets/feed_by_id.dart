@@ -1,13 +1,9 @@
-import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
-import 'package:expandable_widget/res/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reca_mobile/controller/storage_controller.dart';
 import 'package:reca_mobile/models/feed_response_model.dart';
-import 'package:reca_mobile/screens/profile_visit.dart';
 import 'package:reca_mobile/services/api_services.dart';
 import 'package:reca_mobile/widgets/feed_card.dart';
-import 'package:reca_mobile/widgets/like_button.dart';
 import 'package:reca_mobile/widgets/shimmer.dart';
 
 class FeedById extends StatefulWidget {
@@ -23,7 +19,7 @@ class _FeedByIdState extends State<FeedById> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<FeedData>?>(
-      future: ApiServices().getPostByUserId(widget.userId, controller.id),
+      future: ApiServices().getMyFeeds(),
       builder: (context, snapshot) {
         final data = snapshot.data;
 

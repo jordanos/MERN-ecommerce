@@ -361,7 +361,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 height: 2,
                                               ),
                                               Text(
-                                                '+251${controller.phone.toString()}',
+                                                '+${controller.phone.toString()}',
                                                 // phone.toString(),
                                                 // storage.read(key: "phone").toString(),
                                                 // arg![0].data[0].phonenumber.toString(),

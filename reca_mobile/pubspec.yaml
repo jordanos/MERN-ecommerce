@@ -41,7 +41,7 @@ dev_dependencies:
 
 flutter_native_splash:
   color: "#f7921f"
-  image: "assets/images/reca logo2.png"
+  image: "assets/images/rica splash.png"
   android: true
   ios: true
 

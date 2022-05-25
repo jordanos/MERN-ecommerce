@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reca_mobile/screens/home_page.dart';
-import 'package:reca_mobile/screens/main_page.dart';
 import 'package:reca_mobile/screens/sign_in.dart';
 
 class IntroPage extends StatelessWidget {
@@ -19,7 +17,7 @@ class IntroPage extends StatelessWidget {
               height: 50,
             ),
             Image(
-              image: const AssetImage('assets/images/reca logo2.png'),
+              image: const AssetImage('assets/images/rica splash.png'),
               width: MediaQuery.of(context).size.width * .6,
               height: 100,
             ),
@@ -101,7 +99,7 @@ class IntroPage1 extends StatelessWidget {
               height: 50,
             ),
             Image(
-              image: const AssetImage('assets/images/reca logo2.png'),
+              image: const AssetImage('assets/images/rica splash.png'),
               width: MediaQuery.of(context).size.width * .6,
               height: 100,
             ),
@@ -182,7 +180,7 @@ class GetStarted extends StatelessWidget {
               )),
             ),
             Image(
-              image: const AssetImage('assets/images/reca logo2.png'),
+              image: const AssetImage('assets/images/rica splash.png'),
               width: MediaQuery.of(context).size.width * .6,
               height: 100,
             ),

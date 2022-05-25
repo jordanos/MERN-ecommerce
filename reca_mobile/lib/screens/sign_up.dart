@@ -67,13 +67,13 @@ class _SignUpState extends State<SignUp> {
                             ),
                           ),
                           Positioned(
-                            top: 100,
+                            top: 80,
                             child: Container(
                               child: const Image(
                                   image: AssetImage(
-                                      'assets/images/reca logo2.png')),
-                              width: MediaQuery.of(context).size.width * .6,
-                              height: 100,
+                                      'assets/images/rica logo.png')),
+                              width: MediaQuery.of(context).size.width * .9,
+                              height: 150,
                             ),
                           ),
                         ],
