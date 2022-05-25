@@ -113,7 +113,7 @@ router
    *             $ref: '#/components/schemas/User'
    *     responses:
    *       "201":
-   *         description: returnes data object with acknowledged=true.
+   *         description: returns data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
@@ -174,7 +174,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .put(loginReq, authorizeReq(User), updateUser)
+  .put(loginReq,authorizeReq(User), updateUser)
   /**
    *@swagger
    *path:
