@@ -49,6 +49,7 @@ const followsRoute = require('./routes/follows');
 const authRoute = require('./routes/auth');
 const feedsRoute = require('./routes/feeds');
 const likesRoute = require('./routes/likes');
+const conversationsRoute = require('./routes/conversations');
 const messagesRoute = require('./routes/messages');
 const notificationsRoute = require('./routes/notifications');
 const packageRoute = require('./routes/packageTypes');
@@ -57,7 +58,6 @@ const rateRoute = require('./routes/rates');
 const userPackageRoute = require('./routes/userPackage');
 const adminRoute = require('./routes/admin');
 const appRoute = require('./routes/appRoute');
-
 
 // Use Routes
 const apiVersion = '/api/v1';
@@ -69,6 +69,7 @@ app.use(`${apiVersion}/follows`, followsRoute);
 app.use(`${apiVersion}/auth`, authRoute);
 app.use(`${apiVersion}/feeds`, feedsRoute);
 app.use(`${apiVersion}/likes`, likesRoute);
+app.use(`${apiVersion}/conversations`, conversationsRoute);
 app.use(`${apiVersion}/messages`, messagesRoute);
 app.use(`${apiVersion}/notifications`, notificationsRoute);
 app.use(`${apiVersion}/packages`, packageRoute);
@@ -79,7 +80,6 @@ app.use(`${apiVersion}/userpackages`, userPackageRoute);
 app.use(`${apiVersion}/admin`, adminRoute);
 
 app.use(`${apiVersion}/app`, appRoute);
-
 
 const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware

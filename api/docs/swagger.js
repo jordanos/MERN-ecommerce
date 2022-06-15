@@ -9,7 +9,7 @@ exports.options = {
           name: 'Authorization',
           description: '',
         },
-        value: 'Bearer <JWT>',
+        value: '<JWT>',
       },
     },
   },
@@ -32,7 +32,7 @@ exports.swaggerOptions = {
       securitySchemes: {
         bearerAuth: {
           type: 'apiKey',
-          name: 'authorization',
+          name: 'Authorization',
           scheme: 'bearer',
           in: 'header',
         },

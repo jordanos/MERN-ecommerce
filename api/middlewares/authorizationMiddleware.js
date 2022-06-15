@@ -4,6 +4,7 @@ const Message = require('../models/Message');
 const Admin = require('../models/Admin');
 const User = require('../models/User');
 const UnauthorizedError = require('../utils/UnauthorizedError');
+const Conversation = require('../models/Conversation');
 
 // checks if a user is authorized to get/update thid user resource
 exports.authorizeUser = (req, res, next) => {
@@ -39,6 +40,18 @@ exports.authorizeReq = function outer(model) {
     return next();
   }
 
+  async function innerConversation(req, res, next) {
+    const doc = await model.findById(req.params.id);
+    if (
+      !doc ||
+      (!doc.fromId.equals(new mongoose.Types.ObjectId(req.user.id)) &&
+        !doc.toId.equals(new mongoose.Types.ObjectId(req.user.id)))
+    )
+      return next(new UnauthorizedError());
+
+    return next();
+  }
+
   async function innerFollow(req, res, next) {
     const doc = await model.findById(req.params.id);
     if (
@@ -53,6 +66,8 @@ exports.authorizeReq = function outer(model) {
   if (model === User) return innerUser;
   if (model === Message) return innerMessage;
   if (model === Follow) return innerFollow;
+  if (model === Conversation) return innerConversation;
+
   return inner;
 };
 

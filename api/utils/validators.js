@@ -2,6 +2,7 @@ const Joi = require('joi');
 const CustomError = require('./CustomError');
 const Feed = require('../models/Feed');
 const User = require('../models/User');
+const Conversation = require('../models/Conversation');
 
 // schema options
 const options = {
@@ -75,7 +76,7 @@ const likeFeedSchema = Joi.object({
 
 const messageSchema = Joi.object({
   text: Joi.string().required(),
-  toId: Joi.string().hex().length(24).required(),
+  conversationId: Joi.string().hex().length(24).required(),
 });
 
 const notificationSchema = Joi.object({
@@ -184,11 +185,10 @@ exports.validateMessageInput = async (req) => {
     throw new CustomError(error.message, 400);
   }
   // check if reference exists
-  const fromDoc = await User.findById(req.body.fromId);
-  const toDoc = await User.findById(req.body.toId);
-  if (!fromDoc || !toDoc) {
+  const conversationDoc = await Conversation.findById(req.body.conversationId);
+  if (!conversationDoc) {
     throw new CustomError(
-      "sender or receiver object reference error. id doesn't exist!",
+      "conversation object reference error. id doesn't exist!",
       400
     );
   }
