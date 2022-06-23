@@ -1,13 +1,28 @@
 const mongoose = require('mongoose');
 
-const UserPackageSchema = new mongoose.Schema({
-  PackageId: { type: mongoose.Schema.Types.ObjectId, ref: 'PackageType' },
-  UserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  isActive: {type:Boolean},
-  createdAt: {
-    type: Date,
-    default: Date.now(),
+const UserPackageSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    packageId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Package',
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
   },
-});
-module.exports = mongoose.model("UserPackage", UserPackageSchema);
+  {
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true },
+  }
+);
 
+module.exports = mongoose.model('UserPackage', UserPackageSchema);

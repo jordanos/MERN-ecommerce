@@ -174,7 +174,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .put(loginReq,authorizeReq(User), updateUser)
+  .put(loginReq, authorizeReq(User), updateUser)
   /**
    *@swagger
    *path:
@@ -197,7 +197,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/User'
    */
-  .delete(loginReq, authorizeReq, deleteUser);
+  .delete(loginReq, authorizeReq(User), deleteUser);
 
 /**
  *@swagger

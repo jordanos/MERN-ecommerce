@@ -6,14 +6,12 @@ const {
   getOne,
   updateOne,
   deleteOne,
-  getConvMessages,
-} = require('../controllers/messageController');
+} = require('../controllers/conversationController');
 
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
 const Conversation = require('../models/Conversation');
-const Message = require('../models/Message');
 
 const router = express.Router();
 
@@ -22,41 +20,40 @@ const router = express.Router();
  *@swagger
  *components:
  *  schemas:
- *    Message:
+ *    Conversation:
  *      type: object
  *      required:
- *        - text
- *        - conversationId
+ *        - toId
  *      properties:
  *        id:
  *          type: String
  *          description: The auto-generated id of the document.
- *        conversationId:
+ *        fromId:
  *          type: String
- *          description: id of the conversation.
- *        text:
+ *          description: id of the sender.
+ *        toId:
  *          type: String
- *          description: text of the message.
+ *          description: id of the reciever.
  *        type:
  *          type: String
- *          description: message type.
- *        status:
- *          type: String
- *          description: message status read, unread.
+ *          description: Conversation type.
  *        createdAt:
  *          type: string
  *          format: date
  *          description: The date of the record creation.
+ *        updatedAt:
+ *          type: string
+ *          format: date
+ *          description: The date of the record update.
  *      example:
- *        conversationId: fa124b57a700cccb21b45be1
- *        text: "hello"
+ *        toId: fa124b57a700cccb21b45be1
  */
 
 /**
  *@swagger
  *tags:
- *  name: Messages
- *  description: API to manage Messages.
+ *  name: Conversations
+ *  description: API to manage Conversations.
  */
 
 router
@@ -64,10 +61,10 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/messages?skip=0:
+   * /api/v1/conversations?skip=0:
    *   get:
-   *     summary: Lists all the messages
-   *     tags: [Messages]
+   *     summary: Lists all the Conversations
+   *     tags: [Conversations]
    *     parameters:
    *     - in: query
    *       name: skip
@@ -76,33 +73,33 @@ router
    *       description: pagination value to skip to
    *     responses:
    *       "200":
-   *         description: list of Messages.
+   *         description: list of Conversations.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Message'
+   *               $ref: '#/components/schemas/Conversation'
    */
   .get(loginReq, getAll)
   /**
    *@swagger
    *path:
-   * /api/v1/messages:
+   * /api/v1/conversations:
    *   post:
-   *     summary: Creates a Message.
-   *     tags: [Messages]
+   *     summary: Creates a Conversation.
+   *     tags: [Conversations]
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/Message'
+   *             $ref: '#/components/schemas/Conversation'
    *     responses:
    *       "201":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Message'
+   *               $ref: '#/components/schemas/Conversation'
    */
   .post(loginReq, createOne);
 
@@ -111,110 +108,77 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/messages/{id}:
+   * /api/v1/conversations/{id}:
    *   get:
-   *     summary: gets a Message object.
-   *     tags: [Messages]
+   *     summary: gets a Conversation object.
+   *     tags: [Conversations]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The Message id
+   *         description: The Conversation id
    *     responses:
    *       "200":
-   *         description: returnes a Message object.
+   *         description: returnes a Conversation object.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Message'
+   *               $ref: '#/components/schemas/Conversation'
    */
   .get(loginReq, getOne)
   /**
    *@swagger
    *path:
-   * /api/v1/messages/{id}:
+   * /api/v1/conversations/{id}:
    *   put:
-   *     summary: edits/updates a Message.
-   *     tags: [Messages]
+   *     summary: edits/updates a Conversation.
+   *     tags: [Conversations]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The Message id
+   *         description: The Conversation id
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/Message'
+   *             $ref: '#/components/schemas/Conversation'
    *     responses:
    *       "200":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Message'
+   *               $ref: '#/components/schemas/Conversation'
    */
-  .put(loginReq, authorizeReq(Message), updateOne)
+  .put(loginReq, authorizeReq(Conversation), updateOne)
   /**
    *@swagger
    *path:
-   * /api/v1/messages/{id}:
+   * /api/v1/conversations/{id}:
    *   delete:
-   *     summary: deletes a Message.
-   *     tags: [Messages]
+   *     summary: deletes a Conversation.
+   *     tags: [Conversations]
    *     parameters:
    *       - in: path
    *         name: id
    *         schema:
    *           type: string
    *         required: true
-   *         description: The Message id
+   *         description: The Conversation id
    *     responses:
    *       "200":
    *         description: returnes data object with acknowledged=true.
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Message'
+   *               $ref: '#/components/schemas/Conversation'
    */
-  .delete(loginReq, authorizeReq(Message), deleteOne);
+  .delete(loginReq, authorizeReq(Conversation), deleteOne);
 
-/**
- *@swagger
- *path:
- * /api/v1/messages/conversation/{id}?skip=0:
- *   get:
- *     summary: Lists all messages in a conversation
- *     tags: [Messages]
- *     parameters:
- *     - in: path
- *       name: id
- *       schema:
- *         type: string
- *       required: true
- *       description: The conversation id
- *     - in: query
- *       name: skip
- *       schema:
- *         type: integer
- *       description: pagination value to skip to
- *     responses:
- *       "200":
- *         description: list of Messages.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Message'
- */
-router.get(
-  '/conversation/:id',
-  loginReq,
-  authorizeReq(Conversation),
-  getConvMessages
-);
 module.exports = router;

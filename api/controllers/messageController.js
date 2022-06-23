@@ -9,14 +9,13 @@ const {
 } = require('./templates');
 const { validateMessageInput } = require('../utils/validators');
 
+const populateConversation = { path: 'conversationId', select: 'toId fromId' };
+
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.execute();
-};
+  getAll.populate.push(populateConversation);
+  // getAll.filter = { $or: [{ toId: req.user.id }, { fromId: req.user.id }] };
 
-exports.getMy = (req, res, next) => {
-  const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.filter = { $or: [{ toId: req.user.id }, { fromId: req.user.id }] };
   getAll.execute();
 };
 
@@ -45,4 +44,11 @@ exports.updateOne = (req, res, next) => {
 exports.deleteOne = (req, res, next) => {
   const deleteOne = new DeleteOne(req, res, next, Message, 'Message');
   deleteOne.execute();
+};
+
+exports.getConvMessages = (req, res, next) => {
+  const getAll = new GetAll(req, res, next, Message, 'Message');
+  const conversationId = req.params.id;
+  getAll.filter = { conversationId };
+  getAll.execute();
 };

@@ -2,27 +2,22 @@ const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema(
   {
+    conversationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Conversation',
+      required: [true, 'conversation id is required'],
+    },
     text: {
       type: String,
-      required: [true, 'Please provide a text'],
-    },
-    fromId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'sender id is required'],
-    },
-    toId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'reciever id is required'],
+      required: [true, 'please provide a text'],
     },
     type: {
       type: String,
-      default: 'normal',
+      default: 'text',
     },
     status: {
       type: String,
-      default: 'unread',
+      default: 'sent',
     },
     createdAt: {
       type: Date,
@@ -34,5 +29,28 @@ const MessageSchema = new mongoose.Schema(
     toObject: { getters: true, virtuals: true },
   }
 );
+
+// class MessageStatus {
+//   static Sent = new MessageStatus('sent');
+//   static Delivered = new MessageStatus('delivered');
+//   static Read = new MessageStatus('read');
+
+//   constructor(status) {
+//     this.status = status;
+//   }
+// }
+
+// const getMessageStatus = (status) => {
+//   switch (status) {
+//     case MessageStatus.Sent:
+//       return 'sent';
+//     case MessageStatus.Delivered:
+//       return 'delivered';
+//     case MessageStatus.Read:
+//       return 'read';
+//     default:
+//       throw new Error('Message status unknown.');
+//   }
+// };
 
 module.exports = mongoose.model('Message', MessageSchema);

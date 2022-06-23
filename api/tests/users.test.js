@@ -1,6 +1,5 @@
 const { expect, describe, beforeAll, afterAll, it } = global;
 const request = require('supertest');
-const jwt = require('jsonwebtoken');
 const app = require('../app');
 const User = require('../models/User');
 const Follow = require('../models/Follow');
@@ -11,17 +10,11 @@ const {
   seedUser2,
   seedFollow1,
   seedFollow2,
+  token1,
+  token2,
 } = require('../_seedData/testData');
 
-const token1 = jwt.sign({ id: seedUser1._id }, process.env.SECRET_KEY, {
-  expiresIn: '9999d',
-});
-
-const token2 = jwt.sign({ id: seedUser2._id }, process.env.SECRET_KEY, {
-  expiresIn: '9999d',
-});
-
-const { userSchema, followSchema } = require('./schemas');
+const { userSchema, followSchema, userSchemaGetOne } = require('./schemas');
 
 // /users integration test
 describe('Users API endpoint', () => {
@@ -108,7 +101,9 @@ describe('Users API endpoint', () => {
       .expect('Content-Type', /json/)
       .expect(200)
       .then((response) => {
-        expect(response.body.data).toEqual(expect.objectContaining(userSchema));
+        expect(response.body.data).toEqual(
+          expect.objectContaining(userSchemaGetOne)
+        );
       }));
 
   it('PUT /users/:id -> edits a user', () =>
@@ -135,6 +130,23 @@ describe('Users API endpoint', () => {
           })
         );
       }));
+});
+
+// follows integration test
+describe('Users API endpoint', () => {
+  beforeAll(async () => {
+    await connect();
+    await User.create(seedUser1);
+    await User.create(seedUser2);
+    await Follow.create(seedFollow1);
+  });
+  afterAll(async () => {
+    await Follow.deleteOne({ _id: seedFollow1.id });
+    await Follow.deleteOne({ _id: seedFollow2.id });
+    await User.deleteOne({ _id: seedUser1.id });
+    await User.deleteOne({ _id: seedUser2.id });
+    await disconnect();
+  });
 
   // follows
   it('GET /follows -> list of follows', () =>
@@ -204,19 +216,19 @@ describe('Users API endpoint', () => {
         );
       }));
 
-  it('DELETE /follows/:id -> deletes a follow', () =>
-    request(app)
-      .delete(`/api/v1/follows/${seedFollow1.id}`)
-      .set('Authorization', token2)
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .then((response) => {
-        expect(response.body.data).toEqual(
-          expect.objectContaining({
-            acknowledged: expect.any(Boolean),
-          })
-        );
-      }));
+  // it('DELETE /follows/:id -> deletes a follow', () =>
+  //   request(app)
+  //     .delete(`/api/v1/follows/${seedFollow1.id}`)
+  //     .set('Authorization', token2)
+  //     .expect('Content-Type', /json/)
+  //     .expect(200)
+  //     .then((response) => {
+  //       expect(response.body.data).toEqual(
+  //         expect.objectContaining({
+  //           acknowledged: expect.any(Boolean),
+  //         })
+  //       );
+  //     }));
 
   it('GET /follows/followings/:id -> list of following users', () =>
     request(app)

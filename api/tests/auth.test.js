@@ -43,27 +43,27 @@ describe('Users API endpoint', () => {
         );
       }));
 
-  it('POST /auth/sendotp -> send otp for a user', () =>
-    request(app)
-      .post(`/api/v1/auth/sendotp/${seedUser1.id}`)
-      .send()
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .then((response) => {
-        expect(response.body.data).toEqual(
-          expect.objectContaining({ success: true })
-        );
-      }));
+  // it('POST /auth/sendotp -> send otp for a user', () =>
+  //   request(app)
+  //     .post(`/api/v1/auth/sendotp/${seedUser1.id}`)
+  //     .send()
+  //     .expect('Content-Type', /json/)
+  //     .expect(200)
+  //     .then((response) => {
+  //       expect(response.body.data).toEqual(
+  //         expect.objectContaining({ success: true })
+  //       );
+  //     }));
 
-  it('POST /auth/verify -> verify user', () =>
-    request(app)
-      .post(`/api/v1/auth/verify/${seedUser1.id}`)
-      .send({ otp: 123456 })
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .then((response) => {
-        expect(response.body.data).toEqual(
-          expect.objectContaining({ success: true })
-        );
-      }));
+  // it('POST /auth/verify -> verify user', () =>
+  //   request(app)
+  //     .post(`/api/v1/auth/verify/${seedUser1.id}`)
+  //     .send({ otp: 123456 })
+  //     .expect('Content-Type', /json/)
+  //     .expect(200)
+  //     .then((response) => {
+  //       expect(response.body.data).toEqual(
+  //         expect.objectContaining({ success: true })
+  //       );
+  //     }));
 });
