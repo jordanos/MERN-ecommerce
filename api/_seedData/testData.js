@@ -158,7 +158,7 @@ exports.seedTransaction1 = {
   amount: 10,
   transactionMethodId: this.seedTransactionMethod1.id,
   type: 'INCOMING',
-  currency: 'COIN',
+  currency: 'MONEY',
   status: 'PENDING',
   createdAt: '2022-03-14T08:34:39.297Z',
   _id: '618efe3d2a8345cd7bb07a6a',
@@ -189,6 +189,26 @@ exports.seedTransactionMethod2 = {
   createdAt: '2022-03-14T08:34:39.297Z',
   _id: '938efe3d2a8345cd7bb07a6a',
   id: '938efe3d2a8345cd7bb07a6a',
+};
+
+exports.seedIpn1 = {
+  body: 'some req.body message',
+  from: '110.2.1.1',
+  amount: this.seedTransaction1.amount,
+  transactionId: this.seedTransaction1.id,
+  status: 'Paid',
+  createdAt: '2022-03-14T08:34:39.297Z',
+  _id: '939efe3d2a8345cd7bb07a6a',
+  id: '939efe3d2a8345cd7bb07a6a',
+};
+
+exports.seedIpnYenepay = {
+  Amount: this.seedTransaction2.amount,
+  TransactionId: this.seedTransaction2.id,
+  Status: 'Paid',
+  createdAt: '2022-03-14T08:34:39.297Z',
+  _id: '936efe3d2a8345cd7bb07a6a',
+  id: '936efe3d2a8345cd7bb07a6a',
 };
 
 // exports.seedTask1 = {

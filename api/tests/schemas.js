@@ -175,3 +175,13 @@ exports.transactionMethodSchema = {
   name: expect.any(String),
   createdAt: expect.any(String),
 };
+
+exports.ipnSchema = {
+  id: expect.any(String),
+  body: expect.any(String),
+  from: expect.any(String),
+  amount: expect.any(Number),
+  transactionId: expect.any(String),
+  status: expect.any(String),
+  createdAt: expect.any(String),
+};
