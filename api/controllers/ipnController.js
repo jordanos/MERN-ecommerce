@@ -19,7 +19,7 @@ exports.createOne = async (req, res, next) => {
 
     // add IpnModel to database
     await Ipn.create({
-      message: JSON.stringify(req.body),
+      body: JSON.stringify(req.body),
       from: ipnModel.from,
       amount: ipnModel.amount,
       transactionId: ipnModel.transactionId,

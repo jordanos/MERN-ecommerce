@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const IpnSchema = new mongoose.Schema(
   {
-    message: {
+    body: {
       type: String,
       required: true,
     },
@@ -28,9 +28,8 @@ const IpnSchema = new mongoose.Schema(
     },
   },
   {
-    toObject: {},
-    toJSON: {},
-    runSettersOnQuery: true,
+    toObject: { getters: true, setters: true, virtuals: true },
+    toJSON: { getters: true, setters: true, virtuals: true },
   }
 );
 
