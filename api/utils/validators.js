@@ -11,13 +11,25 @@ const options = {
   stripUnknown: true, // remove unknown props
 };
 
-const userSchema = Joi.object().keys({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string()
-    .length(12)
-    .pattern(/^[0-9]+$/),
-  password: Joi.string().min(6),
+const userSchema = Joi.when(Joi.ref('$method'), {
+  is: 'PUT',
+  then: Joi.object().keys({
+    name: Joi.string(),
+    email: Joi.string().email(),
+    phone: Joi.string()
+      .length(12)
+      .pattern(/^[0-9]+$/),
+    password: Joi.string().min(6),
+  }),
+  otherwise: Joi.object().keys({
+    name: Joi.string().required(),
+    email: Joi.string().email(),
+    phone: Joi.string()
+      .length(12)
+      .pattern(/^[0-9]+$/)
+      .required(),
+    password: Joi.string().min(6).required(),
+  }),
 });
 
 const productSchema = Joi.when(Joi.ref('$method'), {
@@ -56,6 +68,12 @@ const followSchema = Joi.object({
 const packageSchema = Joi.object({
   name: Joi.string().required(),
   price: Joi.number().required(),
+  maxPosts: Joi.number().required(),
+  expiresAfter: Joi.number().required(),
+});
+
+const userPackageSchema = Joi.object({
+  packageId: Joi.string().hex().length(24).required(),
 });
 
 const adminSchema = Joi.object({
@@ -91,6 +109,17 @@ const rateSchema = Joi.object({
   text: Joi.string(),
 });
 
+const transactionSchema = Joi.object({
+  amount: Joi.number().required(),
+  transactionMethodId: Joi.string().hex().length(24).required(),
+  type: Joi.string().valid('INCOMING', 'OUTGOING').required(),
+  currency: Joi.string().valid('COIN', 'MONEY').required(),
+});
+
+const transactionMethodSchema = Joi.object({
+  name: Joi.string().required(),
+});
+
 exports.validateUserInput = async (req) => {
   const { error } = userSchema.validate(req.body, options);
   if (error) {
@@ -100,6 +129,13 @@ exports.validateUserInput = async (req) => {
 
 exports.validatePackageInput = async (req) => {
   const { error } = packageSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+};
+
+exports.validateUserPackageInput = async (req) => {
+  const { error } = userPackageSchema.validate(req.body, options);
   if (error) {
     throw new CustomError(error.message, 400);
   }
@@ -208,6 +244,20 @@ exports.validateNotificationInput = async (req) => {
 
 exports.validateRateInput = async (req) => {
   const { error } = rateSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+};
+
+exports.validateTransactionInput = async (req) => {
+  const { error } = transactionSchema.validate(req.body, options);
+  if (error) {
+    throw new CustomError(error.message, 400);
+  }
+};
+
+exports.validateTransactionMethodInput = async (req) => {
+  const { error } = transactionMethodSchema.validate(req.body, options);
   if (error) {
     throw new CustomError(error.message, 400);
   }

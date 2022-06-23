@@ -52,12 +52,15 @@ const likesRoute = require('./routes/likes');
 const conversationsRoute = require('./routes/conversations');
 const messagesRoute = require('./routes/messages');
 const notificationsRoute = require('./routes/notifications');
-const packageRoute = require('./routes/packageTypes');
+const packageRoute = require('./routes/packages');
 const searchRoute = require('./routes/search');
 const rateRoute = require('./routes/rates');
-const userPackageRoute = require('./routes/userPackage');
+const userPackageRoute = require('./routes/userPackages');
 const adminRoute = require('./routes/admin');
 const appRoute = require('./routes/appRoute');
+const transactionRoute = require('./routes/transactions');
+const transactionMethodRoute = require('./routes/transactionMethods');
+const ipnRoute = require('./routes/ipnRoute');
 
 // Use Routes
 const apiVersion = '/api/v1';
@@ -75,11 +78,12 @@ app.use(`${apiVersion}/notifications`, notificationsRoute);
 app.use(`${apiVersion}/packages`, packageRoute);
 app.use(`${apiVersion}/search`, searchRoute);
 app.use(`${apiVersion}/rates`, rateRoute);
-
-app.use(`${apiVersion}/userpackages`, userPackageRoute);
+app.use(`${apiVersion}/user-packages`, userPackageRoute);
 app.use(`${apiVersion}/admin`, adminRoute);
-
 app.use(`${apiVersion}/app`, appRoute);
+app.use(`${apiVersion}/transactions`, transactionRoute);
+app.use(`${apiVersion}/transaction-methods`, transactionMethodRoute);
+app.use(`${apiVersion}/ipn`, ipnRoute);
 
 const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware

@@ -10,16 +10,50 @@ const { expect } = global;
 //   owner: expect.any(String),
 // };
 exports.productSchema = {
-  userId: expect.any(String),
+  userId: expect.objectContaining({
+    id: expect.any(String),
+    name: expect.any(String),
+  }),
   name: expect.any(String),
-  price: expect.any(String),
-  quantity: expect.any(String),
+  price: expect.any(Number),
+  quantity: expect.any(Number),
   description: expect.any(String),
-  image:expect.any(String),
+  image: expect.any(String),
   productCondition: expect.any(String),
   brand: expect.any(String),
+  tags: expect.any(Array),
   createdAt: expect.any(String),
-}
+};
+
+exports.productSchemaPost = {
+  userId: expect.any(String),
+  name: expect.any(String),
+  price: expect.any(Number),
+  quantity: expect.any(Number),
+  description: expect.any(String),
+  image: expect.any(String),
+  productCondition: expect.any(String),
+  brand: expect.any(String),
+  tags: expect.any(Array),
+  createdAt: expect.any(String),
+};
+
+exports.userSchemaGetOne = {
+  user: expect.objectContaining({
+    name: expect.any(String),
+    phone: expect.any(String),
+    email: expect.any(String),
+    address: expect.any(String),
+    image: expect.any(String),
+    status: expect.any(String),
+    createdAt: expect.any(String),
+    lastSeen: expect.any(String),
+  }),
+  feedsCount: expect.any(Number),
+  productsCount: expect.any(Number),
+  followingCount: expect.any(Number),
+  followersCount: expect.any(Number),
+};
 
 exports.userSchema = {
   name: expect.any(String),
@@ -29,6 +63,7 @@ exports.userSchema = {
   image: expect.any(String),
   status: expect.any(String),
   createdAt: expect.any(String),
+  lastSeen: expect.any(String),
 };
 
 exports.followSchema = {
@@ -48,14 +83,36 @@ exports.adminSchema = {
 exports.feedSchema = {
   text: expect.any(String),
   image: expect.any(String),
-  owner: expect.any(String),
+  userId: expect.objectContaining({
+    id: expect.any(String),
+    name: expect.any(String),
+    image: expect.any(String),
+  }),
+  createdAt: expect.any(String),
+};
+
+exports.feedSchemaPost = {
+  text: expect.any(String),
+  image: expect.any(String),
+  userId: expect.any(String),
+  createdAt: expect.any(String),
+};
+
+exports.messageSchemaPost = {
+  text: expect.any(String),
+  conversationId: expect.any(String),
+  type: expect.any(String),
+  status: expect.any(String),
   createdAt: expect.any(String),
 };
 
 exports.messageSchema = {
   text: expect.any(String),
-  toId: expect.any(String),
-  fromId: expect.any(String),
+  conversationId: expect.objectContaining({
+    toId: expect.any(String),
+    fromId: expect.any(String),
+  }),
+  type: expect.any(String),
   status: expect.any(String),
   createdAt: expect.any(String),
 };
@@ -66,5 +123,55 @@ exports.notificationSchema = {
   userId: expect.any(String),
   type: expect.any(String),
   status: expect.any(String),
+  createdAt: expect.any(String),
+};
+
+exports.packageSchema = {
+  id: expect.any(String),
+  name: expect.any(String),
+  price: expect.any(Number),
+  maxPosts: expect.any(Number),
+  expiresAfter: expect.any(Number),
+  image: expect.any(String),
+  createdAt: expect.any(String),
+};
+
+exports.userPackageSchema = {
+  id: expect.any(String),
+  userId: expect.objectContaining({
+    id: expect.any(String),
+    name: expect.any(String),
+  }),
+  packageId: expect.objectContaining({
+    id: expect.any(String),
+    name: expect.any(String),
+    price: expect.any(Number),
+  }),
+  isActive: expect.any(Boolean),
+  createdAt: expect.any(String),
+};
+
+exports.userPackageSchemaPost = {
+  id: expect.any(String),
+  userId: expect.any(String),
+  packageId: expect.any(String),
+  isActive: expect.any(Boolean),
+  createdAt: expect.any(String),
+};
+
+exports.transactionSchema = {
+  id: expect.any(String),
+  userId: expect.any(String),
+  amount: expect.any(Number),
+  transactionMethodId: expect.any(String),
+  type: expect.any(String),
+  currency: expect.any(String),
+  status: expect.any(String),
+  createdAt: expect.any(String),
+};
+
+exports.transactionMethodSchema = {
+  id: expect.any(String),
+  name: expect.any(String),
   createdAt: expect.any(String),
 };
