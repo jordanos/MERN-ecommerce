@@ -1,6 +1,8 @@
+const { factoryYenepay } = require('../entities/ipnModel');
 const Ipn = require('../models/Ipn');
 
 const { GetAll, GetOne } = require('./templates');
+const { completeTransaction } = require('./transactionController');
 // const { validateIpnInput } = require('../utils/validators');
 
 exports.getAll = (req, res, next) => {
@@ -8,9 +10,31 @@ exports.getAll = (req, res, next) => {
   getAll.execute();
 };
 
-exports.createOne = (req, res, next) => {
-  console.log(req.body);
-  res.status(201).send();
+exports.createOne = async (req, res, next) => {
+  try {
+    // console.log(req.body);
+    // send req to factory method, get Ipn model back
+    const ipnModel = factoryYenepay(req);
+    console.log(ipnModel);
+
+    // add IpnModel to database
+    await Ipn.create({
+      message: JSON.stringify(req.body),
+      from: ipnModel.from,
+      amount: ipnModel.amount,
+      transactionId: ipnModel.transactionId,
+      status: ipnModel.status,
+    });
+
+    // complete transaction if exists
+    const isComplete = await completeTransaction(ipnModel.transactionId);
+    if (!isComplete) {
+      return res.status(400).send();
+    }
+    return res.status(200).send();
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.getOne = (req, res, next) => {
