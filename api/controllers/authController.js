@@ -33,7 +33,7 @@ exports.login = async (req, res, next) => {
     // user.token = token;
     // user.save();
 
-    res.status(200).json({ data: { token, user } });
+    res.status(200).json({ token, user });
   } catch (e) {
     next(e);
   }
@@ -57,7 +57,7 @@ exports.adminLogin = async (req, res, next) => {
     // user.token = token;
     // user.save();
 
-    res.status(200).json({ data: { token, admin } });
+    res.status(200).json({ token, admin });
   } catch (e) {
     next(e);
   }
@@ -68,13 +68,13 @@ exports.logout = async (req, res, next) => {
     const { token } = req.params;
     // check if token is already blacklisted, if true return
     const docToken = await TokenBlackList.findOne({ token });
-    if (docToken) return res.status(200).json({ data: { success: true } });
+    if (docToken) return res.status(200).json({ success: true });
 
     const doc = await TokenBlackList.create({ token });
     if (!doc) {
       throw new Error('something went wrong', 500);
     }
-    return res.status(200).json({ data: { success: true } });
+    return res.status(200).json({ success: true });
   } catch (e) {
     return next(e);
   }
@@ -107,7 +107,7 @@ exports.sendOtp = async (req, res, next) => {
     // dispatch otp sending api
 
     // send success message
-    res.status(200).json({ data: { success: true } });
+    res.status(200).json({ success: true });
   } catch (e) {
     next(e);
   }
@@ -137,7 +137,7 @@ exports.verify = async (req, res, next) => {
     user.isVerified = true;
     user.save();
 
-    res.status(200).json({ data: { success: true } });
+    res.status(200).json({ success: true });
   } catch (e) {
     next(e);
   }

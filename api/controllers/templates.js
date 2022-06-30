@@ -81,9 +81,7 @@ exports.CreateOne = class CreateOne extends BaseTemplate {
   }
 
   performReq() {
-    this.res.status(201).json({
-      data: this.doc,
-    });
+    this.res.status(201).json(this.doc);
   }
 };
 
@@ -107,9 +105,7 @@ exports.GetOne = class GetOne extends BaseTemplate {
         404
       );
     }
-    this.res.status(200).json({
-      data: this.doc,
-    });
+    this.res.status(200).json(this.doc);
   }
 };
 
@@ -135,9 +131,7 @@ exports.UpdateOne = class UpdateOne extends BaseTemplate {
         404
       );
 
-    this.res.status(200).json({
-      data: this.doc,
-    });
+    this.res.status(200).json(this.doc);
   }
 };
 
@@ -151,8 +145,6 @@ exports.DeleteOne = class DeleteOne extends BaseTemplate {
   }
 
   performReq() {
-    this.res.status(200).json({
-      data: this.doc,
-    });
+    this.res.status(200).json(this.doc);
   }
 };
