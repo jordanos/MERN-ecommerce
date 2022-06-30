@@ -1,8 +1,8 @@
-import HomePage from "presentation/views/HomePage";
+import Home from "presentation/views/Home";
 import React from "react";
 
 const App: React.FC = () => {
-  return <HomePage />;
+  return <Home />;
 };
 
 export default App;

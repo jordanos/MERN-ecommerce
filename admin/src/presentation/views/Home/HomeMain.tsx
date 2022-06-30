@@ -1,9 +1,7 @@
-import {
-  StyledLargCard,
-  StyledMediumCard,
-  StyledMediumLargCard,
-  StyledSmallCard,
-} from "core/components/styles/StyledCard";
+import CardHeader from "core/components/CardHeader";
+import LargeCard from "core/components/LargeCard";
+import MediumCard from "core/components/MediumCard";
+import SmallCard from "core/components/SmallCard";
 import React from "react";
 
 const HomeMain: React.FC = () => {
@@ -15,9 +13,15 @@ const HomeMain: React.FC = () => {
           flexDirection: "row",
         }}
       >
-        <StyledSmallCard />
-        <StyledSmallCard />
-        <StyledSmallCard />
+        <SmallCard>
+          <CardHeader title="Products" />
+        </SmallCard>
+        <SmallCard>
+          <CardHeader title="Users" />
+        </SmallCard>
+        <SmallCard>
+          <CardHeader title="Packages" />
+        </SmallCard>
       </div>
       <div
         style={{
@@ -28,17 +32,16 @@ const HomeMain: React.FC = () => {
           marginTop: "1em",
         }}
       >
-        <StyledLargCard />
+        <LargeCard />
         <div
           style={{
-            width: "25%",
-            height: "420px",
             display: "flex",
             flexDirection: "column",
           }}
         >
-          <StyledMediumCard />
-          <StyledMediumLargCard />
+          <MediumCard>
+            <CardHeader title="Packages Bought" count={10} />
+          </MediumCard>
         </div>
       </div>
     </>
