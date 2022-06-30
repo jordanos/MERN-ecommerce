@@ -5,6 +5,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+// const multer = require('multer');
+
+// const upload = multer();
 
 // pagination
 const paginate = require('express-paginate');
@@ -18,6 +21,10 @@ app.disable('etag');
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// for parsing multipart/form-data
+// app.use(upload.array());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));
 app.use(cors());

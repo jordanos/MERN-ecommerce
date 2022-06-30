@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 exports.seedUser1 = {
-  name: 'kebede',
+  firstName: 'kebede',
+  lastName: 'Abebe',
   phone: '251919803123',
   email: 'alemu@xyz.com',
   password: '123456',
@@ -10,13 +11,15 @@ exports.seedUser1 = {
   status: 'active',
   isVerified: true,
   balance: 100,
+  referral: '123234',
   createdAt: '2022-03-14T08:28:54.019Z',
   id: '622efd0f9676958c4d2732cc',
   _id: '622efd0f9676958c4d2732cc',
 };
 
 exports.seedUser2 = {
-  name: 'abebu',
+  firstName: 'kebede',
+  lastName: 'Abebe',
   phone: '251919803125',
   email: 'abebu@xyz.com',
   password: '123456',
@@ -25,6 +28,7 @@ exports.seedUser2 = {
   status: 'active',
   isVerified: true,
   balance: 100,
+  referral: '123234',
   createdAt: '2022-03-14T08:34:39.297Z',
   id: '622efe5d7a8344cd7bb07a6a',
   _id: '622efe5d7a8344cd7bb07a6a',

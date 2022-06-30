@@ -15,7 +15,6 @@ const Admin = require('../models/Admin');
 
 const Feed = require('../models/Feed');
 const Follow = require('../models/Follow');
-const { FormatPhone } = require('../utils/Formatter');
 
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
@@ -23,15 +22,7 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.createUser = (req, res, next) => {
-  let modifiedReq = req;
-  const formatPhone = new FormatPhone();
-  const { phone } = req.body;
-  if (phone)
-    modifiedReq = {
-      ...req,
-      body: { ...req.body, phone: formatPhone.exec(phone) },
-    };
-  const createOne = new CreateOne(modifiedReq, res, next, User, 'user');
+  const createOne = new CreateOne(req, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown
   createOne.validate = validateUserInput;
 
@@ -74,16 +65,7 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  let modifiedReq = req;
-  const formatPhone = new FormatPhone();
-  const { phone } = req.body;
-  if (phone)
-    modifiedReq = {
-      ...req,
-      body: { ...req.body, phone: formatPhone.exec(phone) },
-    };
-
-  const updateOne = new UpdateOne(modifiedReq, res, next, User, 'user');
+  const updateOne = new UpdateOne(req, res, next, User, 'user');
   // setup a vallidaion function otherwise an error will be thrown
   updateOne.validate = validateUserInput;
   // hash password if exists

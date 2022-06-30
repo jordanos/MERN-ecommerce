@@ -22,7 +22,8 @@ const userSchema = Joi.when(Joi.ref('$method'), {
     password: Joi.string().min(6),
   }),
   otherwise: Joi.object().keys({
-    name: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     email: Joi.string().email(),
     phone: Joi.string()
       .length(12)

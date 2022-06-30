@@ -7,7 +7,7 @@ const Package = require('../models/Package');
 const Transaction = require('../models/Transaction');
 const { completeTransaction } = require('./transactionController');
 
-const populateUser = { path: 'userId', select: 'name' };
+const populateUser = { path: 'userId', select: 'firstName lastName' };
 const populatePackage = {
   path: 'packageId',
   select: 'name price expiresAfter',

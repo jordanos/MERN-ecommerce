@@ -1,18 +1,10 @@
 const { expect } = global;
 
-// exports.taskSchema = {
-//   title: expect.any(String),
-//   description: expect.any(String),
-//   date: expect.any(String),
-//   status: expect.any(String),
-//   assignedTo: expect.any(String),
-//   createdAt: expect.any(String),
-//   owner: expect.any(String),
-// };
 exports.productSchema = {
   userId: expect.objectContaining({
     id: expect.any(String),
-    name: expect.any(String),
+    firstName: expect.any(String),
+    lastName: expect.any(String),
   }),
   name: expect.any(String),
   price: expect.any(Number),
@@ -40,7 +32,8 @@ exports.productSchemaPost = {
 
 exports.userSchemaGetOne = {
   user: expect.objectContaining({
-    name: expect.any(String),
+    firstName: expect.any(String),
+    lastName: expect.any(String),
     phone: expect.any(String),
     email: expect.any(String),
     address: expect.any(String),
@@ -56,7 +49,8 @@ exports.userSchemaGetOne = {
 };
 
 exports.userSchema = {
-  name: expect.any(String),
+  firstName: expect.any(String),
+  lastName: expect.any(String),
   phone: expect.any(String),
   email: expect.any(String),
   address: expect.any(String),
@@ -85,7 +79,8 @@ exports.feedSchema = {
   image: expect.any(String),
   userId: expect.objectContaining({
     id: expect.any(String),
-    name: expect.any(String),
+    firstName: expect.any(String),
+    lastName: expect.any(String),
     image: expect.any(String),
   }),
   createdAt: expect.any(String),
@@ -140,7 +135,8 @@ exports.userPackageSchema = {
   id: expect.any(String),
   userId: expect.objectContaining({
     id: expect.any(String),
-    name: expect.any(String),
+    firstName: expect.any(String),
+    lastName: expect.any(String),
   }),
   packageId: expect.objectContaining({
     id: expect.any(String),
