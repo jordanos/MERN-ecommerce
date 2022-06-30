@@ -4,9 +4,13 @@ const { userImagesPath } = require('../config');
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    firstName: {
       type: String,
-      required: [true, 'Please provide your name'],
+      required: [true, 'Please provide your first name'],
+    },
+    lastName: {
+      type: String,
+      required: [true, 'Please provide your last name'],
     },
     phone: {
       type: String,
@@ -15,6 +19,7 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      unique: true,
     },
     password: {
       type: String,
@@ -44,6 +49,9 @@ const UserSchema = new mongoose.Schema(
     balance: {
       type: Number,
       default: 0,
+    },
+    referral: {
+      type: String,
     },
     createdAt: {
       type: Date,

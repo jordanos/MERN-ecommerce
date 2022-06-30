@@ -29,16 +29,20 @@ const router = express.Router();
  *    User:
  *      type: object
  *      required:
- *        - name
+ *        - firstName
+ *        - lastName
  *        - phone
  *        - password
  *      properties:
  *        id:
  *          type: String
  *          description: The auto-generated id of the user.
- *        name:
+ *        firstName:
  *          type: string
- *          description: name of the user.
+ *          description: first name of the user.
+ *        lastName:
+ *          type: string
+ *          description: last name of the user.
  *        email:
  *          type: string
  *          description: email of user.
@@ -62,7 +66,8 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        name: "Abebe"
+ *        firstName: "Abebe"
+ *        lastName: "kebede"
  *        phone: "251919803245"
  *        password: "123456"
  */

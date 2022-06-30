@@ -12,7 +12,10 @@ const {
 const { validateProductInput } = require('../utils/validators');
 
 const populateCategory = { path: 'category', select: 'name' };
-const populateUser = { path: 'userId', select: 'name image phone' };
+const populateUser = {
+  path: 'userId',
+  select: 'firstName lastName image phone',
+};
 const populateTags = { path: 'tags', select: 'name' };
 
 exports.getProducts = (req, res, next) => {
