@@ -15,6 +15,14 @@ const Admin = require('../models/Admin');
 
 const Feed = require('../models/Feed');
 const Follow = require('../models/Follow');
+const userUpload = require('../utils/multerFormatter');
+const { userImagesPath } = require('../config');
+const saveImageFunction = require('../utils/saveImageFunction');
+
+// const userUpload = multer({
+//   storage: multer.memoryStorage(),
+//   filter,
+// }).single('image');
 
 exports.getUsers = (req, res, next) => {
   const getAll = new GetAll(req, res, next, User, 'user');
@@ -22,11 +30,38 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.createUser = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, User, 'user');
-  // setup a vallidaion function otherwise an error will be thrown
-  createOne.validate = validateUserInput;
+  // eslint-disable-next-line consistent-return
+  userUpload(req, res, async (err) => {
+    if (err) {
+      return next(err);
+    }
+    try {
+      await validateUserInput(req);
+    } catch (e) {
+      return next(e);
+    }
 
-  createOne.execute();
+    let modifiedReq = req;
+
+    if (req.file) {
+      try {
+        await saveImageFunction(req, userImagesPath);
+      } catch (e) {
+        return next(e);
+      }
+
+      modifiedReq = {
+        ...req,
+        body: { ...req.body, image: req.file.filename },
+      };
+    }
+
+    const createOne = new CreateOne(modifiedReq, res, next, User, 'user');
+    // setup a vallidaion function otherwise an error will be thrown
+    createOne.validate = () => {};
+
+    createOne.execute();
+  });
 };
 
 exports.createAdmin = (req, res, next) => {
