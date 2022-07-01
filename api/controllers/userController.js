@@ -69,10 +69,12 @@ exports.createAdmin = (req, res, next) => {
   createOne.validate = validateUserInput;
   createOne.execute();
 };
+
 exports.getAdmin = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Admin, 'user');
   getAll.execute();
 };
+
 exports.getUser = (req, res, next) => {
   const getOne = new GetOne(req, res, next, User, 'user');
   getOne.transform = async () => {
@@ -100,27 +102,45 @@ exports.getUser = (req, res, next) => {
 };
 
 exports.updateUser = async (req, res, next) => {
-  const updateOne = new UpdateOne(req, res, next, User, 'user');
-  // setup a vallidaion function otherwise an error will be thrown
-  updateOne.validate = validateUserInput;
-  // hash password if exists
-  if (req.body.password) {
-    req.body.password = await hashPassword(req.body.password);
-  }
+  // eslint-disable-next-line consistent-return
+  userUpload(req, res, async (err) => {
+    if (err) {
+      return next(err);
+    }
+    try {
+      await validateUserInput(req);
+    } catch (e) {
+      return next(e);
+    }
 
-  updateOne.execute();
+    let modifiedReq = req;
+
+    if (req.file) {
+      try {
+        await saveImageFunction(req, userImagesPath);
+      } catch (e) {
+        return next(e);
+      }
+
+      modifiedReq = {
+        ...req,
+        body: { ...req.body, image: req.file.filename },
+      };
+    }
+
+    const updateOne = new UpdateOne(modifiedReq, res, next, User, 'user');
+    // setup a vallidaion function otherwise an error will be thrown
+    updateOne.validate = () => {};
+    // hash password if exists
+    if (req.body.password) {
+      req.body.password = await hashPassword(modifiedReq.body.password);
+    }
+
+    updateOne.execute();
+  });
 };
 
 exports.deleteUser = (req, res, next) => {
   const deleteOne = new DeleteOne(req, res, next, User, 'user');
   deleteOne.execute();
-};
-
-exports.uploadImage = (req, res, next) => {
-  req.body = { image: req.file.filename };
-  const updateOne = new UpdateOne(req, res, next, User, 'user');
-  // setup a vallidaion function otherwise an error will be thrown
-  updateOne.validate = () => {};
-
-  updateOne.execute();
 };
