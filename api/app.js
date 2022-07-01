@@ -9,11 +9,13 @@ const fs = require('fs');
 
 // create media folder if it doesnt exist
 if (!fs.existsSync('./public/media')) {
-  fs.mkdirSync('./public/test/media/users', { recursive: true });
-  fs.mkdirSync('./public/test/media/products', { recursive: true });
-  fs.mkdirSync('./public/test/media/feeds', { recursive: true });
-  fs.mkdirSync('./public/test/media/categories', { recursive: true });
-  fs.mkdirSync('./public/test/media/hero', { recursive: true });
+  console.log('creating folders...');
+  fs.mkdirSync('./public/media/images/users', { recursive: true });
+  fs.mkdirSync('./public/media/images/products', { recursive: true });
+  fs.mkdirSync('./public/media/images/feeds', { recursive: true });
+  fs.mkdirSync('./public/media/images/categories', { recursive: true });
+  fs.mkdirSync('./public/media/images/hero', { recursive: true });
+  console.log('folders created');
 }
 // pagination
 const paginate = require('express-paginate');
