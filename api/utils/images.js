@@ -15,26 +15,6 @@ const imageInMemory = multer({
   fileFilter: filter,
 });
 
-// app.post('/', imageUploader.single('photo'), async (req, res, next) => {
-//   // req.file includes the buffer
-//   // path: where to store resized photo
-//   const path = `./public/img/${req.file.filename}`;
-
-//   // toFile() method stores the image on disk
-//   await sharp(req.file.buffer).resize(300, 300).toFile(path);
-//   next();
-// });
-
-// const storage = (imagePath) =>
-//   multer.memoryStorage({
-//     destination(req, file, cb) {
-//       cb(null, `./public/${imagePath}`);
-//     },
-//     filename(req, file, cb) {
-//       cb(null, Date.now() + path.extname(file.originalname));
-//     },
-//   });
-
 const imageUpload = () => imageInMemory;
 
 module.exports = imageUpload;

@@ -10,11 +10,9 @@ const filter = (req, file, cb) => {
   // }
 };
 
-const userInMemory = multer({
+const userUpload = multer({
   storage: multer.memoryStorage(),
-  fileFilter: filter,
+  filter,
 }).single('image');
-
-const userUpload = () => userInMemory;
 
 module.exports = userUpload;
