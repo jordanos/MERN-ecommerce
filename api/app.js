@@ -5,10 +5,16 @@ const dotenv = require('dotenv');
 const path = require('path');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-// const multer = require('multer');
+const fs = require('fs');
 
-// const upload = multer();
-
+// create media folder if it doesnt exist
+if (!fs.existsSync('./public/media')) {
+  fs.mkdirSync('./public/test/media/users', { recursive: true });
+  fs.mkdirSync('./public/test/media/products', { recursive: true });
+  fs.mkdirSync('./public/test/media/feeds', { recursive: true });
+  fs.mkdirSync('./public/test/media/categories', { recursive: true });
+  fs.mkdirSync('./public/test/media/hero', { recursive: true });
+}
 // pagination
 const paginate = require('express-paginate');
 
