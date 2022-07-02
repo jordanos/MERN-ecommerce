@@ -122,7 +122,10 @@ const transactionMethodSchema = Joi.object({
 });
 
 exports.validateUserInput = async (req) => {
-  const { error } = userSchema.validate(req.body, options);
+  const { error } = userSchema.validate(req.body, {
+    ...options,
+    context: { method: req.method },
+  });
   if (error) {
     throw new CustomError(error.message, 400);
   }

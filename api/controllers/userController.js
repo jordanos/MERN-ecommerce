@@ -107,6 +107,8 @@ exports.updateUser = async (req, res, next) => {
     if (err) {
       return next(err);
     }
+    console.log(req.method);
+
     try {
       await validateUserInput(req);
     } catch (e) {
