@@ -11,7 +11,7 @@ const {
 } = require('./templates');
 const { validateProductInput } = require('../utils/validators');
 
-const populateCategory = { path: 'category', select: 'name' };
+const populateCategory = { path: 'categoryId', select: 'name' };
 const populateUser = {
   path: 'userId',
   select: 'firstName lastName image phone',

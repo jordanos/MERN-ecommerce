@@ -12,16 +12,17 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    quantity: {
-      type: Number,
-      required: true,
+    isAvailable: {
+      type: Boolean,
+      default: true,
     },
     description: {
       type: String,
     },
-    productCondition: {
+    condition: {
       type: String,
       required: true,
+      enum: ['NEW', 'SLIGHTLY USED', 'USED'],
     },
     brand: {
       type: String,
@@ -36,9 +37,10 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    category: {
+    categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
+      required: true,
     },
     tags: [
       {

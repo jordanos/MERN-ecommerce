@@ -38,18 +38,16 @@ const productSchema = Joi.when(Joi.ref('$method'), {
   then: Joi.object().keys({
     name: Joi.string(),
     price: Joi.number(),
-    quantity: Joi.number().integer(),
     brand: Joi.string(),
     description: Joi.string(),
-    productCondition: Joi.string(),
+    condition: Joi.string(),
   }),
   otherwise: Joi.object().keys({
     name: Joi.string().required(),
     price: Joi.number().required(),
-    quantity: Joi.number().integer().required(),
     brand: Joi.string(),
     description: Joi.string(),
-    productCondition: Joi.string().required(),
+    condition: Joi.string().required(),
   }),
 });
 
