@@ -107,8 +107,6 @@ exports.updateUser = async (req, res, next) => {
     if (err) {
       return next(err);
     }
-    console.log(req.method);
-
     try {
       await validateUserInput(req);
     } catch (e) {
@@ -128,6 +126,12 @@ exports.updateUser = async (req, res, next) => {
         ...req,
         body: { ...req.body, image: req.file.filename },
       };
+    }
+
+    if (modifiedReq.body.password) {
+      const validatedData = req.body;
+      delete validatedData.password;
+      modifiedReq = { ...req, body: validatedData };
     }
 
     const updateOne = new UpdateOne(modifiedReq, res, next, User, 'user');
