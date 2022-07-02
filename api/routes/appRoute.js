@@ -8,8 +8,9 @@ const {
   updateHero,
   deleteHero,
   uploadImage,
-  // homePage,
 } = require('../controllers/heroController');
+
+const { getHomePage } = require('../controllers/appController');
 
 const { saveImageNoCompression } = require('../middlewares/saveImage');
 
@@ -215,6 +216,6 @@ router.put(
   uploadImage
 );
 
-// router.get('/homepage', homePage);
+router.get('/homepage', getHomePage);
 
 module.exports = router;

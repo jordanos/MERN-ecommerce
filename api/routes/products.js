@@ -57,11 +57,12 @@ const imageUpload = require('../utils/images');
  *          type: file
  *          format: binary
  *          description: image of the product.
- *        category:
- *          type: array
- *          description: category of product.
- *        ProductCondition:
+ *        categoryId:
  *          type: string
+ *          description: category of product.
+ *        condition:
+ *          type: string
+ *          enum: [NEW, SLIGHTLY USED, USED]
  *          description: condition of the product.
  *        brand:
  *          type: string
@@ -77,7 +78,8 @@ const imageUpload = require('../utils/images');
  *        name: iphone
  *        price: 20000
  *        quantity: 12
- *        productCondition: "new"
+ *        condition: NEW
+ *        categoryId: aababaaaababab2213
  */
 
 /**

@@ -48,26 +48,3 @@ exports.uploadImage = (req, res, next) => {
 
   updateOne.execute();
 };
-
-// exports.homePage = async (req, res, next) => {
-//   // getter
-//   const home = {
-//     heroImages: [],
-//     categories: [],
-//     homeProducts: [
-//       {
-//         title: "Trending",
-//         product: {}
-//       },
-//     ],
-//   }
-
-//   try {
-//     const heros = await Hero.find();
-//     const categories = await Category.find();
-//     const Trending = await Pr
-
-//   } catch(e) {
-//     next(e)
-//   }
-// }
