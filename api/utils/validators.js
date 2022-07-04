@@ -127,10 +127,14 @@ exports.validateUserInput = async (req) => {
   if (error) {
     throw new CustomError(error.message, 400);
   }
+  const userPhone = await User.findOne({ phone: req.body.phone });
+  if (userPhone) {
+    throw new CustomError('User with that phone number already exists', 410);
+  }
   if (req.body.email) {
-    const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      throw new CustomError('User with that email already exists', 400);
+    const userEmail = await User.findOne({ email: req.body.email });
+    if (userEmail) {
+      throw new CustomError('User with that email already exists', 410);
     }
   }
 };

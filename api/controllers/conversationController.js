@@ -1,4 +1,5 @@
 const Conversation = require('../models/Conversation');
+const Message = require('../models/Message');
 
 const {
   GetAll,
@@ -11,7 +12,39 @@ const { validateMessageInput } = require('../utils/validators');
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Conversation, 'Conversation');
-  getAll.filter = { $or: [{ toId: req.user.id }, { fromId: req.user.id }] };
+  getAll.filter = {
+    $or: [{ toId: req.user.id }, { fromId: req.user.id }],
+  };
+  getAll.populate.push('toId');
+  getAll.populate.push('fromId');
+
+  getAll.transform = async () => {
+    const convs = await Promise.all(
+      getAll.doc.map(async (conv) => {
+        const conversation = {
+          fromId: conv.fromId,
+          toId: conv.toId,
+          lastMessage: null,
+          unreadCount: 0,
+        };
+
+        const lastMessage = await Message.find({ conversationId: conv.id })
+          .sort('-createdAt')
+          .limit(1);
+        const unreadCount = await Message.count({
+          conversationId: conv.id,
+          status: 'SENT',
+        }).count();
+
+        conversation.lastMessage = lastMessage;
+        conversation.unreadCount = unreadCount;
+
+        return conversation;
+      })
+    );
+
+    return convs;
+  };
 
   getAll.execute();
 };

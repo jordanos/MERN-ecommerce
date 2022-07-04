@@ -2,22 +2,7 @@ const Category = require('../models/Category');
 const Hero = require('../models/Hero');
 const Product = require('../models/Product');
 
-const populateCategory = { path: 'categoryId', select: '' };
-const populateUser = { path: 'userId', select: '' };
-
 exports.getHomePage = async (req, res, next) => {
-  // getter
-  const home = {
-    heroImages: [],
-    categories: [],
-    homeProducts: [
-      {
-        title: 'Trending',
-        product: {},
-      },
-    ],
-  };
-
   try {
     const heros = await Hero.find();
     const categories = await Category.find();
