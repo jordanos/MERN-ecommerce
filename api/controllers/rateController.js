@@ -11,6 +11,8 @@ const {
 const { validateRateInput } = require('../utils/validators');
 const Product = require('../models/Product');
 
+const DEFAULT_RATE = 4.9;
+
 exports.getRatings = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Rate, 'Rate');
   getAll.execute();
@@ -25,13 +27,13 @@ exports.createRating = (req, res, next) => {
     const rates = await Rate.find({
       productId: modifiedReq.body.productId,
     }).exec();
-    let sum = 0;
+    let sum = DEFAULT_RATE;
     rates.forEach((rate) => {
       sum += rate.rate;
     });
     await Product.findOneAndUpdate(
       { _id: modifiedReq.body.productId },
-      { rate: sum / rates.length }
+      { rate: sum / (rates.length + 1) }
     ).exec();
     return createOne.doc;
   };

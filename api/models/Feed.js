@@ -10,8 +10,12 @@ const FeedSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: 'default_image.png',
-      get: (image) => formatImageUrl(feedImagesPath, image),
+      get: (image) => {
+        if (!image) {
+          return null;
+        }
+        return formatImageUrl(feedImagesPath, image);
+      },
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

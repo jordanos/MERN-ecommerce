@@ -35,7 +35,7 @@ const ProductSchema = new mongoose.Schema(
     },
     rate: {
       type: Number,
-      default: 0,
+      default: 4.9,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,

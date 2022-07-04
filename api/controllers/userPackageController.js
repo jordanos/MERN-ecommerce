@@ -49,6 +49,15 @@ exports.createUserPackage = async (req, res, next) => {
       throw new CustomError('insufficient balance', 400);
     }
 
+    // check if user has unfinished package
+    const isUserPackage = await UserPackage.findOne({ isActive: true });
+    if (isUserPackage) {
+      throw new CustomError(
+        'Dear customer, You already have an active packege.',
+        400
+      );
+    }
+
     // Perform transaction
     // Create Outgoing transaction for package and user
     const packageTransaction = {

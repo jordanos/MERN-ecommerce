@@ -17,7 +17,8 @@ const MessageSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: 'sent',
+      enum: ['SENT', 'READ'],
+      default: 'SENT',
     },
     createdAt: {
       type: Date,

@@ -10,6 +10,8 @@ const {
   UpdateOne,
 } = require('./templates');
 const { validateProductInput } = require('../utils/validators');
+const { findOne } = require('../models/Product');
+const UserPackage = require('../models/UserPackage');
 
 const populateCategory = { path: 'categoryId', select: 'name' };
 const populateUser = {
@@ -39,8 +41,20 @@ exports.getMyProducts = (req, res, next) => {
   getAll.execute();
 };
 
-exports.createProduct = (req, res, next) => {
+exports.createProduct = async (req, res, next) => {
   const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
+  // check if the user has package
+  const package = await UserPackage.findOne({
+    userId: modfiedReq.body.userId,
+    isActive: true,
+  });
+  // if (!package) {
+  //   throw new Error();
+  // }
+
+  // deduct products count
+
+  // create product
   const createOne = new CreateOne(modfiedReq, res, next, Product, 'product');
   createOne.validate = validateProductInput;
   createOne.execute();

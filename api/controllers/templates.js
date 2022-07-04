@@ -10,6 +10,7 @@ class BaseTemplate {
     this.model = model;
     this.modelName = modelName;
     // below variables are used to build query later
+    this.totalCount = 0;
     this.filter = {};
     this.sort = null;
     this.populate = [];
@@ -60,12 +61,13 @@ exports.GetAll = class GetAll extends BaseTemplate {
     // run query
     this.doc = await query.exec();
 
-    const itemCount = await this.model.count({});
-    this.pageCount = Math.ceil(itemCount / this.req.query.limit);
+    this.totalCount = await this.model.count({});
+    this.pageCount = Math.ceil(this.totalCount / this.req.query.limit);
   }
 
   performReq() {
     this.res.status(200).json({
+      count: this.totalCount,
       hasMore: this.req.query.skip / this.req.query.limit + 1 < this.pageCount,
       skip: this.req.query.skip + this.req.query.limit,
       data: this.doc,
