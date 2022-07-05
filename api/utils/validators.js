@@ -14,7 +14,8 @@ const options = {
 const userSchema = Joi.when(Joi.ref('$method'), {
   is: 'PUT',
   then: Joi.object().keys({
-    name: Joi.string(),
+    firstName: Joi.string(),
+    lastName: Joi.string(),
     email: Joi.string().email(),
     phone: Joi.string()
       .length(12)

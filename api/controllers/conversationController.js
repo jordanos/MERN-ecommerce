@@ -22,15 +22,16 @@ exports.getAll = (req, res, next) => {
     const convs = await Promise.all(
       getAll.doc.map(async (conv) => {
         const conversation = {
+          id: conv.id,
           fromId: conv.fromId,
           toId: conv.toId,
           lastMessage: null,
           unreadCount: 0,
         };
 
-        const lastMessage = await Message.find({ conversationId: conv.id })
-          .sort('-createdAt')
-          .limit(1);
+        const lastMessage = await Message.findOne({
+          conversationId: conv.id,
+        }).sort('-createdAt');
         const unreadCount = await Message.count({
           conversationId: conv.id,
           status: 'SENT',
