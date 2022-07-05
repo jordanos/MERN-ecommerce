@@ -46,9 +46,14 @@ exports.deleteOne = (req, res, next) => {
   deleteOne.execute();
 };
 
-exports.getConvMessages = (req, res, next) => {
-  const getAll = new GetAll(req, res, next, Message, 'Message');
+exports.getConvMessages = async (req, res, next) => {
   const conversationId = req.params.id;
+
+  // update read status
+  if (conversationId)
+    await Message.updateMany({ conversationId }, { status: 'READ' });
+
+  const getAll = new GetAll(req, res, next, Message, 'Message');
   getAll.filter = { conversationId };
   getAll.execute();
 };
