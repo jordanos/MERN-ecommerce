@@ -61,7 +61,7 @@ exports.GetAll = class GetAll extends BaseTemplate {
     // run query
     this.doc = await query.exec();
 
-    this.totalCount = await this.model.count({});
+    this.totalCount = await this.model.count(this.filter);
     this.pageCount = Math.ceil(this.totalCount / this.req.query.limit);
   }
 
