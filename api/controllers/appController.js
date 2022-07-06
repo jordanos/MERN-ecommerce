@@ -1,6 +1,12 @@
 const Category = require('../models/Category');
 const Hero = require('../models/Hero');
 const Product = require('../models/Product');
+const UserPackage = require('../models/UserPackage');
+const {
+  populateCategory,
+  populateUser,
+  populateTags,
+} = require('./productController');
 
 exports.getHomePage = async (req, res, next) => {
   try {
@@ -52,4 +58,22 @@ exports.getHomePage = async (req, res, next) => {
   } catch (e) {
     next(e);
   }
+};
+
+exports.getMyShop = async (req, res, next) => {
+  const userId = req.user.id;
+  const products = await Product.find({ userId })
+    .populate.push(populateCategory)
+    .populate.push(populateUser)
+    .populate.push(populateTags);
+
+  const package = await UserPackage.findOne({
+    userId,
+    isActive: true,
+  }).populate('packageId');
+
+  const myShop = {
+    package,
+    products,
+  };
 };
