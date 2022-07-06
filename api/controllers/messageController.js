@@ -54,6 +54,8 @@ exports.getConvMessages = async (req, res, next) => {
     await Message.updateMany({ conversationId }, { status: 'READ' });
 
   const getAll = new GetAll(req, res, next, Message, 'Message');
+  getAll.populate.push(populateConversation);
+
   getAll.filter = { conversationId };
   getAll.execute();
 };
