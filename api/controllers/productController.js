@@ -13,19 +13,19 @@ const { validateProductInput } = require('../utils/validators');
 const { findOne } = require('../models/Product');
 const UserPackage = require('../models/UserPackage');
 
-const populateCategory = { path: 'categoryId', select: 'name' };
-const populateUser = {
+exports.populateCategory = { path: 'categoryId', select: 'name' };
+exports.populateUser = {
   path: 'userId',
   select: 'firstName lastName image phone',
 };
-const populateTags = { path: 'tags', select: 'name' };
+exports.populateTags = { path: 'tags', select: 'name' };
 
 exports.getProducts = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Product, 'product');
   // add joins
-  getAll.populate.push(populateCategory);
-  getAll.populate.push(populateUser);
-  getAll.populate.push(populateTags);
+  getAll.populate.push(this.populateCategory);
+  getAll.populate.push(this.populateUser);
+  getAll.populate.push(this.populateTags);
 
   getAll.execute();
 };
@@ -63,9 +63,9 @@ exports.createProduct = async (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const getOne = new GetOne(req, res, next, Product, 'product');
   // add joins
-  getOne.populate.push(populateCategory);
-  getOne.populate.push(populateUser);
-  getOne.populate.push(populateTags);
+  getOne.populate.push(this.populateCategory);
+  getOne.populate.push(this.populateUser);
+  getOne.populate.push(this.populateTags);
 
   getOne.execute();
 };
@@ -119,9 +119,9 @@ exports.filterByCategories = async (req, res, next) => {
 
   getAll.filter = { category: catId };
   // add joins
-  getAll.populate.push(populateCategory);
-  getAll.populate.push(populateUser);
-  getAll.populate.push(populateTags);
+  getAll.populate.push(this.populateCategory);
+  getAll.populate.push(this.populateUser);
+  getAll.populate.push(this.populateTags);
 
   getAll.execute();
 };

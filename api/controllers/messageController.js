@@ -9,11 +9,14 @@ const {
 } = require('./templates');
 const { validateMessageInput } = require('../utils/validators');
 
-const populateConversation = { path: 'conversationId', select: 'toId fromId' };
+exports.populateConversation = {
+  path: 'conversationId',
+  select: 'toId fromId',
+};
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.populate.push(populateConversation);
+  getAll.populate.push(this.populateConversation);
   // getAll.filter = { $or: [{ toId: req.user.id }, { fromId: req.user.id }] };
 
   getAll.execute();
@@ -54,7 +57,7 @@ exports.getConvMessages = async (req, res, next) => {
     await Message.updateMany({ conversationId }, { status: 'READ' });
 
   const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.populate.push(populateConversation);
+  getAll.populate.push(this.populateConversation);
 
   getAll.filter = { conversationId };
   getAll.execute();

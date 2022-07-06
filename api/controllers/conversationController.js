@@ -9,6 +9,7 @@ const {
   UpdateOne,
 } = require('./templates');
 const { validateMessageInput } = require('../utils/validators');
+const { populateConversation } = require('./messageController');
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Conversation, 'Conversation');
@@ -31,7 +32,9 @@ exports.getAll = (req, res, next) => {
 
         const lastMessage = await Message.findOne({
           conversationId: conv.id,
-        }).sort('-createdAt');
+        })
+          .sort('-createdAt')
+          .populate(populateConversation);
         const unreadCount = await Message.count({
           conversationId: conv.id,
           status: 'SENT',

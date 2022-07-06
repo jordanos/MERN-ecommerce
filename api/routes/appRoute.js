@@ -10,11 +10,13 @@ const {
   uploadImage,
 } = require('../controllers/heroController');
 
-const { getHomePage } = require('../controllers/appController');
+const { getHomePage, getMyShop } = require('../controllers/appController');
 
 const { saveImageNoCompression } = require('../middlewares/saveImage');
 
 const imageUpload = require('../utils/images');
+
+const { loginReq } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
@@ -216,6 +218,10 @@ router.put(
   uploadImage
 );
 
+// home page route
 router.get('/homepage', getHomePage);
+
+// my shop page route
+router.get('/myshop', loginReq, getMyShop);
 
 module.exports = router;
