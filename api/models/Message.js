@@ -7,6 +7,16 @@ const MessageSchema = new mongoose.Schema(
       ref: 'Conversation',
       required: [true, 'conversation id is required'],
     },
+    fromId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'sender id is required'],
+    },
+    toId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'reciever id is required'],
+    },
     text: {
       type: String,
       required: [true, 'please provide a text'],

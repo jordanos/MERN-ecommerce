@@ -32,9 +32,7 @@ exports.getAll = (req, res, next) => {
 
         const lastMessage = await Message.findOne({
           conversationId: conv.id,
-        })
-          .sort('-createdAt')
-          .populate(populateConversation);
+        }).sort('-createdAt');
         const unreadCount = await Message.count({
           conversationId: conv.id,
           status: 'SENT',
