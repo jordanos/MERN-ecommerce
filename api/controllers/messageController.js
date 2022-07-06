@@ -1,3 +1,4 @@
+const { default: mongoose } = require('mongoose');
 const Message = require('../models/Message');
 
 const {
@@ -8,6 +9,8 @@ const {
   UpdateOne,
 } = require('./templates');
 const { validateMessageInput } = require('../utils/validators');
+const CustomError = require('../utils/CustomError');
+const Conversation = require('../models/Conversation');
 
 exports.populateConversation = {
   path: 'conversationId',
@@ -16,19 +19,44 @@ exports.populateConversation = {
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.populate.push(this.populateConversation);
   // getAll.filter = { $or: [{ toId: req.user.id }, { fromId: req.user.id }] };
 
   getAll.execute();
 };
 
-exports.createOne = (req, res, next) => {
-  const modfiedReq = { ...req, body: { ...req.body, fromId: req.user.id } };
-  const createOne = new CreateOne(modfiedReq, res, next, Message, 'Message');
-  // setup a vallidaion function otherwise an error will be thrown
-  createOne.validate = validateMessageInput;
+exports.createOne = async (req, res, next) => {
+  try {
+    if (!req.body.conversationId) {
+      throw new CustomError('conversation id required', 400);
+    }
 
-  createOne.execute();
+    const conversationDoc = await Conversation.findById(
+      req.body.conversationId
+    );
+    if (!conversationDoc) {
+      throw new CustomError('conversation object doesn not exist', 400);
+    }
+    let toId = '';
+    if (
+      conversationDoc.fromId.equals(new mongoose.Types.ObjectId(req.user.id))
+    ) {
+      toId = conversationDoc.toId;
+    } else {
+      toId = conversationDoc.fromId;
+    }
+
+    const modfiedReq = {
+      ...req,
+      body: { ...req.body, fromId: req.user.id, toId },
+    };
+    const createOne = new CreateOne(modfiedReq, res, next, Message, 'Message');
+    // setup a vallidaion function otherwise an error will be thrown
+    createOne.validate = validateMessageInput;
+
+    createOne.execute();
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.getOne = (req, res, next) => {
@@ -57,7 +85,6 @@ exports.getConvMessages = async (req, res, next) => {
     await Message.updateMany({ conversationId }, { status: 'READ' });
 
   const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.populate.push(this.populateConversation);
 
   getAll.filter = { conversationId };
   getAll.execute();
