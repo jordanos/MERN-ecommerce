@@ -63,17 +63,31 @@ exports.getHomePage = async (req, res, next) => {
 exports.getMyShop = async (req, res, next) => {
   const userId = req.user.id;
   const products = await Product.find({ userId })
-    .populate.push(populateCategory)
-    .populate.push(populateUser)
-    .populate.push(populateTags);
+    .populate(populateCategory)
+    .populate(populateUser)
+    .populate(populateTags);
 
   const package = await UserPackage.findOne({
     userId,
     isActive: true,
   }).populate('packageId');
 
+  const now = new Date();
+
   const myShop = {
-    package,
+    package: package
+      ? {
+          remainingPosts: package.packageId.maxPosts - package.posts,
+          expiresAfter:
+            package.packageId.expiresAfter -
+            Math.ceil(
+              Math.abs(package.createdAt.getTime() - now.getTime()) /
+                (1000 * 3600 * 24)
+            ),
+        }
+      : { remainingPosts: 0, expiresAfter: 0 },
     products,
   };
+
+  res.status(200).send(myShop);
 };

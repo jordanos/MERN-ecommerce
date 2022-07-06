@@ -50,7 +50,7 @@ exports.createUserPackage = async (req, res, next) => {
     }
 
     // check if user has unfinished package
-    const isUserPackage = await UserPackage.findOne({ isActive: true });
+    const isUserPackage = await UserPackage.findOne({ userId, isActive: true });
     if (isUserPackage) {
       throw new CustomError(
         'Dear customer, You already have an active packege.',
