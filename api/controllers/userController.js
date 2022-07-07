@@ -15,9 +15,11 @@ const Admin = require('../models/Admin');
 
 const Feed = require('../models/Feed');
 const Follow = require('../models/Follow');
-const userUpload = require('../utils/multerFormatter');
+const { userUpload } = require('../utils/multerFormatter');
 const { userImagesPath } = require('../config');
 const saveImageFunction = require('../utils/saveImageFunction');
+const Package = require('../models/Package');
+const UserPackage = require('../models/UserPackage');
 
 // const userUpload = multer({
 //   storage: multer.memoryStorage(),
@@ -45,22 +47,30 @@ exports.createUser = (req, res, next) => {
 
     if (req.file) {
       try {
-        await saveImageFunction(req, userImagesPath);
+        const filename = await saveImageFunction(req.file, userImagesPath);
+        modifiedReq = {
+          ...req,
+          body: { ...req.body, image: filename },
+        };
       } catch (e) {
         return next(e);
       }
-
-      modifiedReq = {
-        ...req,
-        body: { ...req.body, image: req.file.filename },
-      };
     }
 
-    const createOne = new CreateOne(modifiedReq, res, next, User, 'user');
     // setup a vallidaion function otherwise an error will be thrown
-    createOne.validate = () => {};
-
-    createOne.execute();
+    try {
+      const userDoc = await User.create(modifiedReq.body);
+      const packageDoc = await Package.findOne({ name: 'Free' });
+      if (packageDoc) {
+        await UserPackage.createOne({
+          userId: userDoc.id,
+          packageId: packageDoc.id,
+        });
+      }
+      return res.status(201).send(userDoc);
+    } catch (e) {
+      return next(e);
+    }
   });
 };
 
@@ -117,15 +127,14 @@ exports.updateUser = async (req, res, next) => {
 
     if (req.file) {
       try {
-        await saveImageFunction(req, userImagesPath);
+        const filename = await saveImageFunction(req.file, userImagesPath);
+        modifiedReq = {
+          ...req,
+          body: { ...req.body, image: filename },
+        };
       } catch (e) {
         return next(e);
       }
-
-      modifiedReq = {
-        ...req,
-        body: { ...req.body, image: req.file.filename },
-      };
     }
 
     if (modifiedReq.body.password) {

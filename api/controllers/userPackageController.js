@@ -53,7 +53,7 @@ exports.createUserPackage = async (req, res, next) => {
     const isUserPackage = await UserPackage.findOne({ userId, isActive: true });
     if (isUserPackage) {
       throw new CustomError(
-        'Dear customer, You already have an active packege.',
+        'Dear customer, You already have an active package.',
         400
       );
     }

@@ -3,6 +3,8 @@ const CustomError = require('./CustomError');
 const Feed = require('../models/Feed');
 const User = require('../models/User');
 const Conversation = require('../models/Conversation');
+const Category = require('../models/Category');
+const UserPackage = require('../models/UserPackage');
 
 // schema options
 const options = {
@@ -49,6 +51,7 @@ const productSchema = Joi.when(Joi.ref('$method'), {
     brand: Joi.string(),
     description: Joi.string(),
     condition: Joi.string().required(),
+    categoryId: Joi.string().hex().length(24).required(),
   }),
 });
 
@@ -159,14 +162,39 @@ exports.validateProductInput = async (req) => {
     ...options,
     context: { method: req.method },
   });
+
   if (error) {
     throw new CustomError(error.message, 400);
   }
 
-  // check if reference exists
+  if (req.method === 'POST') {
+    if (!req.files || req.files.length === 0) {
+      throw new CustomError('Atleast one product image is required', 400);
+    }
+    if (req.files.length > 5) {
+      throw new CustomError('Max product images allowed is 5', 400);
+    }
+
+    // check if category reference exists
+    const categoryDoc = await Category.findById(req.body.categoryId);
+    if (!categoryDoc) {
+      throw new CustomError('category object reference error', 400);
+    }
+
+    // check if user has an active package
+    const userPackageDoc = await UserPackage.findOne({
+      userId: req.user.id,
+      isActive: true,
+    });
+    if (!userPackageDoc) {
+      throw new CustomError(`You don't have any active package`, 400);
+    }
+  }
+
+  // check if user reference exists
   const userDoc = await User.findById(req.body.userId);
   if (!userDoc) {
-    throw new CustomError('notification receiver object reference error', 400);
+    throw new CustomError('product owner user object reference error', 400);
   }
 };
 

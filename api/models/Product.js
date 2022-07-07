@@ -16,8 +16,13 @@ const ProductSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
     description: {
       type: String,
+      default: 'Description not available.',
     },
     condition: {
       type: String,
@@ -28,11 +33,13 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: 'unknown',
     },
-    image: {
-      type: String,
-      default: 'default_image.jpg',
-      get: (image) => formatImageUrl(productImagesPath, image),
-    },
+    images: [
+      {
+        type: String,
+        default: 'default_image.jpg',
+        get: (image) => formatImageUrl(productImagesPath, image),
+      },
+    ],
     rate: {
       type: Number,
       default: 4.9,

@@ -1,5 +1,4 @@
 const router = require('express').Router();
-const { productImagesPath } = require('../config');
 
 const {
   getProducts,
@@ -7,8 +6,6 @@ const {
   getProduct,
   updateProduct,
   deleteProduct,
-  uploadImage,
-  getHeroImages,
   filterByCategories,
   getMyProducts,
 } = require('../controllers/productController');
@@ -16,9 +13,7 @@ const {
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
-const { saveImage } = require('../middlewares/saveImage');
 const Product = require('../models/Product');
-const imageUpload = require('../utils/images');
 
 // products route
 
@@ -213,62 +208,6 @@ router
    *               $ref: '#/components/schemas/Product'
    */
   .delete(loginReq, authorizeReq(Product), deleteProduct);
-
-/**
- *@swagger
- *path:
- * /api/v1/products/image/{id}:
- *   put:
- *     consumes:
- *     - multipart/form-data
- *     summary: uploads a user image.
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The product id
- *       - in: formData
- *         name: image
- *         type: file
- *         required: true
- *         description: image file
- *     responses:
- *       "200":
- *         description: returnes data object with acknowledged=true.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- */
-// add validation of images for latter
-router.put(
-  '/image/:id',
-  loginReq,
-  authorizeReq(Product),
-  imageUpload().single('image'),
-  saveImage(productImagesPath),
-  uploadImage
-);
-
-/**
- *@swagger
- *path:
- * /api/v1/products/hero/images:
- *   get:
- *     summary: Lists all hero images of products
- *     tags: [Products]
- *     responses:
- *       "200":
- *         description: list of images.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
- */
-router.get('/hero/images', getHeroImages);
 
 /**
  *@swagger
