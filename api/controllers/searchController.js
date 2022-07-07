@@ -15,15 +15,21 @@ exports.search = (req, res, next) => {
   }
 
   const name = req.query.q;
-  const OrderBy = req.query.orderBy;
-  if (OrderBy == null) {
-    filter = { $text: { $search: `${name}` } };
-  } else if (name && OrderBy === 'asc') {
-    filter = { name: { $regex: `^${name}`, $options: 'i' } };
-    sort = { name: 1 };
-  } else if (name && OrderBy === 'desc') {
-    filter = { name: { $regex: `^${name}`, $options: 'i' } };
-    sort = { name: -1 };
+  const { price } = req.query;
+  const { rate } = req.query;
+
+  filter = { name: { $regex: `^${name}`, $options: 'i' } };
+  if (price && price === 'asc') {
+    sort = { ...sort, price: 1 };
+  }
+  if (price && price === 'desc') {
+    sort = { ...sort, price: -1 };
+  }
+  if (rate && rate === 'asc') {
+    sort = { ...sort, rate: 1 };
+  }
+  if (rate && rate === 'desc') {
+    sort = { ...sort, rate: -1 };
   }
 
   getAll.filter = filter;

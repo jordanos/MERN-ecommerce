@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const { categoryImagesPath } = require('../config');
+const { formatImageUrl } = require('../utils/helpers');
 
 const CategorySchema = new mongoose.Schema({
   name: {
@@ -9,6 +11,7 @@ const CategorySchema = new mongoose.Schema({
   image: {
     type: String,
     default: 'default_image.png',
+    get: (image) => formatImageUrl(categoryImagesPath, image),
   },
   createdAt: {
     type: Date,
