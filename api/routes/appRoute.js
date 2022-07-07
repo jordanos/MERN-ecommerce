@@ -1,5 +1,4 @@
 const express = require('express');
-const { heroImagesPath } = require('../config');
 
 const {
   getHeros,
@@ -7,14 +6,9 @@ const {
   getHero,
   updateHero,
   deleteHero,
-  uploadImage,
 } = require('../controllers/heroController');
 
 const { getHomePage, getMyShop } = require('../controllers/appController');
-
-const { saveImageNoCompression } = require('../middlewares/saveImage');
-
-const imageUpload = require('../utils/images');
 
 const { loginReq } = require('../middlewares/authMiddleware');
 
@@ -183,45 +177,27 @@ router
 /**
  *@swagger
  *path:
- * /api/v1/app/heros/image/{id}:
- *   put:
- *     consumes:
- *     - multipart/form-data
- *     summary: uploads a hero image.
+ * /api/v1/app/homepage:
+ *   get:
+ *     summary: homepage
  *     tags: [App]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The hero id
- *       - in: formData
- *         name: image
- *         type: file
- *         required: true
- *         description: image file
  *     responses:
  *       "200":
- *         description: returnes data object with acknowledged=true.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/App'
+ *         description: homepage.
  */
-
-// add validation of images for latter
-router.put(
-  '/heros/image/:id',
-  imageUpload().single('image'),
-  saveImageNoCompression(heroImagesPath),
-  uploadImage
-);
-
-// home page route
 router.get('/homepage', getHomePage);
 
-// my shop page route
+/**
+ *@swagger
+ *path:
+ * /api/v1/app/myshop:
+ *   get:
+ *     summary: myshop
+ *     tags: [App]
+ *     responses:
+ *       "200":
+ *         description: myshop page.
+ */
 router.get('/myshop', loginReq, getMyShop);
 
 module.exports = router;
