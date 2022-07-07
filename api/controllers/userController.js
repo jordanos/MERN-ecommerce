@@ -62,7 +62,7 @@ exports.createUser = (req, res, next) => {
       const userDoc = await User.create(modifiedReq.body);
       const packageDoc = await Package.findOne({ name: 'Free' });
       if (packageDoc) {
-        await UserPackage.createOne({
+        await UserPackage.create({
           userId: userDoc.id,
           packageId: packageDoc.id,
         });
