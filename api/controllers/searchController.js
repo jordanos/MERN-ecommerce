@@ -1,5 +1,10 @@
 const Product = require('../models/Product');
 const User = require('../models/User');
+const {
+  populateCategory,
+  populateUser,
+  populateTags,
+} = require('./productController');
 const { GetAll } = require('./templates');
 
 exports.search = (req, res, next) => {
@@ -34,5 +39,9 @@ exports.search = (req, res, next) => {
 
   getAll.filter = filter;
   getAll.sort = sort;
+  getAll.populate.push(populateCategory);
+  getAll.populate.push(populateUser);
+  getAll.populate.push(populateTags);
+
   getAll.execute();
 };
