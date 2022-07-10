@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const CustomError = require('../utils/CustomError');
-const User = require('../models/User');
+const Admin = require('../models/Admin');
 
 exports.loginReq = async (req, res, next) => {
   // check for token
@@ -9,7 +9,7 @@ exports.loginReq = async (req, res, next) => {
     return next(new CustomError('A token is required for authentication', 403));
 
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+    const decoded = await jwt.verify(token, process.env.SECRET_KEY);
     req.user = decoded;
   } catch (e) {
     return next(new CustomError('Invalid Token', 401));
@@ -22,6 +22,26 @@ exports.loginReq = async (req, res, next) => {
   } catch (e) {
     next(e);
   } */
+
+  return next();
+};
+
+exports.adminReq = async (req, res, next) => {
+  // check for token
+  const token = req.header['x-auth-token'] || req.headers.authorization;
+  if (!token)
+    return next(new CustomError('A token is required for authentication', 403));
+
+  try {
+    const decoded = await jwt.verify(token, process.env.SECRET_KEY);
+    const adminDoc = await Admin.findById(decoded.id);
+    if (!adminDoc) {
+      return next(new CustomError('Admin does not exist', 404));
+    }
+    req.user = decoded;
+  } catch (e) {
+    return next(new CustomError('Invalid Token', 401));
+  }
 
   return next();
 };

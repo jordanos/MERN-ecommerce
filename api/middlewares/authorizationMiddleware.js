@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const { mongoose } = require('mongoose');
 const Follow = require('../models/Follow');
 const Message = require('../models/Message');
@@ -5,6 +6,14 @@ const Admin = require('../models/Admin');
 const User = require('../models/User');
 const UnauthorizedError = require('../utils/UnauthorizedError');
 const Conversation = require('../models/Conversation');
+
+exports.AuthAdminEnum = {
+  read: 'READ',
+  write: 'WRITE',
+  addAdmin: 'ADD_ADMIN',
+  removeAdmin: 'REMOVE_ADMIN',
+  isSuper: 'SUPER',
+};
 
 // checks if a user is authorized to get/update thid user resource
 exports.authorizeUser = (req, res, next) => {
@@ -81,12 +90,47 @@ exports.authorizeReq = function outer(model) {
 
 // Cheks if the user is an admin
 
-exports.adminReq = async (req, res, next) => {
-  //  check the user is an admin
-  const admin = await Admin.findOne({
-    owner: new mongoose.Types.ObjectId(req.user.id),
-  });
-  if (!admin) return next(new UnauthorizedError());
+exports.authorizeAdmin = function outer(access) {
+  async function checkRead(req, res, next) {
+    const doc = await Admin.findById(req.user.id);
+    if (!doc || !doc.read) return next(new UnauthorizedError());
 
-  return next();
+    return next();
+  }
+
+  async function checkWrite(req, res, next) {
+    const doc = await Admin.findById(req.user.id);
+    if (!doc || !doc.write) return next(new UnauthorizedError());
+
+    return next();
+  }
+
+  async function checkAddAdmin(req, res, next) {
+    const doc = await Admin.findById(req.user.id);
+    if (!doc || !doc.addAdmin) return next(new UnauthorizedError());
+
+    return next();
+  }
+
+  async function checkRemoveAdmin(req, res, next) {
+    const doc = await Admin.findById(req.user.id);
+    if (!doc || !doc.removeAdmin) return next(new UnauthorizedError());
+
+    return next();
+  }
+
+  async function checkSuper(req, res, next) {
+    const doc = await Admin.findById(req.user.id);
+    if (!doc || !doc.isSuper) return next(new UnauthorizedError());
+
+    return next();
+  }
+
+  if (access === 'READ') return checkRead;
+  if (access === 'WRITE') return checkWrite;
+  if (access === 'ADD_ADMIN') return checkAddAdmin;
+  if (access === 'REMOVE_ADMIN') return checkRemoveAdmin;
+  if (access === 'SUPER') return checkSuper;
+
+  return checkRead;
 };
