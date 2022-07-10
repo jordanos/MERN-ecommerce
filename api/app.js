@@ -71,11 +71,12 @@ const packageRoute = require('./routes/packages');
 const searchRoute = require('./routes/search');
 const rateRoute = require('./routes/rates');
 const userPackageRoute = require('./routes/userPackages');
-const adminRoute = require('./routes/admin');
 const appRoute = require('./routes/appRoute');
 const transactionRoute = require('./routes/transactions');
 const transactionMethodRoute = require('./routes/transactionMethods');
 const ipnRoute = require('./routes/ipnRoute');
+// admin
+const adminRoute = require('./routes/admin');
 
 // Use Routes
 const apiVersion = '/api/v1';
@@ -94,11 +95,12 @@ app.use(`${apiVersion}/packages`, packageRoute);
 app.use(`${apiVersion}/search`, searchRoute);
 app.use(`${apiVersion}/rates`, rateRoute);
 app.use(`${apiVersion}/user-packages`, userPackageRoute);
-app.use(`${apiVersion}/admin`, adminRoute);
 app.use(`${apiVersion}/app`, appRoute);
 app.use(`${apiVersion}/transactions`, transactionRoute);
 app.use(`${apiVersion}/transaction-methods`, transactionMethodRoute);
 app.use(`${apiVersion}/ipn`, ipnRoute);
+// admin
+app.use(`${apiVersion}/admin`, adminRoute);
 
 const errorHandler = require('./middlewares/errorHandler');
 // Error handler middleware
