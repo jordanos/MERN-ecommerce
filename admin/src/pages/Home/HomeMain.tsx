@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import CardBody from "shared/components/CardBody";
 import CardHeader from "shared/components/CardHeader";
 import LargeCard from "shared/components/LargeCard";
@@ -7,6 +8,8 @@ import SmallCard from "shared/components/SmallCard";
 import CountInfo from "./CountInfo";
 
 const HomeMain: React.FC = () => {
+  const home = useSelector((state: any) => state.home);
+
   return (
     <>
       <div
@@ -21,7 +24,7 @@ const HomeMain: React.FC = () => {
             <h4>:</h4>
           </CardHeader>
           <CardBody>
-            <CountInfo count={1000} desc="Today" />
+            <CountInfo count={home.users.thisWeek} desc="Today" />
           </CardBody>
         </SmallCard>
         <SmallCard>
@@ -30,7 +33,7 @@ const HomeMain: React.FC = () => {
             <h4>:</h4>
           </CardHeader>
           <CardBody>
-            <CountInfo count={4050} desc="This month" />
+            <CountInfo count={home.products.thisWeek} desc="This month" />
           </CardBody>
         </SmallCard>
         <SmallCard>
@@ -39,7 +42,7 @@ const HomeMain: React.FC = () => {
             <h4>:</h4>
           </CardHeader>
           <CardBody>
-            <CountInfo count={4050} desc="This week" />
+            <CountInfo count={home.packages.thisWeek} desc="This week" />
           </CardBody>
         </SmallCard>
       </div>

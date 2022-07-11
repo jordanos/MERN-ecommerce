@@ -1,5 +1,5 @@
-import { colors } from "core/constants/Styles";
 import React from "react";
+import { colors } from "shared/constants/Styles";
 import StyledCardHeader from "./Styles";
 
 interface Props {

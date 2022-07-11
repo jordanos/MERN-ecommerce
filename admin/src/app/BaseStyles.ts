@@ -1,5 +1,5 @@
-import { colors, font, mixin } from 'shared/utils/Styles';
-import { createGlobalStyle } from 'styled-components';
+import { colors, font, mixin } from "shared/utils/Styles";
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
   html, body, #root {
@@ -9,7 +9,7 @@ export default createGlobalStyle`
   }
 
   body {
-    color: ${colors.textDarkest};
+    color: ${colors.textPrimary};
     background: ${colors.backgroundMedium};
     -webkit-tap-highlight-color: transparent;
     line-height: 1.2;
@@ -93,9 +93,7 @@ export default createGlobalStyle`
     }
   }
 
-  textarea {
-    line-height: 1.4285;
-  }
+
 
   body, select {
     -webkit-font-smoothing: antialiased;

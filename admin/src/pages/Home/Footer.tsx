@@ -1,5 +1,5 @@
-import { colors } from "core/constants/Styles";
 import React, { CSSProperties } from "react";
+import { colors } from "shared/constants/Styles";
 
 const footerStyle: CSSProperties = {
   width: "100%",

@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 const StyledCustomInput = styled.input`
-  height: 24px;
+  background: transparent;
+  font-size: 0.85rem;
   border: 1px solid gray;
   border-radius: 16px;
-  padding: 0.25em 1em;
+  padding: 0.5em 1em;
 
   &:focus {
     outline: none !important;

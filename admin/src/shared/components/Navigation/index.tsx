@@ -1,6 +1,7 @@
-import ricaLogo from "core/assets/rica-logo.jpg";
 import React from "react";
-import { NavItem, StyledNav, StyledSubNav } from "./Styles";
+import { Link } from "react-router-dom";
+import ricaLogo from "shared/assets/rica-logo.jpg";
+import { StyledNav, StyledNavItem, StyledSubNav } from "./Styles";
 
 const Navigation: React.FC = () => {
   return (
@@ -14,14 +15,27 @@ const Navigation: React.FC = () => {
           src={ricaLogo}
           alt="rica logo"
         />
-        <NavItem>Home</NavItem>
-        <NavItem>Products</NavItem>
-        <NavItem>Users</NavItem>
-        <NavItem>Packages</NavItem>
-        <NavItem>Cash flow</NavItem>
+
+        <Link to="/home">
+          <StyledNavItem>Home</StyledNavItem>
+        </Link>
+
+        <Link to="/users">
+          <StyledNavItem>Users</StyledNavItem>
+        </Link>
+
+        <Link to="/products">
+          <StyledNavItem>Products</StyledNavItem>
+        </Link>
+
+        <Link to="/packages">
+          <StyledNavItem>Packages</StyledNavItem>
+        </Link>
       </StyledSubNav>
       <StyledSubNav>
-        <NavItem>Account</NavItem>
+        <Link to="/profile">
+          <StyledNavItem>Profile</StyledNavItem>
+        </Link>
       </StyledSubNav>
     </StyledNav>
   );

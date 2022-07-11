@@ -1,21 +1,20 @@
 import React from "react";
-import ReactDOM from "react-dom";
-// import { Provider } from "react-redux";
-// import { PersistGate } from "redux-persist/integration/react";
-// import { persistor, store } from "shared/store";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
 import App from "./app";
 import reportWebVitals from "./reportWebVitals";
+import store from "./shared/features/store";
 
-ReactDOM.render(
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("Failed to find the root element");
+const root = createRoot(rootElement);
+
+root.render(
   <React.StrictMode>
-    <App />
-    {/* <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <App />
-      </PersistGate>
-    </Provider> */}
-  </React.StrictMode>,
-  document.getElementById("root")
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
 );
 
 reportWebVitals();

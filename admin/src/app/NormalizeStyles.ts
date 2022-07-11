@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 /** DO NOT ALTER THIS FILE. It is a copy of https://necolas.github.io/normalize.css/ */
 
@@ -9,14 +9,12 @@ export default createGlobalStyle`
   }
   body {
     margin: 0;
+    padding: 0;
   }
   main {
     display: block;
   }
-  h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
-  }
+
   hr {
     box-sizing: content-box;
     height: 0;

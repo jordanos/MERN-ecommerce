@@ -2,6 +2,7 @@ import Home from "pages/Home";
 import Login from "pages/Login";
 import Packages from "pages/Packages";
 import Products from "pages/Products";
+import Profile from "pages/Profile";
 import Users from "pages/Users";
 import React from "react";
 import {
@@ -27,6 +28,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/products" element={<Products />} />
           <Route path="/packages" element={<Packages />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/home" replace />} />

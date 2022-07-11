@@ -1,34 +1,19 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { NtwState } from 'shared/store/reducers/appReducer';
-import { UserState } from 'shared/store/reducers/userReducer';
-import InitData from './InitData';
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Notify } from "shared/features/notify/notifySlice";
 
-interface Props {
-  ntw: NtwState;
-  user: UserState;
-}
+const Init: React.FC = () => {
+  const notify: Notify = useSelector((state: any) => state.notify);
 
-const Init: React.FC<Props> = (props) => {
-  const { ntw, user } = props;
   useEffect(() => {
-    if (ntw.error.error) {
-      toast(`${ntw.error.error}`);
+    if (notify.error) {
+      toast(`${notify.error}`);
     }
-  }, [ntw.error]);
+  }, [notify]);
 
-  return (
-    <>
-      <ToastContainer position="bottom-left" />
-      {user.token !== null && <InitData />}
-    </>
-  );
+  return <ToastContainer position="bottom-left" />;
 };
 
-const mapStateToProps = (state: any) => {
-  return { ntw: state.app.ntwState, user: state.user };
-};
-
-export default connect(mapStateToProps)(Init);
+export default Init;

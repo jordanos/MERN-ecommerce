@@ -1,5 +1,5 @@
 import React from "react";
-import { colors } from "./utils/Styles";
+import { colors } from "../utils/Styles";
 
 interface Props {
   className?: string | undefined;

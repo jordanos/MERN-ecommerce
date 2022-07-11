@@ -1,8 +1,8 @@
-import React, { lazy } from 'react';
-import Loader from 'shared/components/Loader';
-import './fontStyles.css';
+import React, { lazy } from "react";
+import Loader from "shared/components/Loader";
+import "./fontStyles.css";
 
-const Setup = lazy(() => import('./Setup'));
+const Setup = lazy(() => import("./Setup"));
 
 const App: React.FC = () => {
   return (

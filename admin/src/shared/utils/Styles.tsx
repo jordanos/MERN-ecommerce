@@ -6,13 +6,13 @@ export const breakpoints = {
 };
 
 export const colors = {
-  primary: "#FF9900", // orange
+  primary: "#617182", // orange
   success: "#58BA6E", // green
   danger: "#E13C3C", // red
   warning: "#F89C1C", // orange
   secondary: "#F4F5F7", // light grey
 
-  textPrimary: "#FF9900",
+  textPrimary: "#617182",
   textSecondary: "#682696",
   textDarkest: "#000",
   textDark: "#283d50",
@@ -24,7 +24,7 @@ export const colors = {
 
   backgroundDarkest: "#000",
   backgroundDark: "#FB8694",
-  backgroundMedium: "#FFE6EA",
+  backgroundMedium: "#f0f2f5",
   backgroundLight: "#ebecf0",
   backgroundLightest: "#fff",
   backgroundLightPrimary: "#D2E5FE",

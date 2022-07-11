@@ -18,7 +18,7 @@ export const StyledSubNav = styled.nav`
   align-items: center;
 `;
 
-export const NavItem = styled.div`
+export const StyledNavItem = styled.div`
   padding: 1em 2em;
 
   &:hover {
