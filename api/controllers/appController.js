@@ -2,6 +2,7 @@ const Category = require('../models/Category');
 const Hero = require('../models/Hero');
 const Product = require('../models/Product');
 const UserPackage = require('../models/UserPackage');
+const Notification = require('../models/Notification');
 const {
   populateCategory,
   populateUser,
@@ -10,30 +11,36 @@ const {
 
 exports.getHomePage = async (req, res, next) => {
   try {
+    const notificationsCount = await Notification.count({ _id: req.user.id });
     const heros = await Hero.find();
     const categories = await Category.find();
     const trendingProducts = await Product.find({
       categoryId: '62bff654706a523ec8fbf7a2',
     })
+      .limit(10)
       .populate('userId')
       .populate('categoryId');
     const sportProducts = await Product.find({
       categoryId: '62bff74966153fd934c67656',
     })
+      .limit(10)
       .populate('userId')
       .populate('categoryId');
     const gamingProducts = await Product.find({
       categoryId: '62bff686706a523ec8fbf7a4',
     })
+      .limit(10)
       .populate('userId')
       .populate('categoryId');
     const computerProducts = await Product.find({
       categoryId: '62bff6bb706a523ec8fbf7a8',
     })
+      .limit(10)
       .populate('userId')
       .populate('categoryId');
 
     res.status(200).send({
+      notificationsCount,
       heros,
       categories,
       homeProducts: [
