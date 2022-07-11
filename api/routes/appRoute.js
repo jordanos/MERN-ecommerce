@@ -185,7 +185,7 @@ router
  *       "200":
  *         description: homepage.
  */
-router.get('/homepage', getHomePage);
+router.get('/homepage', loginReq, getHomePage);
 
 /**
  *@swagger
