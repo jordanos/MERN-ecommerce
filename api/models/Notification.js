@@ -12,11 +12,13 @@ const NotificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      default: 'normal',
+      enum: ['LOW', 'HIGH'],
+      default: 'LOW',
     },
     status: {
       type: String,
-      default: 'unread',
+      enum: ['SENT', 'READ'],
+      default: 'SENT',
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
