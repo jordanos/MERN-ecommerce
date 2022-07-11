@@ -7,13 +7,18 @@ type Props = {
   outline?: boolean;
   loading: boolean;
   children: React.ReactNode;
+  onClick?: React.MouseEventHandler;
 };
 
 const Button: React.FC<Props> = (props) => {
-  const { outline, width, children, loading } = props;
+  const { outline, width, children, loading, onClick } = props;
 
   return (
-    <StyledButton style={{ width: `${width}` }} outline={outline}>
+    <StyledButton
+      style={{ width: `${width}` }}
+      outline={outline}
+      onClick={onClick}
+    >
       {loading ? <Spinner size={24} /> : children}
     </StyledButton>
   );
@@ -22,6 +27,7 @@ const Button: React.FC<Props> = (props) => {
 Button.defaultProps = {
   width: "100%",
   outline: false,
+  onClick: () => {},
 };
 
 export default Button;

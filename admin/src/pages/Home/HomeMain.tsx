@@ -1,11 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import CardBody from "shared/components/CardBody";
 import CardHeader from "shared/components/CardHeader";
 import LargeCard from "shared/components/LargeCard";
 import MediumCard from "shared/components/MediumCard";
 import SmallCard from "shared/components/SmallCard";
-import CountInfo from "./CountInfo";
 
 const HomeMain: React.FC = () => {
   const home = useSelector((state: any) => state.home);
@@ -18,33 +16,9 @@ const HomeMain: React.FC = () => {
           flexDirection: "row",
         }}
       >
-        <SmallCard>
-          <CardHeader>
-            <h4>Users</h4>
-            <h4>:</h4>
-          </CardHeader>
-          <CardBody>
-            <CountInfo count={home.users.thisWeek} desc="Today" />
-          </CardBody>
-        </SmallCard>
-        <SmallCard>
-          <CardHeader>
-            <h4>Products</h4>
-            <h4>:</h4>
-          </CardHeader>
-          <CardBody>
-            <CountInfo count={home.products.thisWeek} desc="This month" />
-          </CardBody>
-        </SmallCard>
-        <SmallCard>
-          <CardHeader>
-            <h4>Packages</h4>
-            <h4>:</h4>
-          </CardHeader>
-          <CardBody>
-            <CountInfo count={home.packages.thisWeek} desc="This week" />
-          </CardBody>
-        </SmallCard>
+        <SmallCard title="Users" count={home.users} />
+        <SmallCard title="Products" count={home.products} />
+        <SmallCard title="Bought Packages" count={home.packages} />
       </div>
       <div
         style={{

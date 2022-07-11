@@ -57,6 +57,10 @@ export default createGlobalStyle`
     border: none;
   }
 
+  button:hover {
+    cursor: pointer;
+  }
+
   /* Workaround for IE11 focus highlighting for select elements */
   select::-ms-value {
     background: none;

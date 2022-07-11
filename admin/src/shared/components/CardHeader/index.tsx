@@ -16,6 +16,7 @@ const CardHeader: React.FC<Props> = ({ children }) => {
           height: "5px",
           background: colors.warning,
           marginTop: "0.5em",
+          position: "absolute",
         }}
       />
     </div>
