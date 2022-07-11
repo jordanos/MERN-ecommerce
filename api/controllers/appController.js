@@ -73,7 +73,8 @@ exports.getMyShop = async (req, res, next) => {
     const products = await Product.find({ userId })
       .populate(populateCategory)
       .populate(populateUser)
-      .populate(populateTags);
+      .populate(populateTags)
+      .sort({ createdAt: -1 });
 
     const packageDoc = await UserPackage.findOne({
       userId,
