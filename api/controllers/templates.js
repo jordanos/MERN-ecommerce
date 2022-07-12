@@ -66,9 +66,9 @@ exports.GetAll = class GetAll extends BaseTemplate {
   }
 
   performReq() {
-    const url = `${this.req.protocol}://${this.req.get('host')}${
-      this.req.originalUrl
-    }`;
+    // const url = `${this.req.protocol}://${this.req.get('host')}${
+    //   this.req.originalUrl
+    // }`;
     const hasMore =
       (this.req.query.page * this.req.query.limit) / this.req.query.limit + 1 <
       this.pageCount;
