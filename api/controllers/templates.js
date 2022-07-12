@@ -45,8 +45,8 @@ class BaseTemplate {
 
 exports.GetAll = class GetAll extends BaseTemplate {
   async doMongo() {
-    this.req.query.skip = this.req.query.skip || 0;
-    this.req.query.skip = parseInt(this.req.query.skip, 10);
+    this.req.query.page = this.req.query.page - 1 || 0;
+    this.req.query.page = parseInt(this.req.query.page, 10);
 
     const query = this.model.find(this.filter);
 
@@ -57,7 +57,7 @@ exports.GetAll = class GetAll extends BaseTemplate {
 
     // generate pagination
     query.limit(this.req.query.limit);
-    query.skip(this.req.query.skip);
+    query.skip(this.req.query.page * this.req.query.limit);
     // run query
     this.doc = await query.exec();
 
@@ -66,10 +66,16 @@ exports.GetAll = class GetAll extends BaseTemplate {
   }
 
   performReq() {
+    const url = `${this.req.protocol}://${this.req.get('host')}${
+      this.req.originalUrl
+    }`;
+    const hasMore =
+      (this.req.query.page * this.req.query.limit) / this.req.query.limit + 1 <
+      this.pageCount;
     this.res.status(200).json({
       count: this.totalCount,
-      hasMore: this.req.query.skip / this.req.query.limit + 1 < this.pageCount,
-      skip: this.req.query.skip + this.req.query.limit,
+      hasMore,
+      next: hasMore ? this.req.query.page + 2 : null,
       data: this.doc,
     });
   }
