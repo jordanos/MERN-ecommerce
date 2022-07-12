@@ -1,13 +1,7 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
-const {
-  GetAll,
-  CreateOne,
-  GetOne,
-  DeleteOne,
-  UpdateOne,
-} = require('./templates');
+const { GetAll, GetOne, DeleteOne, UpdateOne } = require('./templates');
 const { validateProductInput } = require('../utils/validators');
 const { productUpload } = require('../utils/multerFormatter');
 const { productImagesPath } = require('../config');
@@ -73,24 +67,28 @@ exports.createProduct = async (req, res, next) => {
       return next(e);
     }
 
-    // add posted products count on userpackages, if max reached set isActive to false
-    const userPackageDoc = await UserPackage.findOne({
-      userId: req.user.id,
-      isActive: true,
-    }).populate('packageId');
+    try {
+      // create product
+      const productDoc = await Product.create(modifiedReq.body);
+      const doc = await Product.findById(productDoc.id)
+        .populate(this.populateCategory)
+        .populate(this.populateUser)
+        .populate(this.populateTags);
+      // add posted products count on userpackages, if max reached set isActive to false
+      const userPackageDoc = await UserPackage.findOne({
+        userId: req.user.id,
+        isActive: true,
+      }).populate('packageId');
 
-    userPackageDoc.posts += 1;
-    if (userPackageDoc.posts >= userPackageDoc.packageId.maxPosts) {
-      userPackageDoc.isActive = false;
+      userPackageDoc.posts += 1;
+      if (userPackageDoc.posts >= userPackageDoc.packageId.maxPosts) {
+        userPackageDoc.isActive = false;
+      }
+      userPackageDoc.save();
+      return res.status(201).send(doc);
+    } catch (e) {
+      return next(e);
     }
-    userPackageDoc.save();
-    // create product
-
-    const createOne = new CreateOne(modifiedReq, res, next, Product, 'product');
-    // setup a vallidaion function otherwise an error will be thrown
-    createOne.validate = () => {};
-
-    createOne.execute();
   });
 };
 
