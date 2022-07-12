@@ -89,16 +89,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/products/?skip=0:
+   * /api/v1/products/?page=1:
    *   get:
    *     summary: Lists all the products
    *     tags: [Products]
    *     parameters:
    *     - in: query
-   *       name: skip
+   *       name: page
    *       schema:
    *         type: integer
-   *       description: pagination value to skip to
+   *       description: pagination value
    *     responses:
    *       "200":
    *         description: list of products.
