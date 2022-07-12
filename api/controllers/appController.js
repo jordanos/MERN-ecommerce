@@ -3,11 +3,6 @@ const Hero = require('../models/Hero');
 const Product = require('../models/Product');
 const UserPackage = require('../models/UserPackage');
 const Notification = require('../models/Notification');
-const {
-  populateCategory,
-  populateUser,
-  populateTags,
-} = require('./productController');
 
 exports.getHomePage = async (req, res, next) => {
   try {
@@ -70,11 +65,6 @@ exports.getHomePage = async (req, res, next) => {
 exports.getMyShop = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const products = await Product.find({ userId })
-      .populate(populateCategory)
-      .populate(populateUser)
-      .populate(populateTags)
-      .sort({ createdAt: -1 });
 
     const packageDoc = await UserPackage.findOne({
       userId,
@@ -95,7 +85,6 @@ exports.getMyShop = async (req, res, next) => {
               ),
           }
         : { remainingPosts: 0, expiresAfter: 0 },
-      products,
     };
 
     return res.status(200).send(myShop);
