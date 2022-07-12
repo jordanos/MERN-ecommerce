@@ -4,9 +4,10 @@ import CardHeader from "shared/components/CardHeader";
 import LargeCard from "shared/components/LargeCard";
 import MediumCard from "shared/components/MediumCard";
 import SmallCard from "shared/components/SmallCard";
+import { Home } from "shared/features/home/homeSlice";
 
 const HomeMain: React.FC = () => {
-  const home = useSelector((state: any) => state.home);
+  const home: Home = useSelector((state: any) => state.home);
 
   return (
     <>
@@ -29,7 +30,7 @@ const HomeMain: React.FC = () => {
           marginTop: "1em",
         }}
       >
-        <LargeCard />
+        <LargeCard title="Visualize Data" data={home.graph} />
         <div
           style={{
             display: "flex",
@@ -38,8 +39,7 @@ const HomeMain: React.FC = () => {
         >
           <MediumCard>
             <CardHeader>
-              <h4>Packages Bought</h4>
-              <h1 style={{ fontWeight: "normal" }}>10</h1>
+              <h4>Total Info</h4>
             </CardHeader>
           </MediumCard>
         </div>

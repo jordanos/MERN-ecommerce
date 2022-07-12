@@ -9,7 +9,7 @@ const Navigation: React.FC = () => {
       <StyledSubNav>
         <img
           style={{
-            width: "34px",
+            width: "64px",
             padding: "0 1em",
           }}
           src={ricaLogo}
