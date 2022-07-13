@@ -6,6 +6,7 @@ const StyledCardBody = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1em 0em;
+  height: 100%;
 `;
 
 export default StyledCardBody;

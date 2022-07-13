@@ -12,13 +12,7 @@ const footerStyle: CSSProperties = {
 };
 
 const Footer: React.FC = () => {
-  return (
-    <div style={footerStyle}>
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-    </div>
-  );
+  return <div style={footerStyle} />;
 };
 
 export default Footer;

@@ -2,10 +2,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import CountInfo from "pages/Home/CountInfo";
 import React, { useEffect, useState } from "react";
+import { BiMenuAltLeft } from "react-icons/bi";
+import { RiNumbersFill } from "react-icons/ri";
 import { Count } from "shared/features/home/homeSlice";
+import { colors } from "shared/utils/Styles";
 import CardBody from "../CardBody";
 import CardHeader from "../CardHeader";
-import StyledSmallCard, { StyledOptionsItem } from "./Styles";
+import StyledSmallCard, {
+  StyledClickableDiv,
+  StyledOptionsItem,
+} from "./Styles";
 
 type Props = {
   title: string;
@@ -43,7 +49,9 @@ const SmallCard: React.FC<Props> = (props) => {
     <StyledSmallCard>
       <CardHeader>
         <h4>{title}</h4>
-        <button onClick={handleClick}>:</button>
+        <StyledClickableDiv onClick={handleClick}>
+          <BiMenuAltLeft />
+        </StyledClickableDiv>
         <div
           style={{
             position: "absolute",
@@ -52,6 +60,7 @@ const SmallCard: React.FC<Props> = (props) => {
             right: 0,
             boxShadow: "0px 3px 13px -2px rgba(0,0,0,0.75)",
             display: isMenu ? "block" : "none",
+            background: `${colors.backgroundLightest}`,
           }}
         >
           <StyledOptionsItem
@@ -84,6 +93,7 @@ const SmallCard: React.FC<Props> = (props) => {
         </div>
       </CardHeader>
       <CardBody>
+        <RiNumbersFill size="48px" color={`${colors.warning}`} />
         <CountInfo count={state.count} desc={state.desc} />
       </CardBody>
     </StyledSmallCard>

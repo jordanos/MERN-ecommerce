@@ -10,8 +10,8 @@ export type Admin = {
 };
 
 export type Auth = {
-  isLogged: Boolean;
-  token: String | null;
+  isLogged: boolean;
+  token: string | null;
   admin: Admin | null;
 };
 

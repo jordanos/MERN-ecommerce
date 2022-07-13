@@ -12,6 +12,8 @@ export const colors = {
   warning: "#F89C1C", // orange
   secondary: "#F4F5F7", // light grey
 
+  buttonPrimary: "#399af2",
+
   textPrimary: "#617182",
   textSecondary: "#682696",
   textDarkest: "#000",

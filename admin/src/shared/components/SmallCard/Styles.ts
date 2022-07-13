@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { StyledCardBase } from "../styles/BaseStyles";
 
 const StyledSmallCard = styled(StyledCardBase)`
-  height: 120px;
+  height: 160px;
   width: 220px;
   position: relative;
   background: white;
@@ -14,7 +14,13 @@ export const StyledOptionsItem = styled.div`
   border-bottom: 1px solid;
 
   &:hover {
-    background: ${colors.textMute};
+    background: ${colors.backgroundMedium};
+    cursor: pointer;
+  }
+`;
+
+export const StyledClickableDiv = styled.div`
+  &:hover {
     cursor: pointer;
   }
 `;
