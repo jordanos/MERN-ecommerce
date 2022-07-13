@@ -1,4 +1,5 @@
 import React from "react";
+import { IoPersonOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import ricaLogo from "shared/assets/rica-logo.jpg";
 import { StyledNav, StyledNavItem, StyledSubNav } from "./Styles";
@@ -34,7 +35,20 @@ const Navigation: React.FC = () => {
       </StyledSubNav>
       <StyledSubNav>
         <Link to="/profile">
-          <StyledNavItem>Profile</StyledNavItem>
+          <StyledNavItem>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <IoPersonOutline size="24px" color="white" />
+              <div style={{ width: "12px" }} />
+              Profile
+            </div>
+          </StyledNavItem>
         </Link>
       </StyledSubNav>
     </StyledNav>

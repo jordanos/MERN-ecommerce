@@ -5,6 +5,7 @@ import Products from "pages/Products";
 import Profile from "pages/Profile";
 import Users from "pages/Users";
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Navigate,
@@ -16,9 +17,10 @@ import Navigation from "shared/components/Navigation";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes: React.FC = () => {
+  const isLogged = useSelector((state: any) => state.auth.isLogged);
   return (
     <Router>
-      <Navigation />
+      {isLogged && <Navigation />}
 
       <Routes>
         <Route path="/login" element={<Login />} />

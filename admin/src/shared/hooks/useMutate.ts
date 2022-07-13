@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getLocalToken } from "shared/helpers/auth";
+import { useSelector } from "react-redux";
+import { Auth } from "shared/features/auth/authSlice";
 import { getError } from "shared/helpers/ntw";
 import useNtwStates from "./useNtwStates";
 import { ReqReturn } from "./useQuery";
@@ -8,6 +9,8 @@ const useMutate = (
   method: "get" | "post" | "put" | "delete",
   url: string
 ): ReqReturn => {
+  const auth: Auth = useSelector((state: any) => state.auth);
+
   const { loading, setLoading, error, setError, data, setData } =
     useNtwStates();
 
@@ -21,7 +24,7 @@ const useMutate = (
         url: newUrl || url,
         data: reqData,
         headers: {
-          Authorization: getLocalToken(),
+          Authorization: auth.token || "",
         },
       });
       setLoading(false);

@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import CardHeader from "shared/components/CardHeader";
 import LargeCard from "shared/components/LargeCard";
 import MediumCard from "shared/components/MediumCard";
 import SmallCard from "shared/components/SmallCard";
@@ -30,18 +29,21 @@ const HomeMain: React.FC = () => {
           marginTop: "1em",
         }}
       >
-        <LargeCard title="Visualize Data" data={home.graph} />
+        <LargeCard title="Visualize Data" graphData={home.graph} />
         <div
           style={{
             display: "flex",
             flexDirection: "column",
           }}
         >
-          <MediumCard>
-            <CardHeader>
-              <h4>Total Info</h4>
-            </CardHeader>
-          </MediumCard>
+          <MediumCard
+            title="Total View"
+            dataTotal={{
+              usersTotal: home.users.total,
+              productsTotal: home.products.total,
+              packagesTotal: home.packages.total,
+            }}
+          />
         </div>
       </div>
     </>

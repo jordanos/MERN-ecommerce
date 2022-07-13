@@ -22,13 +22,6 @@ export default createGlobalStyle`
     flex-direction: column;
   }
 
-  button,
-  input,
-  optgroup,
-  select,
-  textarea {
-    ${font.regular}
-  }
 
   *, *:after, *:before, input[type="search"] {
     box-sizing: border-box;
@@ -55,6 +48,10 @@ export default createGlobalStyle`
   button {
     background: none;
     border: none;
+  }
+
+  input:hover {
+    cursor: pointer
   }
 
   button:hover {

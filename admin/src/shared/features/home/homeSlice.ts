@@ -4,6 +4,7 @@ export type Count = {
   today: number;
   thisWeek: number;
   thisMonth: number;
+  total: number;
 };
 
 export type Home = {
@@ -11,16 +12,16 @@ export type Home = {
   products: Count;
   packages: Count;
   graph: {
-    users: Array<number>;
-    products: Array<number>;
-    packages: Array<number>;
+    users: number[];
+    products: number[];
+    packages: number[];
   };
 };
 
 const initialState: Home = {
-  users: { today: 0, thisWeek: 0, thisMonth: 0 },
-  products: { today: 0, thisWeek: 0, thisMonth: 0 },
-  packages: { today: 0, thisWeek: 0, thisMonth: 0 },
+  users: { today: 0, thisWeek: 0, thisMonth: 0, total: 0 },
+  products: { today: 0, thisWeek: 0, thisMonth: 0, total: 0 },
+  packages: { today: 0, thisWeek: 0, thisMonth: 0, total: 0 },
   graph: {
     users: [0, 0, 0, 0, 0],
     products: [0, 0, 0, 0, 0],
