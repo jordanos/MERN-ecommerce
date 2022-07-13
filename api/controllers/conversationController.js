@@ -28,6 +28,7 @@ exports.getAll = (req, res, next) => {
           toId: conv.toId,
           lastMessage: null,
           unreadCount: 0,
+          createdAt: conv.createdAt,
         };
 
         const lastMessage = await Message.findOne({

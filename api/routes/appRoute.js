@@ -8,7 +8,11 @@ const {
   deleteHero,
 } = require('../controllers/heroController');
 
-const { getHomePage, getMyShop } = require('../controllers/appController');
+const {
+  getHomePage,
+  getMyShop,
+  createNotification,
+} = require('../controllers/appController');
 
 const { loginReq } = require('../middlewares/authMiddleware');
 
@@ -199,5 +203,18 @@ router.get('/homepage', loginReq, getHomePage);
  *         description: myshop page.
  */
 router.get('/myshop', loginReq, getMyShop);
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/app/notify:
+ *   post:
+ *     summary: notification
+ *     tags: [App]
+ *     responses:
+ *       "200":
+ *         description: notification page.
+ */
+router.post('/notify', createNotification);
 
 module.exports = router;

@@ -1,8 +1,14 @@
+const axios = require('axios');
 const Category = require('../models/Category');
 const Hero = require('../models/Hero');
 const Product = require('../models/Product');
 const UserPackage = require('../models/UserPackage');
 const Notification = require('../models/Notification');
+
+const OneSignalConfig = {
+  appId: '1a85a386-49a2-4e36-a4bb-3eae8ff48a6b',
+  apiKey: 'NjUzNWVlOTEtZGIzMS00MTc2LTk2ODktODA3NGY4MGI1NTM0',
+};
 
 exports.getHomePage = async (req, res, next) => {
   try {
@@ -89,6 +95,43 @@ exports.getMyShop = async (req, res, next) => {
 
     return res.status(200).send(myShop);
   } catch (e) {
+    return next(e);
+  }
+};
+
+exports.createNotification = async (req, res, next) => {
+  const headers = {
+    // eslint-disable-next-line prefer-template
+    Authorization: 'Basic' + OneSignalConfig.apiKey,
+  };
+
+  const options = {
+    url: 'https://onesignal.com/api/v1/notifications',
+    port: 443,
+    path: '',
+    method: 'POST',
+    headers,
+  };
+  try {
+    const response = await axios({
+      method: options.method,
+      url: options.url,
+      data: {
+        app_id: OneSignalConfig.appId,
+        contents: { on: 'Test Push Notification' },
+        included_segments: ['All'],
+        content_available: true,
+        small_icon: 'ic_notification_icon',
+        data: {
+          PushTitle: 'Notification Test',
+        },
+      },
+      headers,
+    });
+
+    return res.status(200).send();
+  } catch (e) {
+    console.log(e);
     return next(e);
   }
 };
