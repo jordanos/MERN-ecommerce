@@ -43,15 +43,8 @@ exports.authorizeReq = function outer(model) {
 
   async function innerMessage(req, res, next) {
     const doc = await model.findById(req.params.id);
-    // check from message existence
-    if (!doc) return next(new UnauthorizedError());
 
-    // check if user is authorized to perfrom functions on the message
-    const conversation = await Conversation.findById(doc.conversationId);
-    if (
-      !conversation ||
-      !conversation.fromId.equals(new mongoose.Types.ObjectId(req.user.id))
-    )
+    if (!doc || !doc.fromId.equals(new mongoose.Types.ObjectId(req.user.id)))
       return next(new UnauthorizedError());
 
     return next();
