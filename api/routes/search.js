@@ -12,16 +12,16 @@ const { search } = require('../controllers/searchController');
 /**
  *@swagger
  *path:
- * /api/v1/search/?skip=0:
+ * /api/v1/search/?page=1:
  *   get:
  *     summary: Search endpoint
  *     tags: [Search]
  *     parameters:
  *     - in: query
- *       name: skip
+ *       name: page
  *       schema:
  *         type: integer
- *       description: pagination value to skip to
+ *       description: pagination value
  *     - in: query
  *       name: q
  *       required: true
