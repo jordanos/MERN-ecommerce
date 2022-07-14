@@ -67,7 +67,9 @@ exports.createOne = async (req, res, next) => {
         { $and: [{ fromId: toId }, { toId: fromId }] },
       ],
     };
-    const doc = await Conversation.findOne(filter);
+    const doc = await Conversation.findOne(filter)
+      .populate('fromId')
+      .populate('toId');
 
     // if it does, return conversation id
     if (doc) {
@@ -78,9 +80,12 @@ exports.createOne = async (req, res, next) => {
       conversation.unreadCount = 0;
     } else {
       const newConv = await Conversation.create({ toId, fromId });
-      conversation.id = newConv.id;
-      conversation.fromId = newConv.fromId;
-      conversation.toId = newConv.toId;
+      const newConvDoc = await Conversation.findById(newConv.id)
+        .populate('fromId')
+        .populate('toId');
+      conversation.id = newConvDoc.id;
+      conversation.fromId = newConvDoc.fromId;
+      conversation.toId = newConvDoc.toId;
       conversation.lastMessage = null;
       conversation.unreadCount = 0;
     }
