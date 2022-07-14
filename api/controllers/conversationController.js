@@ -1,15 +1,9 @@
+/* eslint-disable consistent-return */
 const Conversation = require('../models/Conversation');
 const Message = require('../models/Message');
 
-const {
-  GetAll,
-  CreateOne,
-  GetOne,
-  DeleteOne,
-  UpdateOne,
-} = require('./templates');
+const { GetAll, GetOne, DeleteOne, UpdateOne } = require('./templates');
 const { validateMessageInput } = require('../utils/validators');
-const { populateConversation } = require('./messageController');
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Conversation, 'Conversation');
@@ -52,17 +46,17 @@ exports.getAll = (req, res, next) => {
   getAll.execute();
 };
 
-exports.createOne = (req, res, next) => {
-  const modfiedReq = { ...req, body: { ...req.body, fromId: req.user.id } };
-  const createOne = new CreateOne(
-    modfiedReq,
-    res,
-    next,
-    Conversation,
-    'Conversation'
-  );
+exports.createOne = async (req, res, next) => {
+  const conversation = {
+    id: null,
+    fromId: null,
+    toId: null,
+    lastMessage: null,
+    unreadCount: 0,
+    createdAt: null,
+  };
 
-  createOne.doMongo = async () => {
+  try {
     // check if conversation with sender and reciever exists
     const { toId } = req.body;
     const fromId = req.user.id;
@@ -73,21 +67,28 @@ exports.createOne = (req, res, next) => {
         { $and: [{ fromId: toId }, { toId: fromId }] },
       ],
     };
-    createOne.doc = await Conversation.findOne(filter);
+    const doc = await Conversation.findOne(filter);
 
     // if it does, return conversation id
-    if (createOne.doc) {
-      return;
+    if (doc) {
+      conversation.id = doc.id;
+      conversation.fromId = doc.fromId;
+      conversation.toId = doc.toId;
+      conversation.lastMessage = null;
+      conversation.unreadCount = 0;
+    } else {
+      const newConv = await Conversation.create({ toId, fromId });
+      conversation.id = newConv.id;
+      conversation.fromId = newConv.fromId;
+      conversation.toId = newConv.toId;
+      conversation.lastMessage = null;
+      conversation.unreadCount = 0;
     }
 
-    // if not, create conversation id and return it
-    createOne.doc = await Conversation.create({ toId, fromId });
-  };
-
-  // setup a vallidaion function otherwise an error will be thrown
-  createOne.validate = () => {};
-
-  createOne.execute();
+    return res.status(201).send(conversation);
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.getOne = (req, res, next) => {

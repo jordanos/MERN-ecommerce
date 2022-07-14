@@ -12,7 +12,10 @@ const OneSignalConfig = {
 
 exports.getHomePage = async (req, res, next) => {
   try {
-    const notificationsCount = await Notification.count({ _id: req.user.id });
+    const notificationsCount = await Notification.count({
+      userId: req.user.id,
+      status: 'SENT',
+    });
     const heros = await Hero.find();
     const categories = await Category.find();
     const trendingProducts = await Product.find({
@@ -129,7 +132,7 @@ exports.createNotification = async (req, res, next) => {
       headers,
     });
 
-    return res.status(200).send();
+    return res.status(200).send(response);
   } catch (e) {
     console.log(e);
     return next(e);

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const NotificationSchema = new mongoose.Schema(
   {
+    oneSignalId: {
+      type: String,
+      default: '',
+    },
     title: {
       type: String,
       required: [true, 'Please provide a title for the notification'],
@@ -9,11 +13,6 @@ const NotificationSchema = new mongoose.Schema(
     text: {
       type: String,
       required: [true, 'Please provide a text for the notification'],
-    },
-    type: {
-      type: String,
-      enum: ['LOW', 'HIGH'],
-      default: 'LOW',
     },
     status: {
       type: String,

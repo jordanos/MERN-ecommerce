@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const { default: mongoose } = require('mongoose');
 const Message = require('../models/Message');
 
@@ -11,11 +12,6 @@ const {
 const { validateMessageInput } = require('../utils/validators');
 const CustomError = require('../utils/CustomError');
 const Conversation = require('../models/Conversation');
-
-exports.populateConversation = {
-  path: 'conversationId',
-  select: 'toId fromId',
-};
 
 exports.getAll = (req, res, next) => {
   const getAll = new GetAll(req, res, next, Message, 'Message');
@@ -80,10 +76,13 @@ exports.deleteOne = (req, res, next) => {
 exports.getConvMessages = async (req, res, next) => {
   const conversationId = req.params.id;
 
-  // update read status
-  if (conversationId)
-    await Message.updateMany({ conversationId }, { status: 'READ' });
-
+  try {
+    // update read status
+    if (conversationId)
+      await Message.updateMany({ conversationId }, { status: 'READ' });
+  } catch (e) {
+    return next(e);
+  }
   const getAll = new GetAll(req, res, next, Message, 'Message');
 
   getAll.filter = { conversationId };
