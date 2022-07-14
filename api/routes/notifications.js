@@ -35,9 +35,9 @@ const router = express.Router();
  *        text:
  *          type: String
  *          description: text of notification.
- *        type:
+ *        oneSignalId:
  *          type: String
- *          description: notification type, might be priority.
+ *          description: id in onesignal
  *        status:
  *          type: String
  *          description: notification status read, unread.
@@ -66,16 +66,16 @@ router
   /**
    *@swagger
    *path:
-   * /api/v1/notifications?skip=0:
+   * /api/v1/notifications?page=1:
    *   get:
    *     summary: Lists all the Notifications
    *     tags: [Notifications]
    *     parameters:
    *     - in: query
-   *       name: skip
+   *       name: page
    *       schema:
    *         type: integer
-   *       description: pagination value to skip to
+   *       description: pagination value
    *     responses:
    *       "200":
    *         description: list of Notifications.

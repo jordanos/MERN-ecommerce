@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const Notification = require('../models/Notification');
 
 const {
@@ -9,9 +10,16 @@ const {
 } = require('./templates');
 const { validateNotificationInput } = require('../utils/validators');
 
-exports.getAll = (req, res, next) => {
+exports.getAll = async (req, res, next) => {
+  // update status
+  try {
+    await Notification.updateMany({ userId: req.user.id }, { status: 'READ' });
+  } catch (e) {
+    return next(e);
+  }
   const getAll = new GetAll(req, res, next, Notification, 'Notification');
   getAll.filter = { userId: req.user.id };
+  getAll.populate.push('userId');
   getAll.execute();
 };
 

@@ -1,18 +1,16 @@
 const Category = require('../models/Category');
 
-const {
-  GetAll,
-  CreateOne,
-  GetOne,
-  DeleteOne,
-  UpdateOne,
-} = require('./templates');
+const { CreateOne, GetOne, DeleteOne, UpdateOne } = require('./templates');
 
 const { validateCategoryInput } = require('../utils/validators');
 
-exports.getCategories = (req, res, next) => {
-  const getAll = new GetAll(req, res, next, Category, 'category');
-  getAll.execute();
+exports.getCategories = async (req, res, next) => {
+  try {
+    const doc = await Category.find();
+    return res.status(200).send({ data: doc });
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.createCategory = (req, res, next) => {
