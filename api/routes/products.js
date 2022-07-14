@@ -212,16 +212,28 @@ router
 /**
  *@swagger
  *path:
- * /api/v1/products/filter/categories?skip=0&&cat=Shoe:
+ * /api/v1/products/filter/categories?page=1&&cat=Shoe:
  *   get:
  *     summary: Lists all the products by filter
  *     tags: [Products]
  *     parameters:
  *     - in: query
- *       name: skip
+ *       name: page
  *       schema:
  *         type: integer
- *       description: pagination value to skip to
+ *       description: pagination value
+ *     - in: query
+ *       name: price
+ *       schema:
+ *         type: string
+ *         enum: [asc, desc]
+ *       description: order by price, asc, desc
+ *     - in: query
+ *       name: rate
+ *       schema:
+ *         type: string
+ *         enum: [asc, desc]
+ *       description: order by rate, asc, desc
  *     - in: query
  *       name: cat
  *       schema:

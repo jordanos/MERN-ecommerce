@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
@@ -32,6 +33,7 @@ exports.getMyProducts = (req, res, next) => {
   getAll.populate.push(this.populateCategory);
   getAll.populate.push(this.populateUser);
   getAll.populate.push(this.populateTags);
+  getAll.sort = { createdAt: -1 };
 
   getAll.execute();
 };
@@ -132,16 +134,45 @@ exports.deleteProduct = (req, res, next) => {
 };
 
 exports.filterByCategories = async (req, res, next) => {
-  const getAll = new GetAll(req, res, next, Product, 'product');
-  // get category id from name of category
-  const { cat } = req.query;
-  const catId = await Category.find({ name: cat }).exec();
+  try {
+    // get category id from name of category
+    const { cat } = req.query;
+    const catDoc = await Category.findOne({ name: cat });
 
-  getAll.filter = { category: catId };
-  // add joins
-  getAll.populate.push(this.populateCategory);
-  getAll.populate.push(this.populateUser);
-  getAll.populate.push(this.populateTags);
+    if (!catDoc) {
+      return res
+        .status(200)
+        .send({ count: 0, hasMore: false, next: null, data: [] });
+    }
 
-  getAll.execute();
+    const getAll = new GetAll(req, res, next, Product, 'product');
+    let sort = {};
+
+    const { price } = req.query;
+    const { rate } = req.query;
+
+    if (price && price === 'asc') {
+      sort = { ...sort, price: 1 };
+    }
+    if (price && price === 'desc') {
+      sort = { ...sort, price: -1 };
+    }
+    if (rate && rate === 'asc') {
+      sort = { ...sort, rate: 1 };
+    }
+    if (rate && rate === 'desc') {
+      sort = { ...sort, rate: -1 };
+    }
+
+    getAll.filter = { categoryId: catDoc.id };
+    getAll.sort = sort;
+    // add joins
+    getAll.populate.push(this.populateCategory);
+    getAll.populate.push(this.populateUser);
+    getAll.populate.push(this.populateTags);
+
+    getAll.execute();
+  } catch (e) {
+    return next(e);
+  }
 };
