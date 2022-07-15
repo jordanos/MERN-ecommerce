@@ -6,6 +6,7 @@ const {
   getUser,
   updateUser,
   deleteUser,
+  changePassword,
 } = require('../controllers/userController');
 
 // authentication and authorization
@@ -199,5 +200,36 @@ router
    *               $ref: '#/components/schemas/User'
    */
   .delete(loginReq, authorizeReq(User), deleteUser);
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/users/change/password:
+ *   put:
+ *     summary: change password.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               oldPassword:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *             required:
+ *               - oldPassword
+ *               - newPassword
+ *     responses:
+ *       "200":
+ *         description: returnes data object with status=true.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.put('/change/password', loginReq, changePassword);
 
 module.exports = router;

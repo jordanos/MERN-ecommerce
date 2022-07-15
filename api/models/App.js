@@ -2,17 +2,9 @@ const mongoose = require('mongoose');
 
 const AppSchema = new mongoose.Schema(
   {
-    type: {
-      type: String,
-      required: true,
-    },
     version: {
       type: Number,
       required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
     },
   },
   {
