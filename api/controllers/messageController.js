@@ -79,7 +79,7 @@ exports.getConvMessages = async (req, res, next) => {
   try {
     // update read status
     if (conversationId)
-      await Message.updateMany({ conversationId }, { status: 'READ' });
+      await Message.updateMany({ toId: req.user.id }, { status: 'READ' });
   } catch (e) {
     return next(e);
   }

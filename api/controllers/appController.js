@@ -4,6 +4,7 @@ const Hero = require('../models/Hero');
 const Product = require('../models/Product');
 const UserPackage = require('../models/UserPackage');
 const Notification = require('../models/Notification');
+const App = require('../models/App');
 
 const OneSignalConfig = {
   appId: '1a85a386-49a2-4e36-a4bb-3eae8ff48a6b',
@@ -135,6 +136,16 @@ exports.createNotification = async (req, res, next) => {
     return res.status(200).send(response);
   } catch (e) {
     console.log(e);
+    return next(e);
+  }
+};
+
+exports.getVersion = async (req, res, next) => {
+  try {
+    const doc = await App.findOne({ type: 'flutter' });
+
+    return res.status(200).send(doc);
+  } catch (e) {
     return next(e);
   }
 };

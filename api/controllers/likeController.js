@@ -1,12 +1,6 @@
 const LikeFeed = require('../models/LikeFeed');
 
-const {
-  GetAll,
-  CreateOne,
-  GetOne,
-  DeleteOne,
-  UpdateOne,
-} = require('./templates');
+const { GetAll, GetOne, DeleteOne, UpdateOne } = require('./templates');
 const { validateLikeFeedInput, validateId } = require('../utils/validators');
 const User = require('../models/User');
 const Feed = require('../models/Feed');
@@ -16,13 +10,35 @@ exports.getLikes = (req, res, next) => {
   getAll.execute();
 };
 
-exports.createLike = (req, res, next) => {
-  const modfiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
-  const createOne = new CreateOne(modfiedReq, res, next, LikeFeed, 'Like');
-  // setup a vallidaion function otherwise an error will be thrown
-  createOne.validate = validateLikeFeedInput;
+exports.toggleLike = async (req, res, next) => {
+  try {
+    // validate
+    await validateLikeFeedInput(req);
 
-  createOne.execute();
+    const userId = req.user.id;
+    const { feedId } = req.body;
+
+    // get feed like, if exists delete, deduct count from feed and return
+    const likeDoc = await LikeFeed.findOne({ userId, feedId });
+    if (likeDoc) {
+      await LikeFeed.deleteOne({ id: likeDoc.id });
+      await Feed.updateOne(
+        { _id: likeDoc.feedId },
+        { likesCount: await LikeFeed.count({ userId, feedId }) }
+      );
+      return res.status(200).send({ isLike: false });
+    }
+
+    // create feed like
+    await LikeFeed.create({ userId, feedId });
+    await Feed.updateOne(
+      { _id: feedId },
+      { likesCount: await LikeFeed.count({ userId, feedId }) }
+    );
+    return res.status(200).send({ isLike: true });
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.getLike = (req, res, next) => {

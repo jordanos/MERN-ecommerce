@@ -12,6 +12,7 @@ const {
   getHomePage,
   getMyShop,
   createNotification,
+  getVersion,
 } = require('../controllers/appController');
 
 const { loginReq } = require('../middlewares/authMiddleware');
@@ -216,5 +217,18 @@ router.get('/myshop', loginReq, getMyShop);
  *         description: notification page.
  */
 router.post('/notify', createNotification);
+
+/**
+ *@swagger
+ *path:
+ * /api/v1/app/version:
+ *   post:
+ *     summary: appVersion
+ *     tags: [App]
+ *     responses:
+ *       "200":
+ *         description: app version.
+ */
+router.get('/versions', getVersion);
 
 module.exports = router;
