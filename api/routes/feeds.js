@@ -1,22 +1,17 @@
 const express = require('express');
-const { feedImagesPath } = require('../config');
 
 const {
   getFeeds,
   createFeed,
   getFeed,
-  updateFeed,
   deleteFeed,
-  uploadFeedImage,
   getMyFeeds,
 } = require('../controllers/feedController');
 
 // authentication and authorization
 const { loginReq } = require('../middlewares/authMiddleware');
 const { authorizeReq } = require('../middlewares/authorizationMiddleware');
-const { saveImage } = require('../middlewares/saveImage');
 const Feed = require('../models/Feed');
-const imageUpload = require('../utils/images');
 
 const router = express.Router();
 
@@ -80,7 +75,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Feed'
    */
-  .get(getFeeds)
+  .get(loginReq, getFeeds)
   /**
    *@swagger
    *path:
@@ -129,35 +124,7 @@ router
    *               $ref: '#/components/schemas/Feed'
    */
   .get(getFeed)
-  /**
-   *@swagger
-   *path:
-   * /api/v1/feeds/{id}:
-   *   put:
-   *     summary: edits/updates a feed.
-   *     tags: [Feeds]
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         schema:
-   *           type: string
-   *         required: true
-   *         description: The feed id
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             $ref: '#/components/schemas/Feed'
-   *     responses:
-   *       "200":
-   *         description: returnes data object with acknowledged=true.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Feed'
-   */
-  .put(loginReq, authorizeReq(Feed), updateFeed)
+
   /**
    *@swagger
    *path:
@@ -181,45 +148,6 @@ router
    *               $ref: '#/components/schemas/Feed'
    */
   .delete(loginReq, authorizeReq(Feed), deleteFeed);
-
-/**
- *@swagger
- *path:
- * /api/v1/feeds/image/{id}:
- *   put:
- *     consumes:
- *     - multipart/form-data
- *     summary: uploads feed image.
- *     tags: [Feeds]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The feed id
- *       - in: formData
- *         name: image
- *         type: file
- *         required: true
- *         description: image file
- *     responses:
- *       "200":
- *         description: returnes data object with acknowledged=true.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Feed'
- */
-// add validation of images for latter
-router.put(
-  '/image/:id',
-  loginReq,
-  authorizeReq(Feed),
-  imageUpload().single('image'),
-  saveImage(feedImagesPath),
-  uploadFeedImage
-);
 
 /**
  *@swagger

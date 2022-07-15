@@ -2,7 +2,7 @@ const express = require('express');
 
 const {
   getLikes,
-  createLike,
+  toggleLike,
   getLike,
   updateLike,
   deleteLike,
@@ -42,7 +42,6 @@ const router = express.Router();
  *          format: date
  *          description: The date of the record creation.
  *      example:
- *        userId: fa124b57a700cccb21b45be1
  *        likedObjectId: fa124b57a700cccb21b45be1
  */
 
@@ -76,14 +75,9 @@ router
    *path:
    * /api/v1/likes/feeds:
    *   post:
-   *     summary: Creates a like.
+   *     summary: toggles a like.
    *     tags: [Likes]
    *     parameters:
-   *     - in: query
-   *       name: skip
-   *       schema:
-   *         type: integer
-   *       description: pagination value to skip to
    *     requestBody:
    *       required: true
    *       content:
@@ -91,8 +85,6 @@ router
    *           schema:
    *             type: object
    *             properties:
-   *               userId:
-   *                 type: string
    *               feedId:
    *                 type: string
    *     responses:
@@ -103,7 +95,7 @@ router
    *             schema:
    *               $ref: '#/components/schemas/Like'
    */
-  .post(loginReq, createLike);
+  .post(loginReq, toggleLike);
 
 router
   .route('/feeds/:id')

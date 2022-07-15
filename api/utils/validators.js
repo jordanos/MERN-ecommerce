@@ -247,8 +247,7 @@ exports.validateLikeFeedInput = async (req) => {
   }
   // check if reference exists
   const feedDoc = await Feed.findById(req.body.feedId);
-  const userDoc = await User.findById(req.body.userId);
-  if (!feedDoc || !userDoc) {
+  if (!feedDoc) {
     throw new CustomError(
       "feed or user reference error. id doesn't exist!",
       400

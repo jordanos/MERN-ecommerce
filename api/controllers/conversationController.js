@@ -12,6 +12,7 @@ exports.getAll = (req, res, next) => {
   };
   getAll.populate.push('toId');
   getAll.populate.push('fromId');
+  getAll.sort = { createdAt: -1 };
 
   getAll.transform = async () => {
     const convs = await Promise.all(
@@ -29,7 +30,7 @@ exports.getAll = (req, res, next) => {
           conversationId: conv.id,
         }).sort('-createdAt');
         const unreadCount = await Message.count({
-          conversationId: conv.id,
+          toId: req.user.id,
           status: 'SENT',
         }).count();
 
@@ -78,6 +79,7 @@ exports.createOne = async (req, res, next) => {
       conversation.toId = doc.toId;
       conversation.lastMessage = null;
       conversation.unreadCount = 0;
+      conversation.createdAt = doc.createdAt;
     } else {
       const newConv = await Conversation.create({ toId, fromId });
       const newConvDoc = await Conversation.findById(newConv.id)
@@ -88,6 +90,7 @@ exports.createOne = async (req, res, next) => {
       conversation.toId = newConvDoc.toId;
       conversation.lastMessage = null;
       conversation.unreadCount = 0;
+      conversation.createdAt = newConvDoc.createdAt;
     }
 
     return res.status(201).send(conversation);
