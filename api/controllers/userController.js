@@ -1,4 +1,7 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/User');
 const Product = require('../models/Product');
 const {
@@ -20,6 +23,7 @@ const { userImagesPath } = require('../config');
 const saveImageFunction = require('../utils/saveImageFunction');
 const Package = require('../models/Package');
 const UserPackage = require('../models/UserPackage');
+const CustomError = require('../utils/CustomError');
 
 // const userUpload = multer({
 //   storage: multer.memoryStorage(),
@@ -153,6 +157,33 @@ exports.updateUser = async (req, res, next) => {
 
     updateOne.execute();
   });
+};
+
+exports.changePassword = async (req, res, next) => {
+  try {
+    if (!req.body.newPassword || !req.body.oldPassword) {
+      throw new CustomError('New password and old password are required', 400);
+    }
+
+    if (req.body.newPassword.length < 6) {
+      throw new CustomError('Password length must be greater than 6', 400);
+    }
+
+    const { newPassword } = req.body;
+    const { oldPassword } = req.body;
+    const userDoc = await User.findById(req.user.id);
+    if (userDoc) {
+      if (!(await bcrypt.compare(oldPassword, userDoc.password))) {
+        throw new CustomError('Old password is incorrect', 400);
+      }
+
+      userDoc.password = newPassword;
+      userDoc.save();
+    }
+    res.status(200).send({ status: 'success' });
+  } catch (e) {
+    return next(e);
+  }
 };
 
 exports.deleteUser = (req, res, next) => {

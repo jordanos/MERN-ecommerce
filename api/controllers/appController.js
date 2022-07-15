@@ -135,15 +135,13 @@ exports.createNotification = async (req, res, next) => {
 
     return res.status(200).send(response);
   } catch (e) {
-    console.log(e);
     return next(e);
   }
 };
 
 exports.getVersion = async (req, res, next) => {
   try {
-    const doc = await App.findOne({ type: 'flutter' });
-
+    const doc = await App.findOne({ version: 1 });
     return res.status(200).send(doc);
   } catch (e) {
     return next(e);

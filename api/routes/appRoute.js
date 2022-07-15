@@ -126,6 +126,7 @@ router
    *               $ref: '#/components/schemas/App'
    */
   .get(getHero)
+
   /**
    *@swagger
    *path:
@@ -155,6 +156,7 @@ router
    *               $ref: '#/components/schemas/App'
    */
   .put(updateHero)
+
   /**
    *@swagger
    *path:
@@ -222,13 +224,13 @@ router.post('/notify', createNotification);
  *@swagger
  *path:
  * /api/v1/app/version:
- *   post:
+ *   get:
  *     summary: appVersion
  *     tags: [App]
  *     responses:
  *       "200":
  *         description: app version.
  */
-router.get('/versions', getVersion);
+router.get('/version', getVersion);
 
 module.exports = router;
