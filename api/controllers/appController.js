@@ -141,7 +141,7 @@ exports.createNotification = async (req, res, next) => {
 
 exports.getVersion = async (req, res, next) => {
   try {
-    const doc = await App.findOne({ version: 1 });
+    const doc = await App.findOne();
     return res.status(200).send(doc);
   } catch (e) {
     return next(e);
