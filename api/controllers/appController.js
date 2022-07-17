@@ -24,22 +24,22 @@ exports.getHomePage = async (req, res, next) => {
       .populate('userId')
       .populate('categoryId')
       .sort({ createdAt: -1 });
-    const sportProducts = await Product.find({
-      categoryId: '62bff74966153fd934c67656',
+    const fashion = await Product.find({
+      categoryId: '62d43e6501a7d43674ce04f4',
     })
       .limit(10)
       .populate('userId')
       .populate('categoryId')
       .sort({ createdAt: -1 });
-    const gamingProducts = await Product.find({
-      categoryId: '62bff686706a523ec8fbf7a4',
+    const electronics = await Product.find({
+      categoryId: '62d43e7401a7d43674ce04f6',
     })
       .limit(10)
       .populate('userId')
       .populate('categoryId')
       .sort({ createdAt: -1 });
-    const computerProducts = await Product.find({
-      categoryId: '62bff6bb706a523ec8fbf7a8',
+    const groceries = await Product.find({
+      categoryId: '62d43e1c01a7d43674ce04ee',
     })
       .limit(10)
       .populate('userId')
@@ -56,16 +56,16 @@ exports.getHomePage = async (req, res, next) => {
           products: trendingProducts,
         },
         {
-          title: 'Sports Products',
-          products: sportProducts,
+          title: 'Fashion',
+          products: fashion,
         },
         {
-          title: 'Gaming Products',
-          products: gamingProducts,
+          title: 'Electronics',
+          products: electronics,
         },
         {
-          title: 'Computer Products',
-          products: computerProducts,
+          title: 'Groceries',
+          products: groceries,
         },
       ],
     });
