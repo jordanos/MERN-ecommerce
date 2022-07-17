@@ -19,30 +19,32 @@ exports.getHomePage = async (req, res, next) => {
     });
     const heros = await Hero.find();
     const categories = await Category.find();
-    const trendingProducts = await Product.find({
-      categoryId: '62bff654706a523ec8fbf7a2',
-    })
+    const trendingProducts = await Product.find()
       .limit(10)
       .populate('userId')
-      .populate('categoryId');
+      .populate('categoryId')
+      .sort({ createdAt: -1 });
     const sportProducts = await Product.find({
       categoryId: '62bff74966153fd934c67656',
     })
       .limit(10)
       .populate('userId')
-      .populate('categoryId');
+      .populate('categoryId')
+      .sort({ createdAt: -1 });
     const gamingProducts = await Product.find({
       categoryId: '62bff686706a523ec8fbf7a4',
     })
       .limit(10)
       .populate('userId')
-      .populate('categoryId');
+      .populate('categoryId')
+      .sort({ createdAt: -1 });
     const computerProducts = await Product.find({
       categoryId: '62bff6bb706a523ec8fbf7a8',
     })
       .limit(10)
       .populate('userId')
-      .populate('categoryId');
+      .populate('categoryId')
+      .sort({ createdAt: -1 });
 
     res.status(200).send({
       notificationsCount,
