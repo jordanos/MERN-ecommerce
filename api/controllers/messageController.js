@@ -84,7 +84,7 @@ exports.getConvMessages = async (req, res, next) => {
     return next(e);
   }
   const getAll = new GetAll(req, res, next, Message, 'Message');
-  getAll.filter = { conversationId, status: 'SENT' };
+  getAll.filter = { conversationId };
   getAll.sort = { createdAt: -1 };
   getAll.execute();
 };
