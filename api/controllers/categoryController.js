@@ -1,8 +1,11 @@
 const Category = require('../models/Category');
 
-const { CreateOne, GetOne, DeleteOne, UpdateOne } = require('./templates');
+const { GetOne, DeleteOne, UpdateOne } = require('./templates');
 
 const { validateCategoryInput } = require('../utils/validators');
+const { userUpload } = require('../utils/multerFormatter');
+const saveImageFunction = require('../utils/saveImageFunction');
+const { categoryImagesPath } = require('../config');
 
 exports.getCategories = async (req, res, next) => {
   try {
@@ -14,9 +17,39 @@ exports.getCategories = async (req, res, next) => {
 };
 
 exports.createCategory = (req, res, next) => {
-  const createOne = new CreateOne(req, res, next, Category, 'category');
-  createOne.validate = validateCategoryInput;
-  createOne.execute();
+  userUpload(req, res, async (err) => {
+    if (err) {
+      return next(err);
+    }
+    let modifiedReq = req;
+
+    // validate user input
+    try {
+      await validateCategoryInput(modifiedReq);
+    } catch (e) {
+      return next(e);
+    }
+
+    if (req.file) {
+      try {
+        const filename = await saveImageFunction(req.file, categoryImagesPath);
+        modifiedReq = {
+          ...modifiedReq,
+          body: { ...modifiedReq.body, image: filename },
+        };
+      } catch (e) {
+        return next(e);
+      }
+    }
+
+    try {
+      const categoryDoc = await Category.create(modifiedReq.body);
+
+      return res.status(201).send(categoryDoc);
+    } catch (e) {
+      return next(e);
+    }
+  });
 };
 
 exports.getCategory = (req, res, next) => {
