@@ -2,7 +2,7 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
-const { GetAll, GetOne, DeleteOne, UpdateOne } = require('./templates');
+const { GetAll, GetOne, DeleteOne } = require('./templates');
 const { validateProductInput } = require('../utils/validators');
 const { productUpload } = require('../utils/multerFormatter');
 const { productImagesPath } = require('../config');
@@ -110,20 +110,33 @@ exports.updateProduct = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    const modifiedReq = { ...req, body: { ...req.body, userId: req.user.id } };
-
-    // validate user input
     try {
+      const modifiedReq = {
+        ...req,
+        body: { ...req.body, userId: req.user.id },
+      };
+
+      // validate user input
+
       await validateProductInput(modifiedReq);
+
+      const productDoc = await this.model.findOneAndUpdate(
+        { _id: modifiedReq.params.id },
+        modifiedReq.body,
+        {
+          new: true,
+        }
+      );
+
+      const doc = await Product.findById(productDoc.id)
+        .populate(this.populateCategory)
+        .populate(this.populateUser)
+        .populate(this.populateTags);
+
+      return res.status(2010).send(doc);
     } catch (e) {
       return next(e);
     }
-
-    const updateOne = new UpdateOne(modifiedReq, res, next, Product, 'product');
-    // setup a vallidaion function otherwise an error will be thrown
-    updateOne.validate = () => {};
-
-    updateOne.execute();
   });
 };
 
