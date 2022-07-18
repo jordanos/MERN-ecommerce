@@ -104,7 +104,7 @@ exports.getProduct = (req, res, next) => {
   getOne.execute();
 };
 
-exports.updateProduct = (req, res, next) => {
+exports.updateProduct = async (req, res, next) => {
   // eslint-disable-next-line consistent-return
   productUpload(req, res, async (err) => {
     if (err) {
@@ -120,7 +120,7 @@ exports.updateProduct = (req, res, next) => {
 
       await validateProductInput(modifiedReq);
 
-      const productDoc = await this.model.findOneAndUpdate(
+      const productDoc = await Product.findOneAndUpdate(
         { _id: modifiedReq.params.id },
         modifiedReq.body,
         {
@@ -133,7 +133,7 @@ exports.updateProduct = (req, res, next) => {
         .populate(this.populateUser)
         .populate(this.populateTags);
 
-      return res.status(2010).send(doc);
+      return res.status(200).send(doc);
     } catch (e) {
       return next(e);
     }
