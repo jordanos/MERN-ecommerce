@@ -190,12 +190,6 @@ exports.validateProductInput = async (req) => {
       throw new CustomError(`You don't have any active package`, 400);
     }
   }
-
-  // check if user reference exists
-  const userDoc = await User.findById(req.body.userId);
-  if (!userDoc) {
-    throw new CustomError('product owner user object reference error', 400);
-  }
 };
 
 exports.validateCategoryInput = (req) => {
